@@ -1,0 +1,168 @@
+html, body, #app {
+  padding: 0;
+  margin: 0;
+  background: #0d1926;
+  color: #f5f5f5;
+  width: 100%;
+  height: 100%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+a, a:link, a:visited {
+  color: #d9d9d9;
+  text-decoration: underline;
+}
+a:hover, a:focus, a:active {
+  color: #EEEEEE;
+}
+
+#app {
+  display: flex;
+}
+ul#menu {
+  flex: 0 0 auto;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 250px;
+  background: #262626;
+}
+ul#menu > li {
+  padding: 5px 0;
+}
+ul#menu > li > span {
+  /* text-transform: uppercase; */
+  font-size: 80%;
+  opacity: 0.5;
+  padding-left: 10px;
+}
+ul#menu > li > ul {
+  margin-top: 5px;
+}
+ul#menu > li > ul > li {
+  cursor: pointer;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+ul#menu > li > ul > li b {
+  padding: 6px 0 7px 20px;
+}
+ul#menu > li > ul > li:hover, ul#menu > li > ul > li.active {
+  background: #444444;
+}
+ul#menu > li > ul > li.stopped b {
+  opacity: 0.8;
+}
+ul#menu > li > ul > li.running b, ul#menu > li > ul > li a.start {
+  color: #2EC4B6;
+}
+ul#menu > li > ul > li.waiting b, ul#menu > li > ul > li a.restart {
+  color: #5969FF;
+}
+ul#menu > li > ul > li.error b, ul#menu > li > ul > li a.stop {
+  color: #E71D36;
+}
+ul#menu > li > ul > li a.stop {
+  font-size: 23px;
+  line-height: 25px;
+  height: 30px;
+}
+ul#menu > li > ul > li sup {
+  float: right;
+  color: #5969FF;
+}
+ul#menu > li > ul > li a {
+  float: right;
+  display: block;
+  width: 30px;
+  text-align: center;
+  font-size: 15px;
+  margin-left: 3px;
+  text-decoration: none;
+}
+ul#menu > li > ul > li.stopped a.restart, ul#menu > li > ul > li.stopped a.stop, ul#menu > li > ul > li.waiting a.start, ul#menu > li > ul > li.waiting a.restart, ul#menu > li > ul > li.running a.start, ul#menu > li > ul > li.error a.restart, ul#menu > li > ul > li.error a.stop {
+  display: none;
+}
+ul#menu > li > ul > li a:hover {
+  background: #666666;
+}
+
+#content {
+  flex: 1 1 auto;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#content > div {
+  position: relative;
+  word-break: break-all;
+  padding: 0 65px 0 5px;
+  font-family: monospace;
+  font-size: 12px;
+}
+#content > div.stdout {
+  color: #d9d9d9;
+}
+#content > div.stderr {
+  color: #d9d9d9;
+  background: rgba(231, 29, 54, 0.2);
+}
+#content > div.info {
+  text-align: center;
+  padding: 5px 0;
+  font-family: Verdana;
+  font-size: 80%;
+  color: #5969FF;
+}
+#content > div::after {
+  top: 0;
+  color: #fff;
+  content: attr(data-time);
+  display: block;
+  font-size: 8px;
+  right: 0;
+  padding: .2rem .4rem;
+  pointer-events: none;
+  position: absolute;
+  opacity: 0.3;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+#content > div:last-child {
+  margin-bottom: 50px;
+}
+
+#closing {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(231, 29, 54, 0.7);
+  z-index: 100;
+}
+#closing p {
+  background: #500000;
+  padding: 5px 15px;
+  border-radius: 15px;
+  margin: 50px auto 0;
+  max-width: 444px;
+  text-align: center;
+}
+
+#content .home {
+  opacity: 0.5;
+  text-align: center;
+  padding: 200px 10px 10px;
+  color: #d9d9d9;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 22px;
+}

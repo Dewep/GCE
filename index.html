@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>GCE</title>
+    <link href="assets/styles.css" media="all" rel="stylesheet" />
+    <!-- <script src="assets/vue.min.js"></script> -->
+    <script src="assets/vue.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div v-show="closing || configError" id="closing" style="display: none">
+        <p v-if="configError">Unable to load config file:<br><small>{{ configError }}</small><br><br><a href="https://github.com/Dewep/GCE" @click.prevent="openLink('https://github.com/Dewep/GCE')">How to configure GCE?</a></p>
+        <p v-else>Stopping processes before closing GEC...</p>
+      </div>
+      <ul v-show="menu" id="menu" style="display: none">
+        <li v-for="(commands, section) in menu" :key="section">
+          <span>{{ section }}</span>
+          <ul>
+            <li
+              v-for="(cmd, $index) in commands"
+              :key="'cmd-' + $index"
+              :class="{ active: active === cmd.slug, stopped: status[cmd.slug] === 0, running: status[cmd.slug] === 1, waiting: status[cmd.slug] === 2, error: status[cmd.slug] === 3 }"
+              @click="selectCmd(cmd)"
+            >
+              <a class="start" @click="start(cmd)">►</a>
+              <a class="stop" @click="stop(cmd)">■</a>
+              <a class="restart" @click="restart(cmd)">↻</a>
+              <sup v-show="active !== cmd.slug && unread[cmd.slug]">•</sup>
+              <b>{{ cmd.title }}</b>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <div id="content" ref="scrollableContent">
+        <template v-if="active && content[active] && content[active].length">
+          <div
+            v-for="(line, $index) in content[active]"
+            :key="'content-' + active + '-' + $index"
+            :data-time="line.time"
+            v-html="line.data"
+            :class="line.type"/>
+        </template>
+        <div class="home" v-else>
+          <img src="build/icon.png" alt="GCE" width="125"><br><br>
+          <b>GCE</b><br>
+          <small>Global Commands Execution</small><br><br>
+          <small><a href="https://github.com/Dewep/GCE" @click.prevent="openLink('https://github.com/Dewep/GCE')">github.com/Dewep/GCE</a></small>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
