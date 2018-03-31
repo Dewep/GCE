@@ -1,0 +1,39 @@
+{
+  "name": "gce",
+  "version": "1.0.0",
+  "description": "Global Commands Execution",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dewep/GCE.git"
+  },
+  "author": "Maigret Aurélien",
+  "license": "SEE LICENSE IN LICENCE",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "net.dewep.gce",
+    "productName": "GCE",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "js-yaml": "^3.11.0"
+  },
+  "devDependencies": {
+    "electron": "^1.8.4",
+    "electron-builder": "^20.8.1"
+  }
+}
