@@ -2,7 +2,7 @@
 
 ## Global Commands Execution
 
-Desktop application to run regular scripts (webpack dev, server, vagrant, etc.).
+Desktop application to run regular scripts (webpack dev, server, vagrant, etc.). [Download the latest release.](https://github.com/Dewep/GCE/releases/latest)
 
 ![Preview](assets/preview.png)
 
