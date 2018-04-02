@@ -1,6 +1,6 @@
 {
   "name": "gce",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Global Commands Execution",
   "main": "main.js",
   "repository": {

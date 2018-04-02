@@ -158,7 +158,9 @@ window.app = new Vue({
     stop (cmd) {
       if (this.status[cmd.slug] === 2 && !cmd.proc) {
         this.start(cmd, true)
-      } else if (this.status[cmd.slug] === 1 && cmd.proc) {
+        return true
+      }
+      if (this.status[cmd.slug] === 1 && cmd.proc) {
         this.addContent(cmd, 'info', 'Killing the process...')
         cmd.stop = true
         if (process.platform === 'win32') {
@@ -166,7 +168,9 @@ window.app = new Vue({
         } else {
           cmd.proc.kill('SIGINT')
         }
+        return true
       }
+      return false
     },
     restart (cmd) {
       cmd.restart = true
@@ -175,13 +179,11 @@ window.app = new Vue({
     onClose () {
       let ret = undefined
       this.commands.forEach(cmd => {
-        if (cmd.proc) {
-          this.stop(cmd)
+        if (this.stop(cmd)) {
           ret = false
           this.closing = true
         }
       })
-      console.log({ ret })
       return ret
     },
     openLink (url) {
