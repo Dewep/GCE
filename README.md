@@ -35,3 +35,9 @@ __commands[]__:
 - `path` _(optional)_: Directory path to run the command. This is append to the `root` configuration path.
 - `cmd`: Command to exec
 - `stop-cmd` _(optional)_: If defined, allows to have a command to execute when stopping the service. This is useful for commands such as Vagrant: `cmd` is used to start the VM (`vagrant up`), `stop-cmd` to stop it (`vagrant halt`).
+
+## Todo
+
+- Ctrl+L to clear output
+- Ctrl+C to stop
+- Build release for linux
