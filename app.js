@@ -19,8 +19,10 @@ window.app = new Vue({
 
   data: {
     commands: config.commands || [],
+    shell: config.shell,
     menu: {},
     closing: false,
+    isForceClose: false,
     active: null,
     status: {},
     unread: {},
@@ -69,21 +71,26 @@ window.app = new Vue({
       cmd.slug = index + '/' + cmd.name
       index += 1
 
+      cmd.extra = (cmd.extra || config['default-extra'] || []).map(extra => (config.extra || {})[extra]).filter(extra => extra)
+
       Vue.set(this.status, cmd.slug, 0)
       Vue.set(this.unread, cmd.slug, false)
       Vue.set(this.content, cmd.slug, [])
     })
     window.onbeforeunload = () => {
+      if (this.isForceClose) {
+        return
+      }
       return this.onClose()
     }
   },
 
   methods: {
     selectCmd (cmd) {
-      if (this.active && this.unread[this.active]) {
-        this.unread[this.active] = false
+      if (this.active && this.active.slug && this.unread[this.active.slug]) {
+        this.unread[this.active.slug] = false
       }
-      this.active = cmd.slug
+      this.active = cmd
       this.autoScroll()
     },
     autoScroll () {
@@ -104,31 +111,36 @@ window.app = new Vue({
     },
     addContent (cmd, type, data) {
       if (this.content[cmd.slug]) {
+        if (!cmd.url) {
+          const matches = data.match(/running (?:at|on)(?:.*)(?: |:)([0-9]{2,5})/)
+          if (matches) {
+            cmd.url = 'http://127.0.0.1:' + matches[1]
+            cmd.urlText = '127.0.0.1:' + matches[1]
+          }
+        }
         this.unread[cmd.slug] = true
         this.content[cmd.slug].push({ type, data: this.toHtml(data), time: (new Date()).toLocaleTimeString() })
 
-        if (cmd.slug === this.active) {
+        if (this.active && cmd.slug === this.active.slug) {
           this.autoScroll()
         }
       }
     },
-    start (cmd, stop) {
+    getCWD (cmd) {
+      return config.root && cmd.path ? path.join(config.root, cmd.path) : (config.root || cmd.path || undefined)
+    },
+    runCommand (cmd, command, statusOnSuccess = 0) {
       if (this.status[cmd.slug] !== 1 && !cmd.proc) {
         this.status[cmd.slug] = 1
-        const cwd = config.root && cmd.path ? path.join(config.root, cmd.path) : (config.root || cmd.path || undefined)
+        const cwd = this.getCWD(cmd)
 
         const callback = (error) => {
           if (error) {
             this.addContent(cmd, 'stderr', error.toString())
           }
         }
-        if (stop) {
-          this.addContent(cmd, 'info', cwd ? (cwd + '\n' + cmd['stop-cmd']) : cmd['stop-cmd'])
-          cmd.proc = childProcess.exec(cmd['stop-cmd'], { cwd }, callback)
-        } else {
-          this.addContent(cmd, 'info', cwd ? (cwd + '\n' + cmd.cmd) : cmd.cmd)
-          cmd.proc = childProcess.exec(cmd.cmd, { cwd }, callback)
-        }
+        this.addContent(cmd, 'info', cwd ? (cwd + '\n' + command) : command)
+        cmd.proc = childProcess.exec(command, { cwd }, callback)
 
         cmd.proc.stdout.on('data', data => {
           this.addContent(cmd, 'stdout', data.toString())
@@ -140,7 +152,7 @@ window.app = new Vue({
           this.addContent(cmd, 'info', `Process exited with code ${code}`)
 
           if (cmd.stop || code === 0) {
-            this.status[cmd.slug] = cmd['stop-cmd'] && !stop ? 2 : 0
+            this.status[cmd.slug] = statusOnSuccess
           } else {
             this.status[cmd.slug] = 3
           }
@@ -155,9 +167,18 @@ window.app = new Vue({
         })
       }
     },
+    start (cmd) {
+      if (cmd && cmd.cmd) {
+        this.runCommand(cmd, cmd.cmd, cmd['stop-cmd'] ? 2 : 0)
+      }
+    },
     stop (cmd) {
-      if (this.status[cmd.slug] === 2 && !cmd.proc) {
-        this.start(cmd, true)
+      if (cmd.stop) {
+        return true
+      }
+      if (cmd['stop-cmd'] && this.status[cmd.slug] === 2 && !cmd.proc) {
+        cmd.stop = true
+        this.runCommand(cmd, cmd['stop-cmd'], 0)
         return true
       }
       if (this.status[cmd.slug] === 1 && cmd.proc) {
@@ -172,6 +193,11 @@ window.app = new Vue({
       }
       return false
     },
+    clear (cmd) {
+      if (this.content[cmd.slug]) {
+        this.content[cmd.slug] = []
+      }
+    },
     restart (cmd) {
       cmd.restart = true
       this.stop(cmd)
@@ -179,12 +205,27 @@ window.app = new Vue({
     onClose () {
       let ret = undefined
       this.commands.forEach(cmd => {
-        if (this.stop(cmd)) {
+        if (this.stop(cmd) || cmd.proc) {
           ret = false
           this.closing = true
         }
       })
       return ret
+    },
+    forceClose () {
+      this.isForceClose = true
+      window.close()
+    },
+    openShell (cmd) {
+      if (this.shell && this.shell.length) {
+        const cwd = this.getCWD(cmd)
+        const argv = this.shell.map(arg => arg.replace('%dir%', cwd))
+        const subprocess = childProcess.spawn(argv[0], argv.slice(1), {
+          detached: true,
+          stdio: 'ignore'
+        })
+        subprocess.unref()
+      }
     },
     openLink (url) {
       electron.shell.openExternal(url)

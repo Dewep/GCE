@@ -24,6 +24,41 @@ a:hover, a:focus, a:active {
 
 #app {
   display: flex;
+  flex-direction: column;
+}
+#main {
+  display: flex;
+  flex: 1 1 auto;
+  height: 100%;
+}
+#status-bar {
+  flex: 0 0 auto;
+  height: 20px;
+  line-height: 20px;
+  background: #262626;
+  font-size: 90%;
+}
+#status-bar a {
+  text-decoration: none;
+  background: #444444;
+  display: inline-block;
+  padding: 0 10px;
+  cursor: pointer;
+}
+#status-bar li {
+  float: right;
+  display: block;
+  margin-left: 5px;
+}
+#status-bar a.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: initial;
+}
+#status-bar .version {
+  float: left;
+  font-size: 90%;
+  color: #555555;
 }
 ul#menu {
   flex: 0 0 auto;
@@ -97,6 +132,7 @@ ul#menu > li > ul > li a:hover {
 }
 
 #content {
+  position: relative;
   flex: 1 1 auto;
   height: 100%;
   overflow-x: hidden;
