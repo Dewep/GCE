@@ -16,10 +16,23 @@ The list of commands must be in your "home" folder (`C:/Users/XXXX/` or `/home/X
 
 root: C:\Users\Dewep\Documents\projects
 
+shell: [C:\Program Files\Git\git-bash.exe, --cd=%dir%]
+
+extra:
+  git:
+    name: Git pull FF
+    cmd: git pull --ff-only
+  npm:
+    name: Npm install
+    cmd: npm install
+
+default-extra: [git, npm]
+
 commands:
   - name: Vagrant WorkSpace
     cmd: vagrant up
     stop-cmd: vagrant halt
+    extra: []
 
   - name: Watch-Later/Server
     path: Watch-Later
@@ -33,11 +46,15 @@ __commands[]__:
 
 - `name`: Name of the command. Possibility to group the command in sections, by adding the section name followed by a `/` before the name (`Section name/Command name`).
 - `path` _(optional)_: Directory path to run the command. This is append to the `root` configuration path.
-- `cmd`: Command to exec
+- `cmd`: Command to exec.
 - `stop-cmd` _(optional)_: If defined, allows to have a command to execute when stopping the service. This is useful for commands such as Vagrant: `cmd` is used to start the VM (`vagrant up`), `stop-cmd` to stop it (`vagrant halt`).
+- `extra` _(optional, default to `default-extra`)_: Array of extra commands (present in the status-bar).
 
-## Todo
+__extra[]__:
 
-- Ctrl+L to clear output
-- Ctrl+C to stop
-- Build release for linux
+- `name`: Name of the extra command.
+- `cmd`: Command to exec.
+
+__shell[]__:
+
+- Arguments to spawn a new shell (`Open shell` in the status-bar). `%dir%` is replaced with the directory path of the "command".
