@@ -16,23 +16,32 @@ The list of commands must be in your "home" folder (`C:/Users/XXXX/` or `/home/X
 
 root: C:\Users\Dewep\Documents\projects
 
-shell: [C:\Program Files\Git\git-bash.exe, --cd=%dir%]
-
 extra:
-  git:
+  shell:
+    name: Shell
+    cmd: [C:\Program Files\Git\git-bash.exe, --cd=%dir%]
+    detached: true
+  explorer:
+    name: Explorer
+    cmd: explorer.exe %dir%
+    detached: true
+  git-pull:
     name: Git pull FF
     cmd: git pull --ff-only
-  npm:
-    name: Npm install
-    cmd: npm install
+  npm: npm install
 
-default-extra: [git, npm]
+extra-groups:
+  windows: shell explorer
+  git: git-pull
+  node: npm
+
+extra-default: windows git node
 
 commands:
   - name: Vagrant WorkSpace
     cmd: vagrant up
     stop-cmd: vagrant halt
-    extra: []
+    extra: windows
 
   - name: Watch-Later/Server
     path: Watch-Later
@@ -48,16 +57,17 @@ __commands[]__:
 - `path` _(optional)_: Directory path to run the command. This is append to the `root` configuration path.
 - `cmd`: Command to exec.
 - `stop-cmd` _(optional)_: If defined, allows to have a command to execute when stopping the service. This is useful for commands such as Vagrant: `cmd` is used to start the VM (`vagrant up`), `stop-cmd` to stop it (`vagrant halt`).
-- `extra` _(optional, default to `default-extra`)_: Array of extra commands (present in the status-bar).
+- `extra` _(optional, default to `extra-default`)_: Array of extra (or extra-groups) commands (present in the status-bar).
 
 __extra[]__:
 
 - `name`: Name of the extra command.
 - `cmd`: Command to exec.
+- `detached`: Launch as detached/external script (explorer, shell, etc.). You can use `%dir%` to have the current directory in the command.
 
-__shell[]__:
+__extra-groups[]__:
 
-- Arguments to spawn a new shell (`Open shell` in the status-bar). `%dir%` is replaced with the directory path of the "command".
+Dictionnary to set groups of extras.
 
 ## Credits
 
@@ -65,7 +75,8 @@ Colors (Tomorrow night): https://github.com/chriskempson/tomorrow-theme#tomorrow
 
 Font family (Ubuntu font): https://design.ubuntu.com/font/
 
-## TODO
+Icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com): https://www.flaticon.com/free-icon/chip_141007
+
+## Future
 
 - Better GIT integration (see+switch branch, parallel calls)
-- Remove replay if sub-cmd

@@ -26,7 +26,7 @@
               >
                 <a class="start" @click="start(cmd)">►</a>
                 <a class="stop" @click="stop(cmd)">■</a>
-                <a class="restart" @click="restart(cmd)">↻</a>
+                <a v-show="!cmd.subcmd" class="restart" @click="restart(cmd)">↻</a>
                 <sup v-show="active && active.slug !== cmd.slug && unread[cmd.slug]">•</sup>
                 <b>{{ cmd.title }}</b>
               </li>
@@ -51,7 +51,7 @@
         </div>
       </div>
       <ul id="status-bar" v-show="menu" style="display: none">
-        <li class="version">GCE 1.1.0</li>
+        <li class="version">GCE 1.2.0</li>
         <template v-if="active && active.slug">
           <li>
             <a @click="clear(active)" :class="{ disabled: !content[active.slug] || !content[active.slug].length }">Clear</a>

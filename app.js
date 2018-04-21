@@ -204,6 +204,7 @@ window.app = new Vue({
           } else {
             this.status[cmd.slug] = 3
           }
+          cmd.subcmd = false
           cmd.proc = null
           cmd.stop = false
           if (this.closing) {
@@ -277,6 +278,9 @@ window.app = new Vue({
       if (extra.detached) {
         this.runDetachedCommand(this.active, extra.cmd)
       } else {
+        if (this.active) {
+          this.active.subcmd = true
+        }
         this.runCommand(this.active, extra.cmd || extra)
       }
     },
