@@ -56,11 +56,8 @@
           <li>
             <a @click="clear(active)" :class="{ disabled: !content[active.slug] || !content[active.slug].length }">Clear</a>
           </li>
-          <li>
-            <a @click="openShell(active)" v-if="shell">Open shell</a>
-          </li>
           <li v-for="(extra, $index) in active.extra" :key="'extra-' + active.slug + '-' + $index">
-            <a @click="runCommand(active, extra.cmd || extra)" :class="{ disabled: status[active.slug] !== 0 && status[active.slug] !== 3 }">{{ extra.name || extra.cmd || extra }}</a>
+            <a @click="runSubCommand(extra)" :class="{ disabled: status[active.slug] !== 0 && status[active.slug] !== 3 }">{{ extra.name || extra.cmd || extra }}</a>
           </li>
         </template>
         <li v-if="active && active.url">

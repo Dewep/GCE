@@ -58,3 +58,14 @@ __extra[]__:
 __shell[]__:
 
 - Arguments to spawn a new shell (`Open shell` in the status-bar). `%dir%` is replaced with the directory path of the "command".
+
+## Credits
+
+Colors (Tomorrow night): https://github.com/chriskempson/tomorrow-theme#tomorrow-night
+
+Font family (Ubuntu font): https://design.ubuntu.com/font/
+
+## TODO
+
+- Better GIT integration (see+switch branch, parallel calls)
+- Remove replay if sub-cmd

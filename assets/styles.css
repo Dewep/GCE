@@ -1,12 +1,62 @@
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  src: url("Ubuntu-L_W.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src: url("Ubuntu-R_W.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 300;
+  src: url("Ubuntu-LI_W.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 400;
+  src: url("ubuntu-ri-webfont.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 100;
+  src: url("Ubuntu-Th_W.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-style: normal;
+  font-weight: 300;
+  src: url("UbuntuMono-R_W.woff2") format("woff2");
+}
+
 html, body, #app {
   padding: 0;
   margin: 0;
-  background: #0d1926;
-  color: #f5f5f5;
+  background: #1d1f21;
+  color: #c5c8c6;
   width: 100%;
   height: 100%;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 13px;
+  font-family: Ubuntu, Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 14px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px rgba(55, 59, 65, 0.7);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: #373b41;
 }
 
 ul {
@@ -15,11 +65,11 @@ ul {
   padding: 0;
 }
 a, a:link, a:visited {
-  color: #d9d9d9;
+  color: #969896;
   text-decoration: underline;
 }
 a:hover, a:focus, a:active {
-  color: #EEEEEE;
+  color: #c5c8c6;
 }
 
 #app {
@@ -35,12 +85,12 @@ a:hover, a:focus, a:active {
   flex: 0 0 auto;
   height: 20px;
   line-height: 20px;
-  background: #262626;
+  background: #282a2e;
   font-size: 90%;
 }
 #status-bar a {
   text-decoration: none;
-  background: #444444;
+  background: #373b41;
   display: inline-block;
   padding: 0 10px;
   cursor: pointer;
@@ -58,7 +108,7 @@ a:hover, a:focus, a:active {
 #status-bar .version {
   float: left;
   font-size: 90%;
-  color: #555555;
+  color: #969896;
 }
 ul#menu {
   flex: 0 0 auto;
@@ -66,7 +116,7 @@ ul#menu {
   overflow-x: hidden;
   overflow-y: auto;
   width: 250px;
-  background: #262626;
+  background: #282a2e;
 }
 ul#menu > li {
   padding: 5px 0;
@@ -82,43 +132,44 @@ ul#menu > li > ul {
 }
 ul#menu > li > ul > li {
   cursor: pointer;
-  height: 30px;
-  line-height: 30px;
+  height: 25px;
+  line-height: 25px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 ul#menu > li > ul > li b {
   padding: 6px 0 7px 20px;
+  font-weight: normal;
 }
 ul#menu > li > ul > li:hover, ul#menu > li > ul > li.active {
-  background: #444444;
+  background: #373b41;
 }
 ul#menu > li > ul > li.stopped b {
   opacity: 0.8;
 }
 ul#menu > li > ul > li.running b, ul#menu > li > ul > li a.start {
-  color: #2EC4B6;
+  color: #b5bd68;
 }
 ul#menu > li > ul > li.waiting b, ul#menu > li > ul > li a.restart {
-  color: #5969FF;
+  color: #81a2be;
 }
 ul#menu > li > ul > li.error b, ul#menu > li > ul > li a.stop {
-  color: #E71D36;
+  color: #cc6666;
 }
 ul#menu > li > ul > li a.stop {
   font-size: 23px;
-  line-height: 25px;
-  height: 30px;
+  line-height: 20px;
+  height: 25px;
 }
 ul#menu > li > ul > li sup {
   float: right;
-  color: #5969FF;
+  color: #81a2be;
 }
 ul#menu > li > ul > li a {
   float: right;
   display: block;
-  width: 30px;
+  width: 25px;
   text-align: center;
   font-size: 15px;
   margin-left: 3px;
@@ -128,7 +179,7 @@ ul#menu > li > ul > li.stopped a.restart, ul#menu > li > ul > li.stopped a.stop,
   display: none;
 }
 ul#menu > li > ul > li a:hover {
-  background: #666666;
+  background: rgba(40, 42, 46, 0.25);
 }
 
 #content {
@@ -142,26 +193,26 @@ ul#menu > li > ul > li a:hover {
   position: relative;
   word-break: break-all;
   padding: 0 65px 0 5px;
-  font-family: monospace;
-  font-size: 12px;
+  font-family: "Ubuntu Mono", monospace;
+  font-size: 13px;
 }
 #content > div.stdout {
-  color: #d9d9d9;
+  color: #c5c8c6;
 }
 #content > div.stderr {
-  color: #d9d9d9;
-  background: rgba(231, 29, 54, 0.2);
+  color: #c5c8c6;
+  background: rgba(204, 102, 102, 0.3);
 }
 #content > div.info {
   text-align: center;
   padding: 5px 0;
-  font-family: Verdana;
+  font-family: Ubuntu, Verdana;
   font-size: 80%;
-  color: #5969FF;
+  color: #81a2be;
 }
 #content > div::after {
   top: 0;
-  color: #fff;
+  color: #c5c8c6;
   content: attr(data-time);
   display: block;
   font-size: 8px;
@@ -170,7 +221,7 @@ ul#menu > li > ul > li a:hover {
   pointer-events: none;
   position: absolute;
   opacity: 0.3;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Ubuntu, Verdana, Geneva, Tahoma, sans-serif;
 }
 #content > div:last-child {
   margin-bottom: 50px;
@@ -182,11 +233,11 @@ ul#menu > li > ul > li a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(231, 29, 54, 0.7);
+  background: rgba(204, 102, 102, 0.7);
   z-index: 100;
 }
 #closing p {
-  background: #500000;
+  background: #cc6666;
   padding: 5px 15px;
   border-radius: 15px;
   margin: 50px auto 0;
@@ -198,7 +249,7 @@ ul#menu > li > ul > li a:hover {
   opacity: 0.5;
   text-align: center;
   padding: 200px 10px 10px;
-  color: #d9d9d9;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #c5c8c6;
+  font-family: Ubuntu, Verdana, Geneva, Tahoma, sans-serif;
   font-size: 22px;
 }

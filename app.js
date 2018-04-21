@@ -29,31 +29,65 @@ window.app = new Vue({
     content: {},
     configError,
     colors: [
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?30m/g, color: '#262626' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?31m/g, color: '#b87a7a' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?32m/g, color: '#7ab87a' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?33m/g, color: '#b8b87a' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?34m/g, color: '#7a7ab8' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?35m/g, color: '#b87ab8' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?36m/g, color: '#7ab8b8' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?37m/g, color: '#d9d9d9' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?39m/g, color: '#d9d9d9' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?0m/g, color: '#d9d9d9' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?1m/g, color: '#787878' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?22m/g, color: '#d9d9d9' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?90m/g, color: '#262626' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?91m/g, color: '#b87a7a' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?92m/g, color: '#7ab87a' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?93m/g, color: '#b8b87a' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?94m/g, color: '#7a7ab8' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?95m/g, color: '#b87ab8' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?96m/g, color: '#7ab8b8' },
-      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?[0-9*]m/g, color: '#d9d9d9' }
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?30m/g, color: '#969896' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?31m/g, color: '#cc6666' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?32m/g, color: '#b5bd68' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?33m/g, color: '#f0c674' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?34m/g, color: '#81a2be' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?35m/g, color: '#b294bb' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?36m/g, color: '#8abeb7' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?37m/g, color: '#c5c8c6' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?39m/g, color: '#c5c8c6' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?0m/g, color: '#c5c8c6' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?1m/g, color: '#969896' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?22m/g, color: '#c5c8c6' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?90m/g, color: '#969896' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?91m/g, color: '#cc6666' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?92m/g, color: '#b5bd68' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?93m/g, color: '#f0c674' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?94m/g, color: '#81a2be' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?95m/g, color: '#b294bb' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?96m/g, color: '#8abeb7' },
+      { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?[0-9*]m/g, color: '#c5c8c6' }
     ]
   },
 
   created () {
     let index = 0
+
+    const extraGroups = {}
+    Object.keys(config['extra-groups'] || {}).forEach(extra => {
+      extraGroups[extra] = config['extra-groups'][extra]
+      if (!Array.isArray(extraGroups[extra])) {
+        extraGroups[extra] = extraGroups[extra].split(' ')
+      }
+    })
+    const defaultExtra = config['extra-default'] || config['default-extra'] || []
+
+    const getExtras = extraConfigs => {
+      const extras = []
+      if (extraConfigs === undefined) {
+        extraConfigs = defaultExtra
+      }
+      if (!Array.isArray(extraConfigs)) {
+        extraConfigs = extraConfigs.split(' ')
+      }
+      extraConfigs.forEach(extraConfig => {
+        (extraGroups[extraConfig] || [extraConfig]).forEach(extra => {
+          if (config.extra && config.extra[extra]) {
+            if (typeof config.extra[extra] === 'string' || Array.isArray(config.extra[extra])) {
+              config.extra[extra] = { cmd: config.extra[extra], name: config.extra[extra] }
+            }
+            if (!Array.isArray(config.extra[extra].cmd)) {
+              config.extra[extra].cmd = config.extra[extra].cmd.split(' ')
+            }
+            extras.push(config.extra[extra])
+          }
+        })
+      })
+      return extras
+    }
+
     this.commands.forEach(cmd => {
       const matches = /^(([^/]+)\/)?(.+)$/.exec(cmd.name)
       if (!matches) {
@@ -71,7 +105,11 @@ window.app = new Vue({
       cmd.slug = index + '/' + cmd.name
       index += 1
 
-      cmd.extra = (cmd.extra || config['default-extra'] || []).map(extra => (config.extra || {})[extra]).filter(extra => extra)
+      if (!Array.isArray(cmd.cmd)) {
+        cmd.cmd = cmd.cmd.split(' ')
+      }
+
+      cmd.extra = getExtras(cmd.extra)
 
       Vue.set(this.status, cmd.slug, 0)
       Vue.set(this.unread, cmd.slug, false)
@@ -127,26 +165,36 @@ window.app = new Vue({
       }
     },
     getCWD (cmd) {
-      return config.root && cmd.path ? path.join(config.root, cmd.path) : (config.root || cmd.path || undefined)
+      if (config.root && cmd.path) {
+        if (path.isAbsolute(cmd.path)) {
+          return cmd.path
+        }
+        return path.join(config.root, cmd.path)
+      }
+      return config.root || cmd.path || undefined
     },
     runCommand (cmd, command, statusOnSuccess = 0) {
       if (this.status[cmd.slug] !== 1 && !cmd.proc) {
         this.status[cmd.slug] = 1
         const cwd = this.getCWD(cmd)
 
-        const callback = (error) => {
-          if (error) {
-            this.addContent(cmd, 'stderr', error.toString())
-          }
-        }
-        this.addContent(cmd, 'info', cwd ? (cwd + '\n' + command) : command)
-        cmd.proc = childProcess.exec(command, { cwd }, callback)
+        // const callback = (error) => {
+        //   if (error) {
+        //     this.addContent(cmd, 'stderr', error.toString())
+        //   }
+        // }
+        this.addContent(cmd, 'info', cwd ? (cwd + '\n' + command.join(' ')) : command.join(' '))
+        // cmd.proc = childProcess.exec(command, { cwd }, callback)
+        cmd.proc = childProcess.spawn(command[0], command.slice(1), { cwd, shell: true })
 
         cmd.proc.stdout.on('data', data => {
           this.addContent(cmd, 'stdout', data.toString())
         })
         cmd.proc.stderr.on('data', data => {
           this.addContent(cmd, 'stderr', data.toString())
+        })
+        cmd.proc.on('error', err => {
+          this.addContent(cmd, 'stderr', err.message)
         })
         cmd.proc.on('close', code => {
           this.addContent(cmd, 'info', `Process exited with code ${code}`)
@@ -216,15 +264,20 @@ window.app = new Vue({
       this.isForceClose = true
       window.close()
     },
-    openShell (cmd) {
-      if (this.shell && this.shell.length) {
-        const cwd = this.getCWD(cmd)
-        const argv = this.shell.map(arg => arg.replace('%dir%', cwd))
-        const subprocess = childProcess.spawn(argv[0], argv.slice(1), {
-          detached: true,
-          stdio: 'ignore'
-        })
-        subprocess.unref()
+    runDetachedCommand (cmd, subcmd) {
+      const cwd = this.getCWD(cmd)
+      const argv = subcmd.map(arg => arg.replace('%dir%', cwd))
+      const subprocess = childProcess.spawn(argv[0], argv.slice(1), {
+        detached: true,
+        stdio: 'ignore'
+      })
+      subprocess.unref()
+    },
+    runSubCommand (extra) {
+      if (extra.detached) {
+        this.runDetachedCommand(this.active, extra.cmd)
+      } else {
+        this.runCommand(this.active, extra.cmd || extra)
       }
     },
     openLink (url) {
