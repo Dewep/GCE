@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const childProcess = require('child_process')
 const electron = require('electron')
+const treeKill = require('tree-kill')
 
 const configFile = path.join(electron.remote.app.getPath('home'), 'gce.yml')
 let config = {}
@@ -107,6 +108,9 @@ window.app = new Vue({
 
       if (!Array.isArray(cmd.cmd)) {
         cmd.cmd = cmd.cmd.split(' ')
+      }
+      if (cmd['stop-cmd'] && !Array.isArray(cmd['stop-cmd'])) {
+        cmd['stop-cmd'] = cmd['stop-cmd'].split(' ')
       }
 
       cmd.extra = getExtras(cmd.extra)
@@ -233,11 +237,17 @@ window.app = new Vue({
       if (this.status[cmd.slug] === 1 && cmd.proc) {
         this.addContent(cmd, 'info', 'Killing the process...')
         cmd.stop = true
-        if (process.platform === 'win32') {
-          childProcess.exec('taskkill -F -T -PID ' + cmd.proc.pid)
-        } else {
-          cmd.proc.kill('SIGINT')
-        }
+        treeKill(cmd.proc.pid, err => {
+          if (err) {
+            this.addContent(cmd, 'info', 'Error during killing the process')
+            this.addContent(cmd, 'info', err.message)
+          }
+        })
+        // if (process.platform === 'win32') {
+        //   childProcess.exec('taskkill -F -T -PID ' + cmd.proc.pid)
+        // } else {
+        //   cmd.proc.kill('SIGINT')
+        // }
         return true
       }
       return false
@@ -269,6 +279,7 @@ window.app = new Vue({
       const cwd = this.getCWD(cmd)
       const argv = subcmd.map(arg => arg.replace('%dir%', cwd))
       const subprocess = childProcess.spawn(argv[0], argv.slice(1), {
+        cwd,
         detached: true,
         stdio: 'ignore'
       })

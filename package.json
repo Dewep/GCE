@@ -1,6 +1,6 @@
 {
   "name": "gce",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Global Commands Execution",
   "main": "main.js",
   "repository": {
@@ -34,10 +34,11 @@
     }
   },
   "dependencies": {
-    "js-yaml": "^3.11.0"
+    "js-yaml": "^3.11.0",
+    "tree-kill": "^1.2.0"
   },
   "devDependencies": {
-    "electron": "^1.8.4",
-    "electron-builder": "^20.8.1"
+    "electron": "^1.8.6",
+    "electron-builder": "^20.11.1"
   }
 }

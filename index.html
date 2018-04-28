@@ -51,13 +51,13 @@
         </div>
       </div>
       <ul id="status-bar" v-show="menu" style="display: none">
-        <li class="version">GCE 1.2.0</li>
+        <li class="version">GCE 1.2.1</li>
         <template v-if="active && active.slug">
           <li>
             <a @click="clear(active)" :class="{ disabled: !content[active.slug] || !content[active.slug].length }">Clear</a>
           </li>
           <li v-for="(extra, $index) in active.extra" :key="'extra-' + active.slug + '-' + $index">
-            <a @click="runSubCommand(extra)" :class="{ disabled: status[active.slug] !== 0 && status[active.slug] !== 3 }">{{ extra.name || extra.cmd || extra }}</a>
+            <a @click="runSubCommand(extra)" :class="{ disabled: !extra.detached && status[active.slug] !== 0 && status[active.slug] !== 3 }">{{ extra.name || extra.cmd || extra }}</a>
           </li>
         </template>
         <li v-if="active && active.url">
