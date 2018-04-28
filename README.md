@@ -2,19 +2,19 @@
 
 ## What is GCE?
 
-Nowadays, we use more and more a microservice architecture. The frontend is developed in Vue.js, which uses a NodeJS API, using another API to generate assets, another API to send emails, etc. If you need to work in parallel on 2/3 projects, you will quickly get about ten shells launched.
+GCE is a desktop application that provides a single context to manage and run multiple scripts. [Download the latest release.](https://github.com/Dewep/GCE/releases/latest)
 
-After having trouble opening and managing all these shells every day, I thought it was time to create a little tool to run all these scripts.
+## Why GCE?
 
-Using the Electron-NodeJS combo, GCE reads a yml configuration file listing your various scripts. You can execute them from this interface, in parallel, see the outputs stdout+stderr, or execute other more standard commands in these same directories (git pull, npm install, etc.).
+As web applications are being split in micro services and independant entities, it becomes harder and harder to setup a local dev environment and you have to handle dozen of shell terminals.
 
-[Download the latest release.](https://github.com/Dewep/GCE/releases/latest)
+GCE aims to take that pain away by offering you the ability to configure the setup of your projects once and run it in the blink of an eye.
 
 ![Preview](assets/preview.png)
 
-## Configuration file
+## Usage
 
-The list of commands must be in your "home" folder (`C:/Users/XXXX/` or `/home/XXXX/`), in a configuration file named `gce.yml`.
+You just have to create a configuration file in your `home` folder (`C:/Users/XXXX/` or `/home/XXXX/`), in a file named `gce.yml`, describing all of your commands.
 
 ```yml
 ---
@@ -79,6 +79,15 @@ __extra-groups[]__:
 
 Dictionnary to set groups of extras.
 
+## Build
+
+```bash
+$> git clone git@github.com:Dewep/GCE.git
+$> cd GCE
+$> npm install
+$> npm run dist
+```
+
 ## Credits
 
 - Colors (Tomorrow night): https://github.com/chriskempson/tomorrow-theme#tomorrow-night
@@ -88,6 +97,10 @@ Dictionnary to set groups of extras.
 - Desktop webapp: https://electronjs.org
 - NodeJS package to parse yaml: https://github.com/nodeca/js-yaml
 - NodeJS package to kill trees of processes: https://github.com/pkrumins/node-tree-kill
+
+## License
+
+Dewep/GCE is licensed under the [GNU General Public License v3.0](LICENSE).
 
 ## Future
 
