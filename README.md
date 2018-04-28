@@ -1,14 +1,20 @@
-# GCE
+# GCE (Global Commands Execution)
 
-## Global Commands Execution
+## What is GCE?
 
-Desktop application to run regular scripts (webpack dev, server, vagrant, etc.). [Download the latest release.](https://github.com/Dewep/GCE/releases/latest)
+Nowadays, we use more and more a microservice architecture. The frontend is developed in Vue.js, which uses a NodeJS API, using another API to generate assets, another API to send emails, etc. If you need to work in parallel on 2/3 projects, you will quickly get about ten shells launched.
+
+After having trouble opening and managing all these shells every day, I thought it was time to create a little tool to run all these scripts.
+
+Using the Electron-NodeJS combo, GCE reads a yml configuration file listing your various scripts. You can execute them from this interface, in parallel, see the outputs stdout+stderr, or execute other more standard commands in these same directories (git pull, npm install, etc.).
+
+[Download the latest release.](https://github.com/Dewep/GCE/releases/latest)
 
 ![Preview](assets/preview.png)
 
-The list of commands must be in your "home" folder (`C:/Users/XXXX/` or `/home/XXXX/`), in a configuration file named `gce.yml`.
-
 ## Configuration file
+
+The list of commands must be in your "home" folder (`C:/Users/XXXX/` or `/home/XXXX/`), in a configuration file named `gce.yml`.
 
 ```yml
 ---
@@ -28,11 +34,15 @@ extra:
   git-pull:
     name: Git pull FF
     cmd: git pull --ff-only
+  git-gui:
+    name: Git GUI
+    cmd: git-gui.exe
+    detached: true
   npm: npm install
 
 extra-groups:
   windows: shell explorer
-  git: git-pull
+  git: git-pull git-gui
   node: npm
 
 extra-default: windows git node
@@ -71,11 +81,13 @@ Dictionnary to set groups of extras.
 
 ## Credits
 
-Colors (Tomorrow night): https://github.com/chriskempson/tomorrow-theme#tomorrow-night
+- Colors (Tomorrow night): https://github.com/chriskempson/tomorrow-theme#tomorrow-night
+- Font family (Ubuntu font): https://design.ubuntu.com/font/
+- Icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com): https://www.flaticon.com/free-icon/chip_141007
 
-Font family (Ubuntu font): https://design.ubuntu.com/font/
-
-Icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com): https://www.flaticon.com/free-icon/chip_141007
+- Desktop webapp: https://electronjs.org
+- NodeJS package to parse yaml: https://github.com/nodeca/js-yaml
+- NodeJS package to kill trees of processes: https://github.com/pkrumins/node-tree-kill
 
 ## Future
 
