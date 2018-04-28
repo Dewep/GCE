@@ -58,6 +58,12 @@ html, body, #app {
   border-radius: 2px;
   background: #373b41;
 }
+::selection {
+  background: #81a2be; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #81a2be; /* Gecko Browsers */
+}
 
 ul {
   list-style: none;
@@ -222,6 +228,9 @@ ul#menu > li > ul > li a:hover {
   position: absolute;
   opacity: 0.3;
   font-family: Ubuntu, Verdana, Geneva, Tahoma, sans-serif;
+}
+#content > div:hover::after {
+  opacity: 0.6;
 }
 #content > div:last-child {
   margin-bottom: 50px;
