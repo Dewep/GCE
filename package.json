@@ -34,6 +34,7 @@
     }
   },
   "dependencies": {
+    "fix-path": "^2.1.0",
     "js-yaml": "^3.11.0",
     "tree-kill": "^1.2.0"
   },

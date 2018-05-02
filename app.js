@@ -4,6 +4,9 @@ const path = require('path')
 const childProcess = require('child_process')
 const electron = require('electron')
 const treeKill = require('tree-kill')
+const fixPath = require('fix-path')
+
+fixPath() // Fix for MacOS users, include /usr/local/bin in $PATH
 
 const configFile = path.join(electron.remote.app.getPath('home'), 'gce.yml')
 let config = {}
