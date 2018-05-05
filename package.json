@@ -31,6 +31,9 @@
     "linux": {
       "target": "AppImage",
       "category": "Development"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools"
     }
   },
   "dependencies": {
