@@ -22,8 +22,9 @@ window.app = new Vue({
   el: '#app',
 
   data: {
+    env: Object.assign({}, process.env),
     commands: config.commands || [],
-    shell: config.shell,
+    linesLimit: config.linesLimit || 1000,
     menu: {},
     closing: false,
     isForceClose: false,
@@ -31,6 +32,7 @@ window.app = new Vue({
     status: {},
     unread: {},
     content: {},
+    size: {},
     configError,
     colors: [
       { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?30m/g, color: '#969896' },
@@ -92,6 +94,23 @@ window.app = new Vue({
       return extras
     }
 
+    const parseEnv = (env, line) => {
+      const parts = line.split('=')
+      if (parts.length > 1) {
+        const key = parts.shift()
+        const value = parts.join('=').replace(/\$\{(\w+)\}|\$([A-Za-z0-9_-]+)(?:[^A-Za-z0-9_-]|$)/g, function (segment, first, second) {
+          return env[first || second] || ''
+        })
+        env[key] = value
+      }
+    }
+
+    if (config.env) {
+      config.env.forEach(env => {
+        parseEnv(this.env, env)
+      })
+    }
+
     this.commands.forEach(cmd => {
       const matches = /^(([^/]+)\/)?(.+)$/.exec(cmd.name)
       if (!matches) {
@@ -118,9 +137,18 @@ window.app = new Vue({
 
       cmd.extra = getExtras(cmd.extra)
 
+      if (cmd.env) {
+        const cmdEnv = cmd.env
+        cmd.env = Object.assign({}, this.env)
+        cmdEnv.forEach(env => {
+          parseEnv(cmd.env, env)
+        })
+      }
+
       Vue.set(this.status, cmd.slug, 0)
       Vue.set(this.unread, cmd.slug, false)
       Vue.set(this.content, cmd.slug, [])
+      Vue.set(this.size, cmd.slug, 0)
     })
     window.onbeforeunload = () => {
       if (this.isForceClose) {
@@ -164,7 +192,15 @@ window.app = new Vue({
           }
         }
         this.unread[cmd.slug] = true
-        this.content[cmd.slug].push({ type, data: this.toHtml(data), time: (new Date()).toLocaleTimeString() })
+        const html = this.toHtml(data)
+        const size = 1 + (data.match(/\n/g) || []).length
+        this.content[cmd.slug].push({ type, data: html, time: (new Date()).toLocaleTimeString(), size })
+        this.size[cmd.slug] += size
+
+        while (this.size[cmd.slug] > this.linesLimit && this.content[cmd.slug].length > 2) {
+          this.size[cmd.slug] -= this.content[cmd.slug][0].size
+          this.content[cmd.slug].shift()
+        }
 
         if (this.active && cmd.slug === this.active.slug) {
           this.autoScroll()
@@ -185,14 +221,8 @@ window.app = new Vue({
         this.status[cmd.slug] = 1
         const cwd = this.getCWD(cmd)
 
-        // const callback = (error) => {
-        //   if (error) {
-        //     this.addContent(cmd, 'stderr', error.toString())
-        //   }
-        // }
         this.addContent(cmd, 'info', cwd ? (cwd + '\n' + command.join(' ')) : command.join(' '))
-        // cmd.proc = childProcess.exec(command, { cwd }, callback)
-        cmd.proc = childProcess.spawn(command[0], command.slice(1), { cwd, shell: true })
+        cmd.proc = childProcess.spawn(command[0], command.slice(1), { cwd, shell: true, env: cmd.env || this.env })
 
         cmd.proc.stdout.on('data', data => {
           this.addContent(cmd, 'stdout', data.toString())
@@ -246,11 +276,6 @@ window.app = new Vue({
             this.addContent(cmd, 'info', err.message)
           }
         })
-        // if (process.platform === 'win32') {
-        //   childProcess.exec('taskkill -F -T -PID ' + cmd.proc.pid)
-        // } else {
-        //   cmd.proc.kill('SIGINT')
-        // }
         return true
       }
       return false
@@ -258,6 +283,7 @@ window.app = new Vue({
     clear (cmd) {
       if (this.content[cmd.slug]) {
         this.content[cmd.slug] = []
+        this.size[cmd.slug] = 0
       }
     },
     restart (cmd) {
@@ -283,6 +309,7 @@ window.app = new Vue({
       const argv = subcmd.map(arg => arg.replace('%dir%', cwd))
       const subprocess = childProcess.spawn(argv[0], argv.slice(1), {
         cwd,
+        env: cmd.env || this.env,
         detached: true,
         stdio: 'ignore'
       })

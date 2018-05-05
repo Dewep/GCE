@@ -24,9 +24,9 @@
                 :class="{ active: active && active.slug === cmd.slug, stopped: status[cmd.slug] === 0, running: status[cmd.slug] === 1, waiting: status[cmd.slug] === 2, error: status[cmd.slug] === 3 }"
                 @click="selectCmd(cmd)"
               >
-                <a class="start" @click="start(cmd)">►</a>
-                <a class="stop" @click="stop(cmd)">■</a>
-                <a v-show="!cmd.subcmd" class="restart" @click="restart(cmd)">↻</a>
+                <a class="start tooltip tooltip-left" data-tooltip="Start" @click="start(cmd)">►</a>
+                <a class="stop tooltip tooltip-left" data-tooltip="Stop" @click="stop(cmd)">■</a>
+                <a v-show="!cmd.subcmd" class="restart tooltip tooltip-left" data-tooltip="Restart" @click="restart(cmd)">↻</a>
                 <sup v-show="active && active.slug !== cmd.slug && unread[cmd.slug]">•</sup>
                 <b>{{ cmd.title }}</b>
               </li>
@@ -51,7 +51,7 @@
         </div>
       </div>
       <ul id="status-bar" v-show="menu" style="display: none">
-        <li class="version">GCE 1.2.1</li>
+        <li class="version"><a class="tooltip" data-tooltip="Restart the application" href="#" @click.prevent="window.location.reload()">Restart GCE 1.3.0</a></li>
         <template v-if="active && active.slug">
           <li>
             <a @click="clear(active)" :class="{ disabled: !content[active.slug] || !content[active.slug].length }">Clear</a>
@@ -61,7 +61,7 @@
           </li>
         </template>
         <li v-if="active && active.url">
-          <a :href="active.url" @click.prevent="openLink(active.url)">{{ active.urlText || active.url }}</a>
+          <a :href="active.url" class="tooltip" data-tooltip="Open in browser" @click.prevent="openLink(active.url)">{{ active.urlText || active.url }}</a>
         </li>
       </ul>
     </div>
