@@ -111,6 +111,8 @@ window.app = new Vue({
       })
     }
 
+    const defaultNotification = config.notification !== false
+
     this.commands.forEach(cmd => {
       const matches = /^(([^/]+)\/)?(.+)$/.exec(cmd.name)
       if (!matches) {
@@ -147,11 +149,14 @@ window.app = new Vue({
 
       cmd['success-code'] = cmd['success-code'] || 0
 
+      cmd.notification = cmd.notification === true || cmd.notification === false ? cmd.notification : defaultNotification
+
       Vue.set(this.status, cmd.slug, 0)
       Vue.set(this.unread, cmd.slug, false)
       Vue.set(this.content, cmd.slug, [])
       Vue.set(this.size, cmd.slug, 0)
     })
+
     window.onbeforeunload = () => {
       if (this.isForceClose) {
         return
@@ -184,6 +189,30 @@ window.app = new Vue({
       str += '</span>'
       return str.replace(/\n/g, '<br>')
     },
+    sendNotification (cmd, title, body, force) {
+      if (window.isFocus || cmd.notification === false) {
+        return
+      }
+      if (force && cmd.notificationTimer) {
+        clearTimeout(cmd.notificationTimer)
+        cmd.notificationTimer = null
+      }
+      if (cmd.notificationTimer) {
+        return
+      }
+      cmd.notificationTimer = setTimeout(() => {
+        cmd.notificationTimer = null
+      }, 2000)
+      const notification = new Notification('GCE: ' + title, {
+        body,
+        icon: path.join(__dirname, 'assets', 'icon.png')
+      })
+      notification.onclick = () => {
+        this.selectCmd(cmd)
+        window.focusWindow()
+        notification.close()
+      }
+    },
     addContent (cmd, type, data) {
       if (this.content[cmd.slug]) {
         if (!cmd.url) {
@@ -206,6 +235,14 @@ window.app = new Vue({
 
         if (this.active && cmd.slug === this.active.slug) {
           this.autoScroll()
+        }
+
+        if (type === 'stderr') {
+          let body = data
+          if (body.length > 250) {
+            body = body.substr(0, 245) + '...'
+          }
+          this.sendNotification(cmd, cmd.name, body)
         }
       }
     },
@@ -236,12 +273,14 @@ window.app = new Vue({
           this.addContent(cmd, 'stderr', err.message)
         })
         cmd.proc.on('close', code => {
-          this.addContent(cmd, 'info', `Process exited with code ${code}`)
+          const message = `Process exited with code ${code}`
+          this.addContent(cmd, 'info', message)
 
           if (cmd.stop || code === cmd['success-code']) {
             this.status[cmd.slug] = statusOnSuccess
           } else {
             this.status[cmd.slug] = 3
+            this.sendNotification(cmd, cmd.name, message, true)
           }
           cmd.subcmd = false
           cmd.proc = null

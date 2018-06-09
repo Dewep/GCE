@@ -49,6 +49,8 @@ root: C:\Users\Dewep\Documents\projects
 #   - "detached": Run as detached/external script (explorer, shell, etc.).
 #   - "success-code": Optional option, default to 0. Define the success return code. This
 #     is useful only for non-detached commands.
+#   - "notification": Optional option, override the global notification setting. This is
+#     useful only for non-detached commands.
 #
 # Example:
 # extra:
@@ -150,6 +152,7 @@ env:
 #    of your extra (or extra-groups) commands (present in the bottom bar).
 #  - "env": Optional option. Override some environment variables.
 #  - "success-code": Optional option, default to 0. Define the success return code.
+#  - "notification": Optional option, override the global notification setting.
 #
 # Example:
 # commands:
@@ -166,6 +169,7 @@ env:
 #   - name: Watch-Later/Brunch watch
 #     path: Watch-Later
 #     cmd: npm run watch-app
+#     notification: false
 commands:
   # Section "General"
   - name: Vagrant WorkSpace
@@ -192,6 +196,12 @@ commands:
 #
 # Example:
 # lines-limit: 1000
+
+
+# Enable/disable the notification on errors. Default to true.
+#
+# Example:
+# notification: false
 ```
 
 ## Troubleshooting

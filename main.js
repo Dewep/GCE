@@ -22,11 +22,17 @@ function createWindow () {
 
   // Create the window using the state information
   mainWindow = new BrowserWindow({
+    show: false,
     icon: path.join(__dirname, 'assets', 'icon.png'),
     x: mainWindowState.x,
     y: mainWindowState.y,
     width: mainWindowState.width,
-    height: mainWindowState.height
+    height: mainWindowState.height,
+    autoHideMenuBar: true,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    },
+    title: 'GCE'
   })
 
   // Let us register listeners on the window, so we can update the state
@@ -44,10 +50,29 @@ function createWindow () {
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
-  // Disable menu
-  mainWindow.setMenu(null)
+  mainWindow.once('ready-to-show', mainWindow.show)
+
+  electron.ipcMain.on('register-focus-event', event => {
+    mainWindow.on('focus', function () {
+      event.sender.send('update-focus', '1')
+    })
+    mainWindow.on('blur', function () {
+      event.sender.send('update-focus', '0')
+    })
+  })
+
+  electron.ipcMain.on('focus-window', () => {
+    setImmediate(function () {
+      mainWindow.focus()
+      mainWindow.webContents.focus()
+      mainWindow.focusOnWebView()
+    })
+  })
 
   // Emitted when the window is closed.
+  mainWindow.on('close', function () {
+    mainWindow.hide()
+  })
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
@@ -55,6 +80,9 @@ function createWindow () {
     mainWindow = null
   })
 }
+
+// Notification
+app.setAppUserModelId('net.dewep.gce')
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
