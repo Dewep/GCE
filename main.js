@@ -53,7 +53,11 @@ function createWindow () {
   }))
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  if (process.argv0.endsWith('GCE\\node_modules\\electron\\dist\\electron.exe')) {
+    mainWindow.webContents.openDevTools()
+  }
+
+  let minimizeOnClose = false
 
   const appIcon = new electron.Tray(path.join(__dirname, 'assets', 'icon.png'))
   appIcon.setContextMenu(electron.Menu.buildFromTemplate([
@@ -78,7 +82,7 @@ function createWindow () {
     }
   ]))
   appIcon.on('click', () => {
-    if (mainWindow.isVisible()) {
+    if (minimizeOnClose && mainWindow.isVisible()) {
       mainWindow.hide()
     } else {
       if (mainWindow.isMinimized()) {
@@ -107,8 +111,6 @@ function createWindow () {
       mainWindow.focusOnWebView()
     })
   })
-
-  let minimizeOnClose = false
 
   electron.ipcMain.on('minimize-on-close', (event, arg) => {
     minimizeOnClose = arg === '1'
