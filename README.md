@@ -194,6 +194,54 @@ commands:
 # lines-limit: 1000
 ```
 
+## Troubleshooting
+
+### Relative path in the command
+
+```yml
+commands:
+  - name: Does not work
+    path: directory/to/project
+    cmd: ./bin/run.sh
+
+  - name: Solution 1
+    path: directory/to/project/bin
+    cmd: run.sh
+  - name: Solution 2
+    path: directory/to/project
+    cmd: sh ./bin/run.sh
+```
+
+### Custom env PATH on Windows
+
+On Windows, the `PATH` env use `;` as separator (because `:` is used in `C:\`) (try to run `env` in `cmd.exe`).
+
+However, in `git-bash.exe`, `PATH` use `:`, and windows path are replaced by an Unix notation: `/c/Program Files/Git/bin`.
+
+To be perfectly honest, I'm a little confused about what's really used in GCE, and it may also depend on NodeJS. So in case you want to custom your `PATH` variable, try the Unix notation for Windows paths, or, if it doesn't work, use the `;` separator.
+
+```yml
+# Does not work
+env:
+  - PATH=C:\Program Files\Git\bin:$PATH
+
+# Possible solution
+env:
+  - PATH=/c/Program Files/Git/bin:$PATH
+
+# Another possible solution
+env:
+  - PATH=C:\Program Files\Git\bin;$PATH
+```
+
+If you want to test, just create a temporary `env` command:
+
+```yml
+commands:
+  - name: Env test
+    cmd: env
+```
+
 ## Build
 
 Requirements: NodeJS. I haven't tested it, but I think it should work from Node 6.x. Tested on NodeJS 8.9.4 (npm 5.6.0).
