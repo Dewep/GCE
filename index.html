@@ -51,7 +51,7 @@
         </div>
       </div>
       <ul id="status-bar" v-show="menu" style="display: none">
-        <li class="version"><a class="tooltip" data-tooltip="Restart the application" href="#" @click.prevent="window.location.reload()">Restart GCE 1.3.0</a></li>
+        <li class="version"><a class="tooltip" data-tooltip="Restart the application" href="#" @click.prevent="window.location.reload()">Restart GCE {{ window.GCEVersion }}</a></li>
         <template v-if="active && active.slug">
           <li>
             <a @click="clear(active)" :class="{ disabled: !content[active.slug] || !content[active.slug].length }">Clear</a>
