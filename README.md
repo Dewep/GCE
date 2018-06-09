@@ -47,6 +47,8 @@ root: C:\Users\Dewep\Documents\projects
 #     the spaces. If your arguments have spaces, define your command as an array
 #     ("[C:\Program Files\Git\git-bash.exe, --cd=%dir%]").
 #   - "detached": Run as detached/external script (explorer, shell, etc.).
+#   - "success-code": Optional option, default to 0. Define the success return code. This
+#     is useful only for non-detached commands.
 #
 # Example:
 # extra:
@@ -147,6 +149,7 @@ env:
 #  - "extra": Optional option, default value is the "extra-default" configuration. List
 #    of your extra (or extra-groups) commands (present in the bottom bar).
 #  - "env": Optional option. Override some environment variables.
+#  - "success-code": Optional option, default to 0. Define the success return code.
 #
 # Example:
 # commands:

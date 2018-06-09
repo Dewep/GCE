@@ -145,6 +145,8 @@ window.app = new Vue({
         })
       }
 
+      cmd['success-code'] = cmd['success-code'] || 0
+
       Vue.set(this.status, cmd.slug, 0)
       Vue.set(this.unread, cmd.slug, false)
       Vue.set(this.content, cmd.slug, [])
@@ -236,7 +238,7 @@ window.app = new Vue({
         cmd.proc.on('close', code => {
           this.addContent(cmd, 'info', `Process exited with code ${code}`)
 
-          if (cmd.stop || code === 0) {
+          if (cmd.stop || code === cmd['success-code']) {
             this.status[cmd.slug] = statusOnSuccess
           } else {
             this.status[cmd.slug] = 3
