@@ -13,4 +13,8 @@ process.once('loaded', () => {
   global.focusWindow = () => {
     ipcRenderer.send('focus-window')
   }
+
+  global.minimizeOnClose = (value) => {
+    ipcRenderer.send('minimize-on-close', value ? '1' : '0')
+  }
 })

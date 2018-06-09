@@ -202,6 +202,12 @@ commands:
 #
 # Example:
 # notification: false
+
+
+# Minimize the application instead of closing it. Default to false.
+#
+# Example:
+# minimize-on-close: true
 ```
 
 ## Troubleshooting

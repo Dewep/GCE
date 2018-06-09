@@ -34,6 +34,7 @@ window.app = new Vue({
     content: {},
     size: {},
     configError,
+    minimizeOnClose: false,
     colors: [
       { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?30m/g, color: '#969896' },
       { pattern: /(\u001b|\u033b|\x1b)\[([0-9]*;|[0-9]*)?31m/g, color: '#cc6666' },
@@ -112,6 +113,8 @@ window.app = new Vue({
     }
 
     const defaultNotification = config.notification !== false
+
+    window.minimizeOnClose(config['minimize-on-close'] === true)
 
     this.commands.forEach(cmd => {
       const matches = /^(([^/]+)\/)?(.+)$/.exec(cmd.name)
