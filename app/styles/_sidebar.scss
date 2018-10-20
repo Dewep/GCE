@@ -1,0 +1,197 @@
+@import 'variables';
+
+.sidebar {
+  background: $bg-color-sidebar;
+  width: 16rem;
+
+  a {
+    &,
+    &:link,
+    &:visited {
+      color: $light-color;
+    }
+
+    &:hover {
+      background: $bg-color-sidebar-light;
+      color: $light-color;
+    }
+
+    &:focus,
+    &:active,
+    &.active {
+      background: $selection-color;
+      color: $light-color;
+    }
+
+    .code {
+      &:focus,
+      &:active,
+      &.active {
+        background: $bg-color-sidebar;
+      }
+    }
+  }
+
+  h2 {
+    font-weight: 100;
+    margin: 0;
+  }
+
+  .project {
+    margin: .5rem 0;
+  }
+
+  .project-title {
+    h2,
+    a,
+    sup {
+      font-size: .7rem;
+      padding: .4rem .3rem .3rem;
+    }
+
+    h2 {
+      text-transform: uppercase;
+    }
+
+    .toggle-open {
+      visibility: hidden;
+    }
+
+    &:hover {
+      .toggle-open {
+        visibility: visible;
+      }
+    }
+  }
+
+  .extra-info {
+    font-size: 70%;
+    opacity: .7;
+  }
+
+  .git-origin-up {
+    color: $error-color;
+  }
+
+  .git-origin-down {
+    color: $warning-color;
+  }
+
+  .directory-title {
+    h2,
+    a,
+    sup {
+      font-size: .7rem;
+      font-weight: 500;
+      padding: .4rem .3rem .1rem;
+    }
+
+    h2 {
+      padding-left: 1.2rem;
+    }
+  }
+
+  .command {
+    h2,
+    a,
+    sup {
+      font-size: .7rem;
+      padding: .2rem .3rem;
+    }
+
+    h2 {
+      padding-left: 2rem;
+    }
+
+    .start,
+    .stop,
+    .restart {
+      display: none;
+      font-size: 120%;
+      padding: .1rem .3rem;
+    }
+
+    &.status-running {
+      h2 {
+        color: $success-color;
+      }
+    }
+
+    &.status-starting {
+      h2 {
+        color: $warning-color;
+      }
+    }
+
+    &.status-started {
+      h2 {
+        color: $blue-color;
+      }
+    }
+
+    &.status-error {
+      h2 {
+        color: $error-color;
+      }
+    }
+
+    .start {
+      color: $success-color;
+    }
+
+    .stop {
+      color: $error-color;
+
+      span {
+        display: block;
+        transform: translate(0, .05rem);
+      }
+    }
+
+    .restart {
+      color: $blue-color;
+
+      span {
+        display: block;
+        transform: translate(0, .1rem);
+      }
+    }
+
+    .unread {
+      span {
+        display: block;
+        transform: translate(0, .05rem);
+      }
+    }
+
+    &.status-stopped,
+    &.status-error {
+      .start {
+        display: block;
+      }
+    }
+
+    &.status-starting,
+    &.status-started {
+      .stop {
+        display: block;
+      }
+    }
+
+    &.status-running {
+      .stop,
+      .restart {
+        display: block;
+      }
+    }
+  }
+
+  > .footer {
+    border-top: .1rem solid $dark-color;
+
+    a {
+      padding: .5rem .3rem;
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+html,
+body,
+#app {
+  background: $bg-color-content;
+  color: $light-color;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 2px;
+  box-shadow: inset 0 0 10px rgba($purple-color, .7);
+}
+
+::-webkit-scrollbar-thumb {
+  background: $purple-color;
+  border-radius: 2px;
+}
+
+::selection {
+  background: $selection-color;
+}
+
+::-moz-selection {
+  background: $selection-color;
+}

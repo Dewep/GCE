@@ -1,0 +1,28 @@
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  &,
+  &:link,
+  &:visited {
+    color: $primary-color;
+    text-decoration: none;
+  }
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    color: $primary-color-light;
+    text-decoration: none;
+  }
+}

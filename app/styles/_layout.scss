@@ -1,0 +1,34 @@
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.flex-fixed {
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.flex-extensible {
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+.flex-extensible-fixed {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.w-100 {
+  width: 100%;
+}

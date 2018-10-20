@@ -1,0 +1,48 @@
+// Tomorrow night https://github.com/chriskempson/tomorrow-theme#tomorrow-night
+$background-color: #1d1f21 !default;
+$current-line-color: #282a2e !default;
+$selection-color: #373b41 !default;
+$foreground-color: #c5c8c6 !default;
+$comment-color: #969896 !default;
+$red-color: #cc6666 !default;
+$orange-color: #de935f !default;
+$yellow-color: #f0c674 !default;
+$green-color: #b5bd68 !default;
+$aqua-color: #8abeb7 !default;
+$blue-color: #81a2be !default;
+$purple-color: #b294bb !default;
+
+// Core colors
+$primary-color: $orange-color !default;
+$primary-color-dark: darken($primary-color, 5%) !default;
+$primary-color-light: lighten($primary-color, 5%) !default;
+$secondary-color: lighten($primary-color, 37.5%) !default;
+$secondary-color-dark: darken($secondary-color, 3%) !default;
+$secondary-color-light: lighten($secondary-color, 3%) !default;
+
+// Gray colors
+$dark-color: $background-color !default;
+$light-color: $foreground-color !default;
+$gray-color: lighten($dark-color, 40%) !default;
+$gray-color-dark: darken($gray-color, 25%) !default;
+$gray-color-light: lighten($gray-color, 20%) !default;
+
+$border-color: lighten($dark-color, 60%) !default;
+$border-color-dark: darken($border-color, 10%) !default;
+$bg-color-sidebar: lighten($background-color, 3%) !default;
+$bg-color-sidebar-light: lighten($background-color, 5%) !default;
+$bg-color-content: $background-color !default;
+
+// Control colors
+$success-color: $green-color !default;
+$warning-color: $orange-color !default;
+$error-color: $red-color !default;
+
+// Other colors
+// $code-color: #d73e48 !default;
+// $highlight-color: #ffe9b3 !default;
+// $body-bg: $bg-color-light !default;
+// $body-font-color: lighten($dark-color, 5%) !default;
+// $link-color: $primary-color !default;
+// $link-color-dark: darken($link-color, 10%) !default;
+// $link-color-light: lighten($link-color, 10%) !default;
