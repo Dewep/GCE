@@ -1,13 +1,12 @@
 <template>
   <div>
-    <h1>Project {{ projectSlug }}</h1>
-    <h2>Directory {{ directorySlug }}</h2>
+    <h4>Commands... {{ projectSlug }} {{ directorySlug }}</h4>
   </div>
 </template>
 
 <script>
 module.exports = {
-  name: 'project-directory-settings',
+  name: 'project-directory-dashboard-commands',
 
   props: {
     projectSlug: {

@@ -1,6 +1,17 @@
 <template>
   <div class="sidebar flex-column">
     <div class="flex-extensible">
+      <center>
+        <router-link
+          :to="{ name: 'dashboard-home' }"
+          class="dashboard"
+        >
+          <img src="icon.png">
+          <b>Dashboard GCE</b>
+          <small>2.0.0</small>
+        </router-link>
+      </center>
+
       <div
         v-for="project in projects"
         :key="project.name"
@@ -23,13 +34,19 @@
         >
           <router-link
             :to="{ name: 'directory', params: { projectSlug: project.name, directorySlug: directory.name } }"
-            exact
             class="directory-title flex-row"
           >
             <h2 class="flex-extensible-fixed">{{ directory.name }}</h2>
-            <sup v-show="directory.gitOriginUp" class="flex-fixed code extra-info git-origin-up">{{ directory.gitOriginUp }}⇗</sup>
-            <sup v-show="directory.gitOriginDown" class="flex-fixed code extra-info git-origin-down">{{ directory.gitOriginDown }}⇙</sup>
-            <sup v-show="directory.gitOriginLoading" class="flex-fixed code extra-info loading"/>
+            <router-link
+              :to="{ name: 'directory-git', params: { projectSlug: project.name, directorySlug: directory.name } }"
+              active-class="no-active-class"
+              class="flex-fixed code extra-git"
+            >
+              <span v-show="directory.gitEdition" class="git-modifs"><span>{{ directory.gitEdition }}✎</span></span>
+              <span v-show="directory.gitOriginUp" class="git-origin-up"><span>{{ directory.gitOriginUp }}⇙</span></span>
+              <span v-show="directory.gitOriginDown" class="git-origin-down"><span>{{ directory.gitOriginDown }}⇙</span></span>
+              <span v-show="directory.gitOriginLoading" class="loading"/>
+            </router-link>
           </router-link>
 
           <router-link
@@ -48,11 +65,6 @@
           </router-link>
         </div>
       </div>
-    </div>
-
-    <div class="flex-fixed flex-row footer">
-      <router-link :to="{ name: 'home' }" class="flex-extensible-fixed">Home</router-link>
-      <router-link :to="{ name: 'settings' }" class="flex-extensible-fixed">Settings</router-link>
     </div>
   </div>
 </template>
@@ -139,6 +151,7 @@ module.exports = {
             },
             {
               name: 'Console',
+              gitEdition: 10,
               gitOriginDown: 1,
               commands: [
                 {

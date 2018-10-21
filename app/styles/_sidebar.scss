@@ -11,24 +11,41 @@
       color: $light-color;
     }
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
       background: $bg-color-sidebar-light;
       color: $light-color;
     }
 
-    &:focus,
-    &:active,
     &.active {
       background: $selection-color;
       color: $light-color;
     }
 
-    .code {
+    a {
+      &:hover,
       &:focus,
       &:active,
       &.active {
-        background: $bg-color-sidebar;
+        background: $gray-color-dark;
       }
+    }
+  }
+
+  .dashboard {
+    border: .05rem solid $gray-color-dark;
+    border-radius: .2rem;
+    display: inline-block;
+    margin-top: .5rem;
+    padding: .3rem .8rem;
+
+    img {
+      height: .6rem;
+    }
+
+    b {
+      margin: 0 .3rem;
     }
   }
 
@@ -64,9 +81,8 @@
     }
   }
 
-  .extra-info {
-    font-size: 70%;
-    opacity: .7;
+  .git-modifs {
+    color: $error-color;
   }
 
   .git-origin-up {
@@ -88,6 +104,11 @@
 
     h2 {
       padding-left: 1.2rem;
+    }
+
+    .extra-git {
+      // opacity: .7;
+      padding: .15rem .3rem;
     }
   }
 
@@ -183,15 +204,6 @@
       .restart {
         display: block;
       }
-    }
-  }
-
-  > .footer {
-    border-top: .1rem solid $dark-color;
-
-    a {
-      padding: .5rem .3rem;
-      text-align: center;
     }
   }
 }

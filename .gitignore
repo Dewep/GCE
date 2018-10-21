@@ -59,3 +59,6 @@ typings/
 
 # Electron dist
 /dist/
+
+# brunch public
+/public/

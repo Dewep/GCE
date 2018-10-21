@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h1>Settings</h1>
+    <h1>Home</h1>
   </div>
 </template>
 
 <script>
 module.exports = {
-  name: 'settings'
+  name: 'dashboard-home'
 }
 </script>

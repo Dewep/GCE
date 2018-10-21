@@ -1,0 +1,42 @@
+.topbar {
+  background: $selection-color;
+
+  h1 {
+    font-size: 1rem;
+    margin: 0;
+    padding: .5rem;
+
+    small {
+      font-size: 70%;
+      font-weight: 100;
+      margin-left: 1rem;
+    }
+  }
+
+  nav {
+    padding-left: .5rem;
+
+    a {
+      display: inline-block;
+      padding: .3rem 1rem;
+
+      &,
+      &:link,
+      &:visited {
+        color: $gray-color;
+      }
+
+      &:hover,
+      &:focus,
+      &:active,
+      &.active {
+        background: $bg-color-content;
+        color: $gray-color;
+      }
+
+      &.active {
+        color: $light-color;
+      }
+    }
+  }
+}

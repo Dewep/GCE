@@ -3,13 +3,20 @@ const Router = require('vue-router')
 
 const MainUIComponent = require('../components/main-ui.vue')
 
-const HomeComponent = require('../components/home.vue')
-const SettingsComponent = require('../components/settings.vue')
+const DashboardComponent = require('../components/dashboard/index.vue')
+const DashboardHomeComponent = require('../components/dashboard/home.vue')
+const DashboardSettingsComponent = require('../components/dashboard/settings.vue')
 
 const ProjectComponent = require('../components/project/index.vue')
 const ProjectSettingsComponent = require('../components/project/settings.vue')
+
 const DirectoryComponent = require('../components/project/directory/index.vue')
-const DirectorySettingsComponent = require('../components/project/directory/settings.vue')
+
+const DirectoryDashboardComponent = require('../components/project/directory/dashboard/index.vue')
+const DirectoryDashboardCommandsComponent = require('../components/project/directory/dashboard/commands.vue')
+const DirectoryDashboardGitComponent = require('../components/project/directory/dashboard/git.vue')
+const DirectoryDashboardSettingsComponent = require('../components/project/directory/dashboard/settings.vue')
+
 const DirectoryCommandComponent = require('../components/project/directory/command.vue')
 
 Vue.use(Router)
@@ -21,19 +28,37 @@ const router = new Router({
       path: '',
       component: MainUIComponent,
       children: [
-        { name: 'home', path: '/', component: HomeComponent },
-        { name: 'settings', path: '/settings', component: SettingsComponent },
+        {
+          path: '/dashboard',
+          component: DashboardComponent,
+          children: [
+            { name: 'dashboard-home', path: '', component: DashboardHomeComponent },
+            { name: 'dashboard-settings', path: 'settings', component: DashboardSettingsComponent }
+          ]
+        },
         {
           path: '/project/:projectSlug',
           component: ProjectComponent,
+          props: true,
           children: [
             { name: 'project', path: '', component: ProjectSettingsComponent, props: true },
             {
-              path: ':directorySlug',
+              path: 'directory/:directorySlug',
               component: DirectoryComponent,
+              props: true,
               children: [
-                { name: 'directory', path: '', component: DirectorySettingsComponent, props: true },
-                { name: 'command', path: ':commandSlug', component: DirectoryCommandComponent, props: true }
+                {
+                  path: 'dashboard',
+                  component: DirectoryDashboardComponent,
+                  props: true,
+                  children: [
+                    { name: 'directory', path: '', redirect: '/project/:projectSlug/directory/:directorySlug/dashboard/commands' },
+                    { name: 'directory-commands', path: 'commands', component: DirectoryDashboardCommandsComponent, props: true },
+                    { name: 'directory-git', path: 'git', component: DirectoryDashboardGitComponent, props: true },
+                    { name: 'directory-settings', path: 'settings', component: DirectoryDashboardSettingsComponent, props: true }
+                  ]
+                },
+                { name: 'command', path: 'command/:commandSlug', component: DirectoryCommandComponent, props: true }
               ]
             }
           ]
@@ -42,7 +67,7 @@ const router = new Router({
     },
     {
       path: '*',
-      redirect: '/'
+      redirect: '/dashboard'
     }
   ]
 })
