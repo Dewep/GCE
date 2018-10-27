@@ -1,15 +1,30 @@
+// Variables
+
 @import 'variables';
 
-@import 'reset';
 
-@import 'global';
+// General
 
-@import 'layout';
+@import 'general/reset';
 
-@import 'fonts';
+@import 'general/global';
 
-@import 'tooltip';
+@import 'general/layout';
 
-@import 'sidebar';
+@import 'general/fonts';
 
-@import 'topbar';
+
+// Components
+
+@import 'components/tooltip';
+
+@import 'components/commands-list';
+
+@import 'components/modal';
+
+
+// Pages
+
+@import 'pages/sidebar';
+
+@import 'pages/topbar';

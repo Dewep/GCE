@@ -1,0 +1,104 @@
+.commands-list {
+  margin-bottom: .5rem;
+
+  .commands-list-item {
+    background: $bg-color-sidebar-light;
+    border-radius: .2rem;
+    display: flex;
+    flex-direction: column;
+    float: left;
+    margin: .2rem;
+    min-height: 4rem;
+    width: 20rem;
+
+    .main,
+    .description {
+      flex: 1 1 auto;
+    }
+
+    .group,
+    .edition {
+      flex: 0 0 auto;
+    }
+
+    .main {
+      display: flex;
+
+      a {
+        &:hover,
+        &:active {
+          background: $selection-color;
+        }
+      }
+    }
+
+    .description,
+    .edition {
+      color: $light-color;
+      padding: .7rem .5rem;
+    }
+
+    .description {
+      border-radius: .2rem 0 0 .2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      h5 {
+        margin-bottom: .3rem;
+
+        span {
+          display: inline-block;
+          font-weight: normal;
+          margin-left: .2rem;
+          transform: translate(0, -.3rem);
+        }
+      }
+
+      p {
+        font-size: 80%;
+        opacity: .8;
+      }
+    }
+
+    .edition {
+      align-items: center;
+      border-radius: 0 .2rem .2rem 0;
+      display: flex;
+    }
+
+    .with-group {
+      .description,
+      .edition {
+        padding: .5rem;
+      }
+
+      .description {
+        border-radius: .2rem 0 0;
+      }
+
+      .edition {
+        border-radius: 0 0 .2rem;
+      }
+    }
+
+    .group {
+      background: $comment-color;
+      border-radius: 0 0 .2rem .2rem;
+      color: $dark-color;
+      font-size: 80%;
+      padding: 0 .3rem;
+
+      &:hover,
+      &:active {
+        color: $gray-color-dark;
+      }
+    }
+  }
+
+  &::after {
+    clear: both;
+    content: '';
+    display: block;
+  }
+}

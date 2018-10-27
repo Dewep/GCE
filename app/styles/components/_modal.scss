@@ -1,0 +1,69 @@
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-1.6rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal {
+  bottom: 0;
+  display: none;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 100;
+
+  .modal-overlay {
+    background: rgba($background-color, .8);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .modal-content {
+    background: $current-line-color;
+    border-radius: .2rem;
+    box-shadow: 0 .1rem 1rem $comment-color;
+    margin: 10vh auto 0;
+    max-height: 80vh;
+    position: relative;
+    width: 80vh;
+    z-index: 1;
+  }
+
+  .modal-title {
+    border-bottom: .05rem solid $selection-color;
+    padding: .5rem 1rem;
+
+    h2 {
+      margin: 0;
+    }
+
+    a {
+      color: $foreground-color;
+      float: right;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+  }
+
+  .modal-body {
+    padding: .5rem 1rem;
+  }
+
+  &.active {
+    display: block;
+
+    .modal-content {
+      animation: slide-down .2s ease 1;
+    }
+  }
+}

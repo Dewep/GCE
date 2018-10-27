@@ -4,13 +4,31 @@
   box-sizing: border-box;
 }
 
-ul {
-  list-style: none;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 .5rem;
+  padding: 0;
+}
+
+ul,
+p {
   margin: 0;
   padding: 0;
 }
 
+ul {
+  list-style: none;
+}
+
 a {
+  &:not(href) {
+    cursor: pointer;
+  }
+
   &,
   &:link,
   &:visited {

@@ -54,8 +54,18 @@
     margin: 0;
   }
 
+  .directory {
+    display: none;
+  }
+
   .project {
     margin: .5rem 0;
+
+    &.opened {
+      .directory {
+        display: block;
+      }
+    }
   }
 
   .project-title {
