@@ -8,7 +8,7 @@
         >
           <img src="icon.png">
           <b>Dashboard GCE</b>
-          <small>2.0.0</small>
+          <small>{{ GCEVersion }}</small>
         </router-link>
       </center>
 
@@ -79,7 +79,8 @@ module.exports = {
 
   computed: {
     ...mapGetters([
-      'sidebarProjects'
+      'sidebarProjects',
+      'GCEVersion'
     ])
   },
 

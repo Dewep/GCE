@@ -5,6 +5,9 @@ const MainUIComponent = require('../components/main-ui.vue')
 
 const DashboardComponent = require('../components/dashboard/index.vue')
 const DashboardHomeComponent = require('../components/dashboard/home.vue')
+const DashboardGroupsComponent = require('../components/dashboard/groups/index.vue')
+const DashboardGroupNewComponent = require('../components/dashboard/groups/new.vue')
+const DashboardGroupComponent = require('../components/dashboard/groups/group.vue')
 const DashboardSettingsComponent = require('../components/dashboard/settings.vue')
 
 const ProjectComponent = require('../components/project/index.vue')
@@ -33,6 +36,14 @@ const router = new Router({
           component: DashboardComponent,
           children: [
             { name: 'dashboard-home', path: '', component: DashboardHomeComponent },
+            {
+              path: 'groups',
+              component: DashboardGroupsComponent,
+              children: [
+                { name: 'dashboard-group-new', path: '', component: DashboardGroupNewComponent },
+                { name: 'dashboard-group', path: ':groupSlug', component: DashboardGroupComponent, props: true }
+              ]
+            },
             { name: 'dashboard-settings', path: 'settings', component: DashboardSettingsComponent }
           ]
         },

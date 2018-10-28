@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-content">
     <h4>Settings... {{ projectSlug }} {{ directorySlug }}</h4>
   </div>
 </template>

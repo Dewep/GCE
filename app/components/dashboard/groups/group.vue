@@ -1,15 +1,17 @@
 <template>
-  <router-view/>
+  <div>
+    <h4>Group "{{ group.name }}"</h4>
+  </div>
 </template>
 
 <script>
 const { mapGetters } = require('vuex')
 
 module.exports = {
-  name: 'project',
+  name: 'dashboard-group',
 
   props: {
-    projectSlug: {
+    groupSlug: {
       type: String,
       required: true
     }
@@ -17,18 +19,18 @@ module.exports = {
 
   computed: {
     ...mapGetters([
-      'getProject'
+      'getGroup'
     ]),
-    project () {
-      return this.getProject(this.projectSlug)
+    group () {
+      return this.getGroup(this.groupSlug)
     }
   },
 
   watch: {
-    project: {
+    group: {
       handler () {
-        if (!this.project) {
-          this.$router.push({ name: 'dashboard-home' })
+        if (!this.group) {
+          this.$router.push({ name: 'dashboard-group-new' })
         }
       },
       immediate: true
