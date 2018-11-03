@@ -1,0 +1,109 @@
+// Margin utility mixin
+@mixin margin-variant($id: 1, $size: $unit-1) {
+  .m-#{$id} {
+    margin: $size !important;
+  }
+
+  .mb-#{$id} {
+    margin-bottom: $size !important;
+  }
+
+  .ml-#{$id} {
+    margin-left: $size !important;
+  }
+
+  .mr-#{$id} {
+    margin-right: $size !important;
+  }
+
+  .mt-#{$id} {
+    margin-top: $size !important;
+  }
+
+  .mx-#{$id} {
+    margin-left: $size !important;
+    margin-right: $size !important;
+  }
+
+  .my-#{$id} {
+    margin-bottom: $size !important;
+    margin-top: $size !important;
+  }
+}
+
+// Padding utility mixin
+@mixin padding-variant($id: 1, $size: $unit-1) {
+  .p-#{$id} {
+    padding: $size !important;
+  }
+
+  .pb-#{$id} {
+    padding-bottom: $size !important;
+  }
+
+  .pl-#{$id} {
+    padding-left: $size !important;
+  }
+
+  .pr-#{$id} {
+    padding-right: $size !important;
+  }
+
+  .pt-#{$id} {
+    padding-top: $size !important;
+  }
+
+  .px-#{$id} {
+    padding-left: $size !important;
+    padding-right: $size !important;
+  }
+
+  .py-#{$id} {
+    padding-bottom: $size !important;
+    padding-top: $size !important;
+  }
+}
+
+@include margin-variant(0, 0);
+@include margin-variant(1, .1rem);
+@include margin-variant(2, .2rem);
+@include margin-variant(3, .3rem);
+@include margin-variant(4, .4rem);
+@include margin-variant(5, .5rem);
+@include margin-variant(6, .6rem);
+@include margin-variant(7, .7rem);
+@include margin-variant(8, .8rem);
+@include margin-variant(9, .9rem);
+@include margin-variant(10, 1rem);
+@include margin-variant(11, 1.1rem);
+@include margin-variant(12, 1.2rem);
+@include margin-variant(13, 1.3rem);
+@include margin-variant(14, 1.4rem);
+@include margin-variant(15, 1.5rem);
+@include margin-variant(16, 1.6rem);
+@include margin-variant(17, 1.7rem);
+@include margin-variant(18, 1.8rem);
+@include margin-variant(19, 1.9rem);
+@include margin-variant(20, 2rem);
+@include margin-variant(0, 0);
+
+@include padding-variant(1, .1rem);
+@include padding-variant(2, .2rem);
+@include padding-variant(3, .3rem);
+@include padding-variant(4, .4rem);
+@include padding-variant(5, .5rem);
+@include padding-variant(6, .6rem);
+@include padding-variant(7, .7rem);
+@include padding-variant(8, .8rem);
+@include padding-variant(9, .9rem);
+@include padding-variant(10, 1rem);
+@include padding-variant(11, 1.1rem);
+@include padding-variant(12, 1.2rem);
+@include padding-variant(13, 1.3rem);
+@include padding-variant(14, 1.4rem);
+@include padding-variant(15, 1.5rem);
+@include padding-variant(16, 1.6rem);
+@include padding-variant(17, 1.7rem);
+@include padding-variant(18, 1.8rem);
+@include padding-variant(19, 1.9rem);
+@include padding-variant(20, 2rem);

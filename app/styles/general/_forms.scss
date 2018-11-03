@@ -1,0 +1,98 @@
+.btn {
+  appearance: none;
+  background: $primary-color-dark;
+  border: .05rem solid $primary-color;
+  border-radius: .1rem;
+  color: $dark-color;
+  cursor: pointer;
+  display: inline-block;
+  // font-size: .7rem;
+  // height: 1.4rem;
+  // line-height: 1.2rem;
+  outline: none;
+  padding: .2rem .5rem;
+  text-align: center;
+  text-decoration: none;
+  transition: all .2s ease;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+
+  &:focus {
+    box-shadow: 0 0 0 .1rem $primary-color-light;
+  }
+
+  &:focus,
+  &:hover,
+  &.active,
+  &:active {
+    background: $primary-color-light;
+    text-decoration: none;
+  }
+
+  &.disabled,
+  &:disabled,
+  &[disabled] {
+    cursor: default;
+    opacity: .5;
+    pointer-events: none;
+  }
+
+  &.btn-error {
+    background: $error-color-dark;
+    border-color: $error-color;
+
+    &:focus,
+    &:hover,
+    &.active,
+    &:active {
+      background: $error-color-light;
+    }
+  }
+
+  &.btn-link {
+    background: none;
+    border: 0;
+    color: $primary-color;
+
+    &:focus,
+    &:hover,
+    &.active,
+    &:active {
+      background: none;
+      color: $primary-color-light;
+    }
+  }
+}
+
+input {
+  appearance: none;
+  background: $light-color;
+  background-image: none;
+  border: .05rem solid $gray-color-light;
+  border-radius: .1rem;
+  color: $gray-color-dark;
+  display: block;
+  // font-size: .8rem;
+  // height: 1.8rem;
+  // line-height: 1.2rem;
+  max-width: 100%;
+  outline: none;
+  padding: .25rem .4rem;
+  position: relative;
+  transition: all .2s ease;
+  width: 100%;
+}
+
+form {
+  label {
+    display: block;
+    font-size: 80%;
+    margin: .5rem 0 .2rem;
+  }
+
+  footer {
+    margin-top: .5rem;
+    text-align: right;
+  }
+}

@@ -8,19 +8,19 @@
     &,
     &:link,
     &:visited {
-      color: $light-color;
+      color: $foreground-color;
     }
 
     &:hover,
     &:focus,
     &:active {
       background: $bg-color-sidebar-light;
-      color: $light-color;
+      color: $foreground-color;
     }
 
     &.active {
       background: $selection-color;
-      color: $light-color;
+      color: $foreground-color;
     }
 
     a {

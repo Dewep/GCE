@@ -1,3 +1,24 @@
+.links-list {
+  a {
+    margin-bottom: .1rem;
+    padding: .3rem .5rem;
+
+    &,
+    &:link,
+    &:visited {
+      background: $bg-color-sidebar-light;
+      color: $foreground-color;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      background: $selection-color;
+      color: $foreground-color;
+    }
+  }
+}
+
 .commands-list {
   margin-bottom: .5rem;
 

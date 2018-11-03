@@ -1,0 +1,18 @@
+h4 {
+  border-bottom: .1rem solid $selection-color;
+  color: $comment-color;
+  margin: 2rem 0 .7rem;
+  padding: 0 .5rem .2rem;
+  text-transform: uppercase;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  .btn {
+    float: right;
+    font-size: 80%;
+    margin-left: .3rem;
+    padding: .1rem .3rem;
+  }
+}

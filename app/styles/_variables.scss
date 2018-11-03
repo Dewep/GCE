@@ -11,6 +11,7 @@ $green-color: #b5bd68 !default;
 $aqua-color: #8abeb7 !default;
 $blue-color: #81a2be !default;
 $purple-color: #b294bb !default;
+$white-color: #e5e6e6 !default;
 
 // Core colors
 $primary-color: $orange-color !default;
@@ -22,7 +23,7 @@ $secondary-color-light: lighten($secondary-color, 3%) !default;
 
 // Gray colors
 $dark-color: $background-color !default;
-$light-color: $foreground-color !default;
+$light-color: $white-color !default;
 $gray-color: lighten($dark-color, 40%) !default;
 $gray-color-dark: darken($gray-color, 25%) !default;
 $gray-color-light: lighten($gray-color, 20%) !default;
@@ -37,6 +38,8 @@ $bg-color-content: $background-color !default;
 $success-color: $green-color !default;
 $warning-color: $orange-color !default;
 $error-color: $red-color !default;
+$error-color-dark: darken($error-color, 5%) !default;
+$error-color-light: lighten($error-color, 5%) !default;
 
 // Other colors
 // $code-color: #d73e48 !default;
