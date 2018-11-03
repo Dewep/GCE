@@ -1,21 +1,7 @@
+const storage = require('../storage')
+
 const state = {
-  list: [
-    {
-      slug: 'g1',
-      name: 'Windows',
-      commands: ['c1', 'c2']
-    },
-    {
-      slug: 'g2',
-      name: 'GIT',
-      commands: ['c3', 'c4']
-    },
-    {
-      slug: 'g3',
-      name: 'npm',
-      commands: ['c5']
-    }
-  ]
+  list: storage.array('groups')
 }
 
 const getters = {

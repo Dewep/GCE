@@ -1,4 +1,6 @@
 const Vue = require('vue')
+const storage = require('../storage')
+const identifer = require('../identifier')
 
 const state = {
   opened: {
@@ -6,18 +8,7 @@ const state = {
     'p2': true
   },
 
-  list: [
-    {
-      slug: 'p1',
-      name: 'General',
-      directories: ['d1']
-    },
-    {
-      slug: 'p2',
-      name: 'PandaLab Main',
-      directories: ['d2', 'd3', 'd4', 'd5', 'd6', 'd7']
-    }
-  ]
+  list: storage.array('projects')
 }
 
 const getters = {
@@ -54,13 +45,103 @@ const getters = {
 
 const actions = {
   toggleSidebarProject (store, { projectSlug }) {
-    store.commit('SET_PROJECT_OPENED', { projectSlug, value: !store.getters.isProjectOpened(projectSlug) })
+    store.commit('PROJECT_OPENED', { projectSlug, value: !store.getters.isProjectOpened(projectSlug) })
+  },
+
+  projectCreate (store, { name, directories }) {
+    const projectSlug = identifer('p')
+    name = name || projectSlug
+    directories = directories || []
+
+    store.commit('PROJECT_CREATE', { projectSlug, name, directories })
+
+    return projectSlug
+  },
+
+  projectUpdate (store, { projectSlug, name, directories }) {
+    const project = store.getters.getProject(projectSlug)
+
+    if (!project) {
+      throw new Error('Project not found')
+    }
+
+    name = name || project.name
+    directories = directories || project.directories
+
+    store.commit('PROJECT_UDPATE', { projectSlug, name, directories })
+  },
+
+  projectPositionUp (store, { projectSlug }) {
+    store.commit('PROJECT_POSITION', { projectSlug, position: -1 })
+  },
+
+  projectPositionDown (store, { projectSlug }) {
+    store.commit('PROJECT_POSITION', { projectSlug, position: 1 })
+  },
+
+  projectDelete (store, { projectSlug }) {
+    const project = store.getters.getProject(projectSlug)
+
+    if (!project) {
+      throw new Error('Project not found')
+    }
+
+    store.commit('PROJECT_DELETE', { projectSlug })
   }
 }
 
 const mutations = {
-  SET_PROJECT_OPENED (state, { projectSlug, value }) {
+  PROJECT_OPENED (state, { projectSlug, value }) {
     Vue.set(state.opened, projectSlug, value)
+  },
+
+  PROJECT_CREATE (state, { projectSlug, name, directories }) {
+    state.list = [
+      ...state.list,
+      {
+        slug: projectSlug,
+        name,
+        directories
+      }
+    ]
+
+    storage.array('projects', state.list)
+  },
+
+  PROJECT_UDPATE (state, { projectSlug, name, directories }) {
+    state.list = state.list.map(project => {
+      if (project.slug !== projectSlug) {
+        return project
+      }
+
+      return {
+        slug: project.slug,
+        name,
+        directories
+      }
+    })
+
+    storage.array('projects', state.list)
+  },
+
+  PROJECT_POSITION (state, { projectSlug, position }) {
+    state.list = [...state.list]
+    const index = state.list.findIndex(p => p.slug === projectSlug)
+    const newIndex = index + position
+
+    if (newIndex >= 0 && newIndex < state.list.length) {
+      const tmp = state.list[newIndex]
+      state.list[newIndex] = state.list[index]
+      state.list[index] = tmp
+
+      storage.array('projects', state.list)
+    }
+  },
+
+  PROJECT_DELETE (state, { projectSlug }) {
+    state.list = [...state.list].filter(p => p.slug !== projectSlug)
+
+    storage.array('projects', state.list)
   }
 }
 

@@ -1,62 +1,7 @@
+const storage = require('../storage')
+
 const state = {
-  list: [
-    {
-      slug: 'd1',
-      name: 'Vagrant',
-      path: 'C:\\Users\\Dewep\\WorkSpace',
-      git: false,
-      groups: ['g1'],
-      commands: ['c6', 'c7']
-    },
-    {
-      slug: 'd2',
-      name: 'App',
-      path: 'C:\\Users\\Dewep\\WorkSpace\\pandalab\\app',
-      git: true,
-      groups: ['g1', 'g2', 'g3'],
-      commands: ['c8']
-    },
-    {
-      slug: 'd3',
-      name: 'Team server',
-      path: 'C:\\Users\\Dewep\\WorkSpace\\pandalab\\app\\src\\server',
-      git: true,
-      groups: ['g1', 'g2', 'g3'],
-      commands: ['c9']
-    },
-    {
-      slug: 'd4',
-      name: 'CDN',
-      path: 'C:\\Users\\Dewep\\WorkSpace\\pandalab\\cdn',
-      git: true,
-      groups: ['g1', 'g2', 'g3'],
-      commands: ['c10']
-    },
-    {
-      slug: 'd5',
-      name: 'Balancer',
-      path: 'C:\\Users\\Dewep\\WorkSpace\\pandalab\\balancer',
-      git: true,
-      groups: ['g1', 'g2', 'g3'],
-      commands: ['c11']
-    },
-    {
-      slug: 'd6',
-      name: 'Asset-Maker',
-      path: 'C:\\Users\\Dewep\\WorkSpace\\pandalab\\asset-maker',
-      git: true,
-      groups: ['g1', 'g2', 'g3'],
-      commands: ['c12']
-    },
-    {
-      slug: 'd7',
-      name: 'Console',
-      path: 'C:\\Users\\Dewep\\WorkSpace\\pandalab\\console',
-      git: true,
-      groups: ['g1', 'g2', 'g3'],
-      commands: ['c13', 'c14']
-    }
-  ]
+  list: storage.array('directories')
 }
 
 const getters = {
