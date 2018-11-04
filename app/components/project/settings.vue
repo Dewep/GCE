@@ -6,9 +6,38 @@
     <div class="flex-extensible">
       <div class="main-content">
         <h4>Directories</h4>
-        <p>Project settings...</p>
-        <button class="btn" @click="showDialogDirectories">Add new directories...</button>
-        <input type="file" webkitdirectory multiple>
+        <div class="links-list not-so-large">
+          <div
+            v-for="(directory, $index) in directories"
+            :key="directory.slug"
+            class="flex-row"
+          >
+            <router-link
+              :to="{ name: 'directory', params: { projectSlug: project.slug, directorySlug: directory.slug } }"
+              class="flex-extensible-fixed"
+            >
+              <template>{{ directory.name }}</template>
+            </router-link>
+            <a
+              :class="{ disabled: $index === 0 }"
+              class="flex-fixed code"
+              @click.prevent="directoryPositionUp({ projectSlug: project.slug, directorySlug: directory.slug })"
+            >
+              <template>▲</template>
+            </a>
+            <a
+              :class="{ disabled: $index === directories.length - 1 }"
+              class="flex-fixed code"
+              @click.prevent="directoryPositionDown({ projectSlug: project.slug, directorySlug: directory.slug })"
+            >
+              <template>▼</template>
+            </a>
+          </div>
+
+          <div class="flex-row">
+            <a class="flex-extensible-fixed mt-10 p-8" @click="showDialogDirectories">Add new directories</a>
+          </div>
+        </div>
 
         <h4>
           <button v-show="!form" class="btn" @click="form = 'update'">Update</button>
@@ -62,16 +91,22 @@ module.exports = {
 
   computed: {
     ...mapGetters([
-      'getProject'
+      'getProject',
+      'getDirectory'
     ]),
     project () {
       return this.getProject(this.projectSlug)
+    },
+    directories () {
+      return this.project.directories.map(this.getDirectory)
     }
   },
 
   methods: {
     ...mapActions([
-      'projectDelete'
+      'projectDelete',
+      'directoryPositionUp',
+      'directoryPositionDown'
     ]),
     removeProject () {
       this.projectDelete({ projectSlug: this.projectSlug })

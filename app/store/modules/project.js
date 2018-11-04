@@ -79,6 +79,14 @@ const actions = {
     store.commit('PROJECT_POSITION', { projectSlug, position: 1 })
   },
 
+  directoryPositionUp (store, { projectSlug, directorySlug }) {
+    store.commit('PROJECT_DIRECTORY_POSITION', { projectSlug, directorySlug, position: -1 })
+  },
+
+  directoryPositionDown (store, { projectSlug, directorySlug }) {
+    store.commit('PROJECT_DIRECTORY_POSITION', { projectSlug, directorySlug, position: 1 })
+  },
+
   projectDelete (store, { projectSlug }) {
     const project = store.getters.getProject(projectSlug)
 
@@ -129,12 +137,30 @@ const mutations = {
     const index = state.list.findIndex(p => p.slug === projectSlug)
     const newIndex = index + position
 
-    if (newIndex >= 0 && newIndex < state.list.length) {
+    if (index >= 0 && newIndex >= 0 && newIndex < state.list.length) {
       const tmp = state.list[newIndex]
       state.list[newIndex] = state.list[index]
       state.list[index] = tmp
 
       storage.array('projects', state.list)
+    }
+  },
+
+  PROJECT_DIRECTORY_POSITION (state, { projectSlug, directorySlug, position }) {
+    const project = state.list.find(p => p.slug === projectSlug)
+
+    if (project) {
+      const directories = [...project.directories]
+      const index = directories.indexOf(directorySlug)
+      const newIndex = index + position
+
+      if (index >= 0 && newIndex >= 0 && newIndex < directories.length) {
+        const tmp = directories[newIndex]
+        directories[newIndex] = directories[index]
+        directories[index] = tmp
+
+        mutations.PROJECT_UDPATE(state, { projectSlug, name: project.name, directories })
+      }
     }
   },
 
