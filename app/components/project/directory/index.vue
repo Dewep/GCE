@@ -22,15 +22,13 @@ module.exports = {
   computed: {
     ...mapGetters([
       'getProject',
-      'getDirectory'
+      'getDirectory',
+      'getProjectByDirectory'
     ]),
     project () {
       return this.getProject(this.projectSlug)
     },
     directory () {
-      if (!this.project || !this.project.directories || !this.project.directories.includes(this.directorySlug)) {
-        return null
-      }
       return this.getDirectory(this.directorySlug)
     }
   },
@@ -38,7 +36,17 @@ module.exports = {
   watch: {
     directory: {
       handler () {
-        if (!this.directory || !this.project) {
+        const redirect = !this.directory || !this.project || !this.project.directories.includes(this.directorySlug)
+
+        if (redirect) {
+          if (this.directory) {
+            const newProject = this.getProjectByDirectory(this.directorySlug)
+
+            if (newProject) {
+              return this.$router.push({ name: 'directory-settings', params: { projectSlug: newProject.slug, directorySlug: this.directorySlug } })
+            }
+          }
+
           this.$router.push({ name: 'project', params: { projectSlug: this.projectSlug } })
         }
       },

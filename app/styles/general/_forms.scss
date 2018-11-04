@@ -30,14 +30,6 @@
     text-decoration: none;
   }
 
-  &.disabled,
-  &:disabled,
-  &[disabled] {
-    cursor: default;
-    opacity: .5;
-    pointer-events: none;
-  }
-
   &.btn-error {
     background: $error-color-dark;
     border-color: $error-color;
@@ -63,6 +55,16 @@
       color: $primary-color-light;
     }
   }
+
+  &.disabled,
+  &:disabled,
+  &[disabled] {
+    background: inherit;
+    color: inherit;
+    cursor: default;
+    pointer-events: none;
+    user-select: all;
+  }
 }
 
 input {
@@ -82,6 +84,15 @@ input {
   position: relative;
   transition: all .2s ease;
   width: 100%;
+
+  &.disabled,
+  &:disabled,
+  &[disabled] {
+    background: transparent;
+    border-color: transparent;
+    color: inherit;
+    cursor: default;
+  }
 }
 
 form {

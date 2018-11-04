@@ -63,16 +63,18 @@ module.exports = {
       'projectCreate',
       'projectUpdate'
     ]),
-    submit () {
+    async submit () {
+      let ret
+
       if (this.projectSlug) {
-        this.projectUpdate({ projectSlug: this.projectSlug, name: this.projectName })
+        ret = await this.projectUpdate({ projectSlug: this.projectSlug, name: this.projectName })
       } else {
-        this.projectCreate({ name: this.projectName })
+        ret = await this.projectCreate({ name: this.projectName })
       }
 
-      this.close(true)
+      this.close(ret || null)
     },
-    close (status = false) {
+    close (status = null) {
       this.$emit('close', status)
     }
   }

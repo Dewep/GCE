@@ -12,9 +12,35 @@
 
     &:hover,
     &:focus,
-    &:active {
+    &:active,
+    &.active {
       background: $selection-color;
       color: $foreground-color;
+    }
+  }
+
+  &.links-checkbox {
+    a {
+      &,
+      &:link,
+      &:visited,
+      &:hover,
+      &:focus,
+      &:active {
+        background: $bg-color-sidebar-light;
+        color: $comment-color;
+        opacity: .5;
+      }
+
+      &.active {
+        background: $selection-color;
+        color: $foreground-color;
+        opacity: .9;
+      }
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 }

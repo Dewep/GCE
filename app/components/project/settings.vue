@@ -42,7 +42,7 @@
         <h4>
           <button v-show="!form" class="btn" @click="form = 'update'">Update</button>
           <button v-show="!form" class="btn btn-error" @click="form = 'delete'">Remove</button>
-          <template>Project update</template>
+          <template>Project properties</template>
         </h4>
         <common-project-form
           v-if="form === 'update'"
@@ -85,7 +85,7 @@ module.exports = {
 
   data () {
     return {
-      form: false
+      form: null
     }
   },
 

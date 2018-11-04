@@ -39,9 +39,48 @@ const getters = {
 }
 
 const actions = {
+  directoryUpdate (store, { directorySlug, projectSlug, name, path, git, groups, commands }) {
+    const directory = store.getters.getDirectory(directorySlug)
+    const project = store.getters.getProjectByDirectory(directorySlug)
+
+    if (!directory) {
+      throw new Error('Directory not found')
+    }
+
+    projectSlug = projectSlug || project.slug
+    name = name || directory.name
+    path = path || directory.path
+    git = git !== undefined ? git : directory.git
+    groups = groups || directory.groups
+    commands = commands || directory.commands
+
+    store.commit('DIRECTORY_UDPATE', { directorySlug, name, path, git, groups, commands })
+
+    if (projectSlug !== project.slug) {
+      store.dispatch('projectDirectoryMove', { projectSlug, directorySlug })
+    }
+  }
 }
 
 const mutations = {
+  DIRECTORY_UDPATE (state, { directorySlug, name, path, git, groups, commands }) {
+    state.list = state.list.map(directory => {
+      if (directory.slug !== directorySlug) {
+        return directory
+      }
+
+      return {
+        slug: directory.slug,
+        name,
+        path,
+        git,
+        groups,
+        commands
+      }
+    })
+
+    storage.array('directories', state.list)
+  }
 }
 
 module.exports = { state, getters, actions, mutations }

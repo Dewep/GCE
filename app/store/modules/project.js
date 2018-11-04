@@ -18,6 +18,8 @@ const getters = {
 
   isProjectOpened: state => projectSlug => state.opened[projectSlug] !== false,
 
+  getProjectByDirectory: (state, getters) => directorySlug => getters.projects.find(item => item.directories.includes(directorySlug)) || null,
+
   getSidebarProject: (state, getters) => projectSlug => {
     const project = getters.getProject(projectSlug)
 
@@ -48,7 +50,7 @@ const actions = {
     store.commit('PROJECT_OPENED', { projectSlug, value: !store.getters.isProjectOpened(projectSlug) })
   },
 
-  projectCreate (store, { name, directories }) {
+  async projectCreate (store, { name, directories }) {
     const projectSlug = identifer('p')
     name = name || projectSlug
     directories = directories || []
@@ -58,7 +60,7 @@ const actions = {
     return projectSlug
   },
 
-  projectUpdate (store, { projectSlug, name, directories }) {
+  async projectUpdate (store, { projectSlug, name, directories }) {
     const project = store.getters.getProject(projectSlug)
 
     if (!project) {
@@ -69,6 +71,8 @@ const actions = {
     directories = directories || project.directories
 
     store.commit('PROJECT_UDPATE', { projectSlug, name, directories })
+
+    return projectSlug
   },
 
   projectPositionUp (store, { projectSlug }) {
@@ -85,6 +89,10 @@ const actions = {
 
   directoryPositionDown (store, { projectSlug, directorySlug }) {
     store.commit('PROJECT_DIRECTORY_POSITION', { projectSlug, directorySlug, position: 1 })
+  },
+
+  projectDirectoryMove (store, { projectSlug, directorySlug }) {
+    store.commit('PROJECT_DIRECTORY_MOVE', { projectSlug, directorySlug })
   },
 
   projectDelete (store, { projectSlug }) {
@@ -162,6 +170,22 @@ const mutations = {
         mutations.PROJECT_UDPATE(state, { projectSlug, name: project.name, directories })
       }
     }
+  },
+
+  PROJECT_DIRECTORY_MOVE (state, { projectSlug, directorySlug }) {
+    state.list = [...state.list]
+    const oldProject = state.list.find(p => p.directories.includes(directorySlug))
+    const newProject = state.list.find(p => p.slug === projectSlug)
+
+    if (oldProject) {
+      oldProject.directories = oldProject.directories.filter(d => d !== directorySlug)
+    }
+
+    if (newProject) {
+      newProject.directories.push(directorySlug)
+    }
+
+    storage.array('projects', state.list)
   },
 
   PROJECT_DELETE (state, { projectSlug }) {
