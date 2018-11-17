@@ -45,10 +45,11 @@ const actions = {
       const commands = [...directory.commands, commandSlug]
       store.dispatch('directoryUpdate', { directorySlug: directory.slug, commands })
     } else if (group) {
-      // @TODO: should be tested
       const commands = [...group.commands, commandSlug]
       store.dispatch('groupUpdate', { groupSlug: group.slug, commands })
     }
+
+    return commandSlug
   },
 
   commandUpdate (store, { commandSlug, name, args, detached }) {

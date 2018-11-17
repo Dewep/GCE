@@ -1,6 +1,6 @@
 <template>
   <div class="commands-list-item">
-    <div :class="{ 'with-group': group }" class="main">
+    <div :class="{ 'with-group': group && displayGroup }" class="main">
       <a class="description" @click.prevent="run">
         <h5>
           <template>{{ command.name }}</template>
@@ -9,10 +9,10 @@
         <p class="code">{{ commandLine }}</p>
       </a>
 
-      <a class="edition" @click.prevent="commandModal = true">✎</a>
+      <a v-if="!runAsEdition" class="edition" @click.prevent="commandModal = true">✎</a>
 
       <modal :active.sync="commandModal" title="Command edition">
-        <command-form
+        <common-command-form
           :command-slug="command.slug"
           :directory-slug="directorySlug"
           :group-slug="groupSlug"
@@ -22,7 +22,7 @@
     </div>
 
     <router-link
-      v-if="group"
+      v-if="group && displayGroup"
       :to="{ name: 'dashboard-home' }"
       class="group"
     >
@@ -34,7 +34,7 @@
 <script>
 const { mapGetters } = require('vuex')
 const Modal = require('./modal.vue')
-const CommandForm = require('./command-form.vue')
+const CommonCommandForm = require('./command-form.vue')
 
 module.exports = {
   name: 'commands-list-item',
@@ -51,10 +51,21 @@ module.exports = {
     groupSlug: {
       type: String,
       default: null
+    },
+    runAsEdition: {
+      type: Boolean,
+      default: false
+    },
+    displayGroup: {
+      type: Boolean,
+      default: true
     }
   },
 
-  components: { Modal, CommandForm },
+  components: {
+    Modal,
+    CommonCommandForm
+  },
 
   data () {
     return {
@@ -75,6 +86,16 @@ module.exports = {
     },
     commandLine () {
       return this.command.args.join(' ')
+    }
+  },
+
+  methods: {
+    run () {
+      if (this.runAsEdition) {
+        this.commandModal = true
+      } else {
+        this.$emit('run', this.command.slug)
+      }
     }
   }
 }
