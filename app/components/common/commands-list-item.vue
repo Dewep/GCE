@@ -12,7 +12,12 @@
       <a class="edition" @click.prevent="commandModal = true">✎</a>
 
       <modal :active.sync="commandModal" title="Command edition">
-        <command-form :command-slug="command.slug"/>
+        <command-form
+          :command-slug="command.slug"
+          :directory-slug="directorySlug"
+          :group-slug="groupSlug"
+          @close="commandModal = false"
+        />
       </modal>
     </div>
 
@@ -38,6 +43,10 @@ module.exports = {
     commandSlug: {
       type: String,
       required: true
+    },
+    directorySlug: {
+      type: String,
+      default: null
     },
     groupSlug: {
       type: String,

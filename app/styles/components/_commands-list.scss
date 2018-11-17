@@ -141,6 +141,18 @@
         color: $gray-color-dark;
       }
     }
+
+    &.commands-list-item-extra {
+      background: none;
+      min-height: 2rem;
+      width: 100%;
+
+      .description {
+        h5 {
+          margin: 0;
+        }
+      }
+    }
   }
 
   &::after {

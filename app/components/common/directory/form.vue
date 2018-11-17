@@ -34,7 +34,7 @@
       <template>{{ directoryPath }}</template>
     </button>
 
-    <label @click.prevent="showDialogDirectory">GIT integration</label>
+    <label @click.prevent="directoryGit = !directoryGit">GIT integration</label>
     <button
       :class="{ disabled: !edition }"
       class="btn btn-link"
