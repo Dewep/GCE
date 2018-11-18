@@ -4,11 +4,12 @@
     <input
       :id="_uid + '-form-project-name'"
       v-model="projectName"
+      :disabled="!edition"
       type="text"
       placeholder="Project name"
     >
 
-    <footer>
+    <footer v-show="edition">
       <button
         type="button"
         class="btn btn-link"
@@ -31,6 +32,10 @@ module.exports = {
     projectSlug: {
       type: String,
       default: null
+    },
+    edition: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -51,9 +56,7 @@ module.exports = {
 
   watch: {
     project: {
-      handler () {
-        this.projectName = this.project ? this.project.name : ''
-      },
+      handler: 'reset',
       immediate: true
     }
   },
@@ -63,6 +66,11 @@ module.exports = {
       'projectCreate',
       'projectUpdate'
     ]),
+    reset () {
+      if (this.project) {
+        this.projectName = this.project.name
+      }
+    },
     async submit () {
       let ret
 
@@ -75,6 +83,7 @@ module.exports = {
       this.close(ret || null)
     },
     close (status = null) {
+      this.reset()
       this.$emit('close', status)
     }
   }

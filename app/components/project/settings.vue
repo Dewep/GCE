@@ -44,21 +44,19 @@
           <button v-show="!form" class="btn btn-error" @click="form = 'delete'">Remove</button>
           <template>Project properties</template>
         </h4>
+        <form v-if="form === 'delete'" class="not-so-large" @submit.prevent="removeProject">
+          <p>All the directories and their commands will be removed. Move the directories to another project if you want to keep them.</p>
+          <footer>
+            <button class="btn btn-link" @click.prevent="form = null">Cancel</button>
+            <button class="btn btn-error" type="submit">Remove</button>
+          </footer>
+        </form>
         <common-project-form
-          v-if="form === 'update'"
+          v-else
           :project-slug="projectSlug"
+          :edition="form === 'update'"
           @close="form = null"
         />
-        <template v-else-if="form === 'delete'">
-          <form class="not-so-large" @submit.prevent="removeProject">
-            <p>All the directories and their commands will be removed. Move the directories to another project if you want to keep them.</p>
-            <footer>
-              <button class="btn btn-link" @click.prevent="form = null">Cancel</button>
-              <button class="btn btn-error" type="submit">Remove</button>
-            </footer>
-          </form>
-        </template>
-        <p v-else>Project name: "{{ project.name }}"</p>
       </div>
     </div>
   </div>
