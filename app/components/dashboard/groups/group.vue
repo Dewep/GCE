@@ -79,7 +79,7 @@
 <script>
 const { mapGetters, mapActions } = require('vuex')
 const CommandsListItem = require('../../common/commands-list-item.vue')
-const CommonCommandForm = require('../../common/command-form.vue')
+const CommonCommandForm = require('../../common/command/form.vue')
 const Modal = require('../../common/modal.vue')
 const CommonGroupForm = require('./form.vue')
 

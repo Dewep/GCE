@@ -49,7 +49,7 @@
 const { mapGetters } = require('vuex')
 const CommandsListItem = require('../../../common/commands-list-item.vue')
 const Modal = require('../../../common/modal.vue')
-const CommandForm = require('../../../common/command-form.vue')
+const CommandForm = require('../../../common/command/form.vue')
 
 module.exports = {
   name: 'project-directory-dashboard-commands',

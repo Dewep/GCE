@@ -34,7 +34,7 @@
 <script>
 const { mapGetters } = require('vuex')
 const Modal = require('./modal.vue')
-const CommonCommandForm = require('./command-form.vue')
+const CommonCommandForm = require('./command/form.vue')
 
 module.exports = {
   name: 'commands-list-item',
