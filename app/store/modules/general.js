@@ -18,6 +18,7 @@ const actions = {
     storage.object('identifiers', {})
     window.location.reload()
   },
+
   resetExampleData () {
     storage.array('projects', storageExampleData.projects)
     storage.array('groups', storageExampleData.groups)
