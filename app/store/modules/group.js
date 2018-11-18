@@ -29,20 +29,23 @@ const getters = {
 }
 
 const actions = {
-  async groupUpdate (store, { groupSlug, name }) {
+  async groupUpdate (store, { groupSlug, name, commands }) {
     const group = store.getters.getGroup(groupSlug)
 
     if (!group) {
       throw new Error('Group not found')
     }
 
-    store.commit('GROUP_UDPATE', { groupSlug, name })
+    name = name || group.name
+    commands = commands || group.commands || []
+
+    store.commit('GROUP_UDPATE', { groupSlug, name, commands })
   },
 
-  async groupCreate (store, { name }) {
+  async groupCreate (store, { name, commands }) {
     const groupSlug = identifer('p')
 
-    store.commit('GROUP_CREATE', { groupSlug, name })
+    store.commit('GROUP_CREATE', { groupSlug, name, commands: commands || [] })
 
     return groupSlug
   },
@@ -59,19 +62,20 @@ const actions = {
 }
 
 const mutations = {
-  GROUP_CREATE (state, { groupSlug, name }) {
+  GROUP_CREATE (state, { groupSlug, name, commands }) {
     state.list = [
       ...state.list,
       {
         slug: groupSlug,
-        name
+        name,
+        commands
       }
     ]
 
     storage.array('groups', state.list)
   },
 
-  GROUP_UDPATE (state, { groupSlug, name }) {
+  GROUP_UDPATE (state, { groupSlug, name, commands }) {
     state.list = state.list.map(group => {
       if (group.slug !== groupSlug) {
         return group
@@ -79,7 +83,8 @@ const mutations = {
 
       return {
         slug: group.slug,
-        name
+        name,
+        commands
       }
     })
 

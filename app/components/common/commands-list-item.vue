@@ -23,7 +23,7 @@
 
     <router-link
       v-if="group && displayGroup"
-      :to="{ name: 'dashboard-home' }"
+      :to="{ name: 'dashboard-group', params: { groupSlug: group.slug } }"
       class="group"
     >
       <template>{{ group.name }}</template>

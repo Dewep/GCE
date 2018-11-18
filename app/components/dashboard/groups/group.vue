@@ -64,15 +64,11 @@
       <button v-show="!updateDirectories" class="btn" @click="updateDirectories = true">Update</button>
       <template>Group directories</template>
     </h4>
-    <p>...</p>
-    <!-- <p v-if="!updateDirectories && !directory.groups.length"><i>No group linked to this directory.</i></p> -->
-    <!-- <common-directory-groups
-      v-else
-      :project-slug="projectSlug"
-      :directory-slug="directorySlug"
+    <common-group-directories
+      :group-slug="groupSlug"
       :edition="updateDirectories"
       @close="updateDirectories = false"
-    /> -->
+    />
   </div>
 </template>
 
@@ -80,6 +76,7 @@
 const { mapGetters, mapActions } = require('vuex')
 const CommandsListItem = require('../../common/commands-list-item.vue')
 const CommonCommandForm = require('../../common/command/form.vue')
+const CommonGroupDirectories = require('../../common/group/directories.vue')
 const Modal = require('../../common/modal.vue')
 const CommonGroupForm = require('./form.vue')
 
@@ -97,7 +94,8 @@ module.exports = {
     CommandsListItem,
     Modal,
     CommonGroupForm,
-    CommonCommandForm
+    CommonCommandForm,
+    CommonGroupDirectories
   },
 
   data () {

@@ -52,7 +52,7 @@
     >
       <template>{{ commandDetached ? 'Yes' : 'No' }}</template>
     </button>
-    <blockquote>If yes, the stdout will not be watched (useful for commands that run external windows, like "<code>explorer.exe</code>", "<code>vscode</code>", etc.).</blockquote>
+    <blockquote>If yes, the command will not be run inside GCE (useful for commands that run external windows, like "<code>explorer.exe</code>", "<code>vscode</code>", etc.).</blockquote>
 
     <footer>
       <button
@@ -86,6 +86,10 @@ module.exports = {
       default: null
     },
     directorySlug: {
+      type: String,
+      default: null
+    },
+    groupSlug: {
       type: String,
       default: null
     }
@@ -166,6 +170,8 @@ module.exports = {
           this.commandUpdate({ commandSlug: this.commandSlug, name, args, detached })
         } else if (this.directorySlug) {
           this.commandCreate({ directorySlug: this.directorySlug, name, args, detached })
+        } else if (this.groupSlug) {
+          this.commandCreate({ groupSlug: this.groupSlug, name, args, detached })
         }
       }
 
