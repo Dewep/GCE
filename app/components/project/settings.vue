@@ -102,12 +102,12 @@ module.exports = {
 
   methods: {
     ...mapActions([
-      'projectDelete',
+      'projectRemove',
       'directoryPositionUp',
       'directoryPositionDown'
     ]),
     removeProject () {
-      this.projectDelete({ projectSlug: this.projectSlug })
+      this.projectRemove({ projectSlug: this.projectSlug })
     },
     showDialogDirectories () {
       const path = dialog.showOpenDialog({

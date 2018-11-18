@@ -95,14 +95,14 @@ const actions = {
     store.commit('PROJECT_DIRECTORY_MOVE', { projectSlug, directorySlug })
   },
 
-  projectDelete (store, { projectSlug }) {
+  projectRemove (store, { projectSlug }) {
     const project = store.getters.getProject(projectSlug)
 
     if (!project) {
       throw new Error('Project not found')
     }
 
-    store.commit('PROJECT_DELETE', { projectSlug })
+    store.commit('PROJECT_REMOVE', { projectSlug })
   }
 }
 
@@ -188,7 +188,7 @@ const mutations = {
     storage.array('projects', state.list)
   },
 
-  PROJECT_DELETE (state, { projectSlug }) {
+  PROJECT_REMOVE (state, { projectSlug }) {
     state.list = [...state.list].filter(p => p.slug !== projectSlug)
 
     storage.array('projects', state.list)

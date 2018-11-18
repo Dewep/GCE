@@ -42,10 +42,10 @@ const actions = {
     store.commit('COMMAND_CREATE', { commandSlug, name, args, detached })
 
     if (directory) {
-      const commands = [...directory.commands, commandSlug]
+      const commands = [...(directory.commands || []), commandSlug]
       store.dispatch('directoryUpdate', { directorySlug: directory.slug, commands })
     } else if (group) {
-      const commands = [...group.commands, commandSlug]
+      const commands = [...(group.commands || []), commandSlug]
       store.dispatch('groupUpdate', { groupSlug: group.slug, commands })
     }
 
@@ -73,9 +73,6 @@ const actions = {
 
     if (!command) {
       throw new Error('Command not found')
-    }
-    if (!directory && !group) {
-      throw new Error('Command should be linked to a directory or a group')
     }
 
     if (directory) {

@@ -6,7 +6,7 @@
       <template>Directory properties</template>
     </h4>
     <template v-if="form === 'delete'">
-      <form class="not-so-large" @submit.prevent="removeProject">
+      <form class="not-so-large" @submit.prevent="removeDirectory">
         <p>All the commands linked to this directory will be removed.</p>
         <footer>
           <button class="btn btn-link" @click.prevent="form = null">Cancel</button>
@@ -80,10 +80,10 @@ module.exports = {
 
   methods: {
     ...mapActions([
-      'directoryDelete'
+      'directoryRemove'
     ]),
     removeDirectory () {
-      this.directoryDelete({ projectSlug: this.projectSlug, directorySlug: this.directorySlug })
+      this.directoryRemove({ projectSlug: this.projectSlug, directorySlug: this.directorySlug })
     }
   }
 }
