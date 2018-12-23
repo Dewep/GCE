@@ -39,6 +39,44 @@
           </div>
         </div>
 
+        <template v-if="project.url">
+          <h4>
+            <button
+              :class="{ 'loading-sm': autoDefinitionStatus.loading }"
+              :disabled="autoDefinitionStatus.loading"
+              class="btn"
+              @click="projectLoadAutoDefinition({ projectSlug })"
+            >
+              <template>Refresh</template>
+            </button>
+            <template>Auto-definition</template>
+          </h4>
+          <center v-if="autoDefinitionStatus.loading">
+            <i><small>Fetching data...</small></i>
+          </center>
+          <p v-else-if="autoDefinitionStatus.error" class="toast-error">
+            <template>{{ autoDefinitionStatus.error }}</template>
+          </p>
+          <center v-else-if="!autoDefinition.length">
+            <i><small>No auto-definition remaining found</small></i>
+          </center>
+          <div v-else class="links-list not-so-large">
+            <div
+              v-for="(autoDefinition, $index) in autoDefinition"
+              :key="$index"
+              class="flex-row"
+            >
+              <a
+                class="flex-extensible-fixed"
+              >
+                <template>{{ autoDefinition.name }}</template><br>
+                <small v-if="autoDefinition.git" class="ml-2 op-6">{{ autoDefinition.git }}</small><br>
+                <small v-if="autoDefinition.directoryPath" class="ml-2 op-6">{{ autoDefinition.directoryPath }}</small>
+              </a>
+            </div>
+          </div>
+        </template>
+
         <h4>
           <button v-show="!form" class="btn" @click="form = 'update'">Update</button>
           <button v-show="!form" class="btn btn-error" @click="form = 'delete'">Remove</button>
@@ -90,13 +128,21 @@ module.exports = {
   computed: {
     ...mapGetters([
       'getProject',
-      'getDirectory'
+      'getDirectory',
+      'getProjectAutoDefinitionStatus',
+      'getProjectAutoDefinition'
     ]),
     project () {
       return this.getProject(this.projectSlug)
     },
     directories () {
       return this.project.directories.map(this.getDirectory)
+    },
+    autoDefinitionStatus () {
+      return this.getProjectAutoDefinitionStatus(this.projectSlug)
+    },
+    autoDefinition () {
+      return this.getProjectAutoDefinition(this.projectSlug)
     }
   },
 
@@ -104,7 +150,8 @@ module.exports = {
     ...mapActions([
       'projectRemove',
       'directoryPositionUp',
-      'directoryPositionDown'
+      'directoryPositionDown',
+      'projectLoadAutoDefinition'
     ]),
     async removeProject () {
       await this.projectRemove({ projectSlug: this.projectSlug })
