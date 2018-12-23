@@ -29,7 +29,7 @@ const getters = {
 }
 
 const actions = {
-  async groupUpdate (store, { groupSlug, name, commands }) {
+  async groupUpdate (store, { groupSlug, name, global, commands }) {
     const group = store.getters.getGroup(groupSlug)
 
     if (!group) {

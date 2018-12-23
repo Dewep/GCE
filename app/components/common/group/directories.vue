@@ -46,14 +46,14 @@ module.exports = {
       'directoryUpdate'
     ]),
 
-    close (newDirectories) {
+    async close (newDirectories) {
       if (newDirectories && Array.isArray(newDirectories)) {
         // Remove the group to old directories
         for (const directorySlug of this.selection) {
           if (!newDirectories.includes(directorySlug)) {
             const directory = this.getDirectory(directorySlug)
             const groups = (directory.groups || []).filter(groupSlug => groupSlug !== this.groupSlug)
-            this.directoryUpdate({ directorySlug, groups })
+            await this.directoryUpdate({ directorySlug, groups })
           }
         }
 
@@ -62,7 +62,7 @@ module.exports = {
           if (!this.selection.includes(directorySlug)) {
             const directory = this.getDirectory(directorySlug)
             const groups = [...(directory.groups || []), this.groupSlug]
-            this.directoryUpdate({ directorySlug, groups })
+            await this.directoryUpdate({ directorySlug, groups })
           }
         }
       }

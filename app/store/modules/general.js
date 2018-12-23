@@ -11,6 +11,7 @@ const getters = {
 
 const actions = {
   resetData () {
+  async resetData () {
     storage.array('projects', [])
     storage.array('groups', [])
     storage.array('directories', [])
@@ -19,7 +20,7 @@ const actions = {
     window.location.reload()
   },
 
-  resetExampleData () {
+  async resetExampleData () {
     storage.array('projects', storageExampleData.projects)
     storage.array('groups', storageExampleData.groups)
     storage.array('directories', storageExampleData.directories)

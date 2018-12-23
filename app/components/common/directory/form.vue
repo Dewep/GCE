@@ -2,7 +2,7 @@
   <form class="not-so-large" @submit.prevent="submit">
     <label @click.prevent="projectSelection = true">Project</label>
     <button
-      :class="{ disabled: !edition }"
+      :disabled="!edition"
       class="btn btn-link"
       @click.prevent="projectSelection = true"
     >
@@ -27,16 +27,16 @@
 
     <label @click.prevent="showDialogDirectory">Directory path</label>
     <button
-      :class="{ disabled: !edition }"
+      :disabled="!edition"
       class="btn btn-link"
       @click.prevent="showDialogDirectory"
     >
       <template>{{ directoryPath }}</template>
     </button>
 
-    <label @click.prevent="directoryGit = !directoryGit">GIT integration</label>
+    <label>GIT integration</label>
     <button
-      :class="{ disabled: !edition }"
+      :disabled="!edition"
       class="btn btn-link"
       @click.prevent="directoryGit = !directoryGit"
     >
@@ -131,8 +131,8 @@ module.exports = {
       }
       this.directoryProjectSlug = this.projectSlug
     },
-    submit () {
-      this.directoryUpdate({
+    async submit () {
+      await this.directoryUpdate({
         directorySlug: this.directorySlug,
         projectSlug: this.directoryProjectSlug || this.projectSlug,
         name: this.directoryName,

@@ -106,8 +106,8 @@ module.exports = {
       'directoryPositionUp',
       'directoryPositionDown'
     ]),
-    removeProject () {
-      this.projectRemove({ projectSlug: this.projectSlug })
+    async removeProject () {
+      await this.projectRemove({ projectSlug: this.projectSlug })
     },
     showDialogDirectories () {
       const path = dialog.showOpenDialog({

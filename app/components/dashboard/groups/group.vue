@@ -131,8 +131,8 @@ module.exports = {
       'groupRemove'
     ]),
 
-    removeGroup () {
-      this.groupRemove({ groupSlug: this.groupSlug })
+    async removeGroup () {
+      await this.groupRemove({ groupSlug: this.groupSlug })
     }
   }
 }

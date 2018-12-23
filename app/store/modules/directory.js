@@ -39,7 +39,7 @@ const getters = {
 }
 
 const actions = {
-  directoryUpdate (store, { directorySlug, projectSlug, name, path, git, groups, commands }) {
+  async directoryUpdate (store, { directorySlug, projectSlug, name, path, git, groups, commands }) {
     const directory = store.getters.getDirectory(directorySlug)
     const project = store.getters.getProjectByDirectory(directorySlug)
 
@@ -57,7 +57,7 @@ const actions = {
     store.commit('DIRECTORY_UDPATE', { directorySlug, name, path, git, groups, commands })
 
     if (projectSlug !== project.slug) {
-      store.dispatch('projectDirectoryMove', { projectSlug, directorySlug })
+      await store.dispatch('projectDirectoryMove', { projectSlug, directorySlug })
     }
   }
 }

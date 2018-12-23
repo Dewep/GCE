@@ -46,7 +46,7 @@ const getters = {
 }
 
 const actions = {
-  toggleSidebarProject (store, { projectSlug }) {
+  async toggleSidebarProject (store, { projectSlug }) {
     store.commit('PROJECT_OPENED', { projectSlug, value: !store.getters.isProjectOpened(projectSlug) })
   },
 
@@ -75,27 +75,27 @@ const actions = {
     return projectSlug
   },
 
-  projectPositionUp (store, { projectSlug }) {
+  async projectPositionUp (store, { projectSlug }) {
     store.commit('PROJECT_POSITION', { projectSlug, position: -1 })
   },
 
-  projectPositionDown (store, { projectSlug }) {
+  async projectPositionDown (store, { projectSlug }) {
     store.commit('PROJECT_POSITION', { projectSlug, position: 1 })
   },
 
-  directoryPositionUp (store, { projectSlug, directorySlug }) {
+  async directoryPositionUp (store, { projectSlug, directorySlug }) {
     store.commit('PROJECT_DIRECTORY_POSITION', { projectSlug, directorySlug, position: -1 })
   },
 
-  directoryPositionDown (store, { projectSlug, directorySlug }) {
+  async directoryPositionDown (store, { projectSlug, directorySlug }) {
     store.commit('PROJECT_DIRECTORY_POSITION', { projectSlug, directorySlug, position: 1 })
   },
 
-  projectDirectoryMove (store, { projectSlug, directorySlug }) {
+  async projectDirectoryMove (store, { projectSlug, directorySlug }) {
     store.commit('PROJECT_DIRECTORY_MOVE', { projectSlug, directorySlug })
   },
 
-  projectRemove (store, { projectSlug }) {
+  async projectRemove (store, { projectSlug }) {
     const project = store.getters.getProject(projectSlug)
 
     if (!project) {

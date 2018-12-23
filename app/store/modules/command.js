@@ -30,7 +30,7 @@ const getters = {
 }
 
 const actions = {
-  commandCreate (store, { directorySlug, groupSlug, name, args, detached }) {
+  async commandCreate (store, { directorySlug, groupSlug, name, args, detached }) {
     const directory = store.getters.getDirectory(directorySlug)
     const group = store.getters.getGroup(groupSlug)
 
@@ -43,16 +43,16 @@ const actions = {
 
     if (directory) {
       const commands = [...(directory.commands || []), commandSlug]
-      store.dispatch('directoryUpdate', { directorySlug: directory.slug, commands })
+      await store.dispatch('directoryUpdate', { directorySlug: directory.slug, commands })
     } else if (group) {
       const commands = [...(group.commands || []), commandSlug]
-      store.dispatch('groupUpdate', { groupSlug: group.slug, commands })
+      await store.dispatch('groupUpdate', { groupSlug: group.slug, commands })
     }
 
     return commandSlug
   },
 
-  commandUpdate (store, { commandSlug, name, args, detached }) {
+  async commandUpdate (store, { commandSlug, name, args, detached }) {
     const command = store.getters.getCommand(commandSlug)
 
     if (!command) {
@@ -66,7 +66,7 @@ const actions = {
     store.commit('COMMAND_UDPATE', { commandSlug, name, args, detached })
   },
 
-  commandRemove (store, { commandSlug, directorySlug, groupSlug }) {
+  async commandRemove (store, { commandSlug, directorySlug, groupSlug }) {
     const command = store.getters.getCommand(commandSlug)
     const directory = store.getters.getDirectory(directorySlug)
     const group = store.getters.getGroup(groupSlug)
@@ -77,11 +77,11 @@ const actions = {
 
     if (directory) {
       const commands = directory.commands.filter(command => command !== commandSlug)
-      store.dispatch('directoryUpdate', { directorySlug: directory.slug, commands })
+      await store.dispatch('directoryUpdate', { directorySlug: directory.slug, commands })
     } else if (group) {
       // @TODO: should be tested
       const commands = group.commands.filter(command => command !== commandSlug)
-      store.dispatch('groupUpdate', { groupSlug: group.slug, commands })
+      await store.dispatch('groupUpdate', { groupSlug: group.slug, commands })
     }
 
     store.commit('COMMAND_REMOVE', { commandSlug })

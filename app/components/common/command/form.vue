@@ -160,31 +160,31 @@ module.exports = {
       }
     },
 
-    submit () {
+    async submit () {
       const name = this.commandName
       const args = this.commandArgs.filter(arg => arg)
       const detached = this.commandDetached
 
       if (name && args.length) {
         if (this.commandSlug) {
-          this.commandUpdate({ commandSlug: this.commandSlug, name, args, detached })
+          await this.commandUpdate({ commandSlug: this.commandSlug, name, args, detached })
         } else if (this.directorySlug) {
-          this.commandCreate({ directorySlug: this.directorySlug, name, args, detached })
+          await this.commandCreate({ directorySlug: this.directorySlug, name, args, detached })
         } else if (this.groupSlug) {
-          this.commandCreate({ groupSlug: this.groupSlug, name, args, detached })
+          await this.commandCreate({ groupSlug: this.groupSlug, name, args, detached })
         }
       }
 
       this.close()
     },
 
-    remove () {
+    async remove () {
       const commandSlug = this.commandSlug
       const directorySlug = this.directorySlug
       const groupSlug = this.groupSlug
 
       if (commandSlug && (directorySlug || groupSlug)) {
-        this.commandRemove({ commandSlug, directorySlug, groupSlug })
+        await this.commandRemove({ commandSlug, directorySlug, groupSlug })
       }
     }
   }

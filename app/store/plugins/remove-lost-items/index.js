@@ -9,7 +9,7 @@ module.exports = function (store) {
 
   let running = false
 
-  function findAndRemoveLostItems () {
+  async function findAndRemoveLostItems () {
     if (running) {
       return
     }
@@ -100,7 +100,7 @@ module.exports = function (store) {
 
       if (newDirectories.length !== project.directories.length) {
         console.warn('[remove-lost-items] remove missing directories for project', project.slug)
-        store.dispatch('projectUpdate', { projectSlug: project.slug, directories: newDirectories })
+        await store.dispatch('projectUpdate', { projectSlug: project.slug, directories: newDirectories })
         missing = true
       }
     }
@@ -110,7 +110,7 @@ module.exports = function (store) {
 
       if (newCommands.length !== group.commands.length) {
         console.warn('[remove-lost-items] remove missing commands for group', group.slug)
-        store.dispatch('groupUpdate', { groupSlug: group.slug, commands: newCommands })
+        await store.dispatch('groupUpdate', { groupSlug: group.slug, commands: newCommands })
         missing = true
       }
     }
@@ -121,12 +121,12 @@ module.exports = function (store) {
 
       if (newGroups.length !== directory.groups.length) {
         console.warn('[remove-lost-items] remove missing groups for directory', directory.slug)
-        store.dispatch('directoryUpdate', { directorySlug: directory.slug, groups: newGroups })
+        await store.dispatch('directoryUpdate', { directorySlug: directory.slug, groups: newGroups })
         missing = true
       }
       if (newCommands.length !== directory.commands.length) {
         console.warn('[remove-lost-items] remove missing commands for directory', directory.slug)
-        store.dispatch('directoryUpdate', { directorySlug: directory.slug, commands: newCommands })
+        await store.dispatch('directoryUpdate', { directorySlug: directory.slug, commands: newCommands })
         missing = true
       }
     }
@@ -136,9 +136,9 @@ module.exports = function (store) {
 
   setTimeout(findAndRemoveLostItems, 0)
 
-  store.subscribe(function ({ type, payload }, state) {
-    const triggerTypes = ['PROJECT_UDPATE', 'PROJECT_REMOVE', 'GROUP_UDPATE', 'GROUP_REMOVE', 'DIRECTORY_UDPATE', 'COMMAND_REMOVE']
+  const triggerTypes = ['PROJECT_UDPATE', 'PROJECT_REMOVE', 'GROUP_UDPATE', 'GROUP_REMOVE', 'DIRECTORY_UDPATE', 'COMMAND_REMOVE']
 
+  store.subscribe(function ({ type, payload }, state) {
     if (triggerTypes.includes(type)) {
       findAndRemoveLostItems()
     }

@@ -94,8 +94,8 @@ module.exports = {
         }
       }
     },
-    submit () {
-      this.directoryUpdate({
+    async submit () {
+      await this.directoryUpdate({
         directorySlug: this.directorySlug,
         groups: this.formGroups
       })
