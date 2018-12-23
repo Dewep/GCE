@@ -42,6 +42,15 @@
     }
   }
 
+  &.disabled,
+  &:disabled,
+  &[disabled] {
+    cursor: default;
+    opacity: .2;
+    pointer-events: none;
+    user-select: all;
+  }
+
   &.btn-link {
     background: none;
     border: 0;
@@ -54,16 +63,14 @@
       background: none;
       color: $primary-color-light;
     }
-  }
 
-  &.disabled,
-  &:disabled,
-  &[disabled] {
-    background: inherit;
-    color: inherit;
-    cursor: default;
-    pointer-events: none;
-    user-select: all;
+    &.disabled,
+    &:disabled,
+    &[disabled] {
+      background: inherit;
+      color: inherit;
+      opacity: 1;
+    }
   }
 }
 

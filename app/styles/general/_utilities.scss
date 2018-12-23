@@ -1,3 +1,16 @@
+// Opacity utility
+.op-0 { opacity: 0; }
+.op-1 { opacity: .1; }
+.op-2 { opacity: .2; }
+.op-3 { opacity: .3; }
+.op-4 { opacity: .4; }
+.op-5 { opacity: .5; }
+.op-6 { opacity: .6; }
+.op-7 { opacity: .7; }
+.op-8 { opacity: .8; }
+.op-9 { opacity: .9; }
+.op-10 { opacity: 1; }
+
 // Margin utility mixin
 @mixin margin-variant($id: 1, $size: $unit-1) {
   .m-#{$id} {

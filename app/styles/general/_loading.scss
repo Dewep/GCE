@@ -1,0 +1,84 @@
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+// [class*=' loading'],
+// [class^='loading']
+.loading-sm,
+.loading-lg,
+.loading {
+  // color: transparent!important;
+  border-color: rgba($dark-color, .8)!important;
+  min-height: .8rem;
+  pointer-events: none;
+  position: relative;
+
+  &::before {
+    background: rgba($dark-color, .8);
+    bottom: 0;
+    content: '';
+    display: block;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+  // & > * {
+  //   opacity: .6;
+  // }
+
+  &::after {
+    animation: loading .5s linear infinite;
+    border-color: transparent transparent $primary-color $primary-color;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: .1rem;
+    content: '';
+    display: block;
+    height: .8rem;
+    left: 50%;
+    margin-left: -.4rem;
+    margin-top: -.4rem;
+    position: absolute;
+    top: 50%;
+    width: .8rem;
+    z-index: 1;
+  }
+
+  &.disabled,
+  &:disabled,
+  &[disabled] {
+    opacity: 1;
+  }
+}
+
+.loading-sm {
+  min-height: .5rem;
+
+  &::after {
+    border-width: .05rem;
+    height: .5rem;
+    margin-left: -.25rem;
+    margin-top: -.25rem;
+    width: .5rem;
+  }
+}
+
+.loading-lg {
+  min-height: 2rem;
+
+  &::after {
+    border-width: .2rem;
+    height: 1.6rem;
+    margin-left: -.8rem;
+    margin-top: -.8rem;
+    width: 1.6rem;
+  }
+}

@@ -1,0 +1,12 @@
+.toast-error,
+.label-error {
+  background: $error-color;
+  border-radius: .1rem;
+  color: $light-color;
+  padding: .5rem;
+}
+
+.label-error {
+  border-radius: .2rem;
+  padding: .1rem .2rem;
+}

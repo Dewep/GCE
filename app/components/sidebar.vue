@@ -46,7 +46,7 @@
                 <span v-show="directory.git.edition" class="git-modifs"><span>{{ directory.git.edition }}✎</span></span>
                 <span v-show="directory.git.originUp" class="git-origin-up"><span>{{ directory.git.originUp }}⇙</span></span>
                 <span v-show="directory.git.originDown" class="git-origin-down"><span>{{ directory.git.originDown }}⇙</span></span>
-                <span v-show="directory.git.loading" class="loading"/>
+                <span v-show="directory.git.loading" class="loading-sm"/>
               </template>
             </router-link>
           </router-link>
