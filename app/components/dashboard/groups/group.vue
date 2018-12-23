@@ -61,10 +61,16 @@
     </div>
 
     <h4>
-      <button v-show="!updateDirectories" class="btn" @click="updateDirectories = true">Update</button>
+      <button v-show="!group.global && !updateDirectories" class="btn" @click="updateDirectories = true">Update</button>
       <template>Group directories</template>
     </h4>
+    <p v-if="group.global">
+      <i>
+        <small>This group is global: all directories are linked to these commands.</small>
+      </i>
+    </p>
     <common-group-directories
+      v-else
       :group-slug="groupSlug"
       :edition="updateDirectories"
       @close="updateDirectories = false"

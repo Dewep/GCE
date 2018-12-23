@@ -21,7 +21,15 @@ const getters = {
       git = getters.getGitStatus(directorySlug) || false
     }
 
-    const groups = (directory.groups || [])
+    const groupSlugs = [...(directory.groups || [])]
+
+    for (const group of getters.groupsGlobal) {
+      if (!groupSlugs.includes(group.slug)) {
+        groupSlugs.push(group.slug)
+      }
+    }
+
+    const groups = groupSlugs
       .map(groupSlug => getters.getSidebarGroup(directorySlug, groupSlug))
       .filter(item => item)
 

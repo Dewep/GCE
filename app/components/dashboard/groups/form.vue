@@ -9,6 +9,17 @@
       placeholder="Group name"
     >
 
+    <label>Global group</label>
+    <button
+      :disabled="!edition"
+      type="button"
+      class="btn btn-link"
+      @click.prevent="groupGlobal = !groupGlobal"
+    >
+      <template>{{ groupGlobal ? 'Yes' : 'No' }}</template>
+    </button>
+    <blockquote v-show="edition">If yes, the commands of this group will be linked to all your directories.</blockquote>
+
     <footer v-show="edition">
       <button
         v-show="groupSlug"
@@ -42,7 +53,8 @@ module.exports = {
 
   data () {
     return {
-      groupName: ''
+      groupName: '',
+      groupGlobal: false
     }
   },
 
@@ -71,6 +83,7 @@ module.exports = {
     reset () {
       if (this.group) {
         this.groupName = this.group.name
+        this.groupGlobal = this.group.global || false
       }
     },
 
@@ -78,9 +91,9 @@ module.exports = {
       let ret
 
       if (this.groupSlug) {
-        ret = await this.groupUpdate({ groupSlug: this.groupSlug, name: this.groupName })
+        ret = await this.groupUpdate({ groupSlug: this.groupSlug, name: this.groupName, global: this.groupGlobal })
       } else {
-        ret = await this.groupCreate({ name: this.groupName })
+        ret = await this.groupCreate({ name: this.groupName, global: this.groupGlobal })
       }
 
       this.close(ret || null)
