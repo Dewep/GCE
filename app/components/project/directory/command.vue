@@ -4,8 +4,15 @@
       <h1>{{ directory.name }} / {{ command.name }}<small>{{ directory.path }}</small></h1>
     </div>
 
-    <div class="flex-extensible">
-      <p>...</p>
+    <div ref="scrollableContent" class="flex-extensible">
+      <b>Status: {{ process && process.status || 'N/A' }}</b><br>
+      <div
+        v-for="(line, $index) in lines"
+        :key="'content-' + $index"
+        :data-time="line.time"
+        :class="line.type"
+        v-html="line.html"
+      />
     </div>
   </div>
 </template>
@@ -36,7 +43,8 @@ module.exports = {
       'getProject',
       'getDirectory',
       'getCommand',
-      'getProcess'
+      'getProcess',
+      'getProcessOutput'
     ]),
     project () {
       return this.getProject(this.projectSlug)
@@ -49,6 +57,12 @@ module.exports = {
     },
     process () {
       return this.getProcess(this.directorySlug, this.commandSlug)
+    },
+    processOutput () {
+      return this.getProcessOutput(this.directorySlug, this.commandSlug)
+    },
+    lines () {
+      return (this.processOutput && this.processOutput.lines) || []
     }
   },
 

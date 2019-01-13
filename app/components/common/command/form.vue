@@ -57,28 +57,30 @@
     </button>
     <blockquote>If yes, the command will not be run inside GCE (useful for commands that run external windows, like "<code>explorer.exe</code>", "<code>vscode</code>", etc.).</blockquote>
 
-    <label @click.prevent="commandHasStop = !commandHasStop">Has a stop command</label>
-    <button
-      type="button"
-      class="btn btn-link"
-      @click.prevent="commandHasStop = !commandHasStop"
-    >
-      <template>{{ commandHasStop ? 'Yes' : 'No' }}</template>
-    </button>
-    <blockquote>If yes, you will have to define a start and a stop command (useful for services like "<code>vagrant up</code>" + "<code>vagrant halt</code>", "<code>docker-compose up</code>" + "<code>docker-compose stop</code>", etc.).</blockquote>
-
-    <template v-if="commandHasStop">
-      <label :for="_uid + '-form-command-stop-args-0'">Stop command arguments</label>
-      <input
-        v-for="(commandArg, $index) in commandStopArgs"
-        :key="'form-command-stop-args-' + $index"
-        :id="_uid + '-form-command-stop-args-' + $index"
-        v-model="commandStopArgs[$index]"
-        :placeholder="`Argument ${$index + 1}`"
-        :style="{ opacity: commandStopArgs[$index] ? 1 : 0.3 }"
-        type="text"
+    <template v-if="!commandDetached">
+      <label @click.prevent="commandHasStop = !commandHasStop">Has a stop command</label>
+      <button
+        type="button"
+        class="btn btn-link"
+        @click.prevent="commandHasStop = !commandHasStop"
       >
-      <blockquote>You can use <code>%dir%</code> to have the current directory.</blockquote>
+        <template>{{ commandHasStop ? 'Yes' : 'No' }}</template>
+      </button>
+      <blockquote>If yes, you will have to define a start and a stop command (useful for services like "<code>vagrant up</code>" + "<code>vagrant halt</code>", "<code>docker-compose up</code>" + "<code>docker-compose stop</code>", etc.).</blockquote>
+
+      <template v-if="commandHasStop">
+        <label :for="_uid + '-form-command-stop-args-0'">Stop command arguments</label>
+        <input
+          v-for="(commandArg, $index) in commandStopArgs"
+          :key="'form-command-stop-args-' + $index"
+          :id="_uid + '-form-command-stop-args-' + $index"
+          v-model="commandStopArgs[$index]"
+          :placeholder="`Argument ${$index + 1}`"
+          :style="{ opacity: commandStopArgs[$index] ? 1 : 0.3 }"
+          type="text"
+        >
+        <blockquote>You can use <code>%dir%</code> to have the current directory.</blockquote>
+      </template>
     </template>
 
     <footer>
@@ -177,7 +179,7 @@ module.exports = {
           this.commandName = this.command.name
           this.commandStartArgs = [...this.command.args]
           this.commandDetached = this.command.detached
-          this.commandHasStop = !!(this.command.stopArgs && this.command.stopArgs.length)
+          this.commandHasStop = !!(!this.command.detached && this.command.stopArgs && this.command.stopArgs.length)
           this.commandStopArgs = this.commandHasStop ? [...this.command.stopArgs] : []
         }
       },
@@ -211,7 +213,7 @@ module.exports = {
       const name = this.commandName
       const args = this.commandStartArgs.filter(arg => arg)
       const detached = this.commandDetached
-      let stopArgs = this.commandHasStop ? this.commandStopArgs.filter(arg => arg) : null
+      let stopArgs = !this.commandDetached && this.commandHasStop ? this.commandStopArgs.filter(arg => arg) : null
       if (stopArgs && !stopArgs.length) {
         stopArgs = null
       }

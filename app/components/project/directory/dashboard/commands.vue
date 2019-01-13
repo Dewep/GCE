@@ -39,14 +39,14 @@
         :key="command.slug"
         :group-slug="group.slug"
         :command-slug="command.slug"
-        @runCommand="runCommand(command.slug)"
+        @run="runCommand(command.slug)"
       />
     </div>
   </div>
 </template>
 
 <script>
-const { mapGetters } = require('vuex')
+const { mapGetters, mapActions } = require('vuex')
 const CommandsListItem = require('../../../common/commands-list-item.vue')
 const Modal = require('../../../common/modal.vue')
 const CommandForm = require('../../../common/command/form.vue')
@@ -84,8 +84,19 @@ module.exports = {
   },
 
   methods: {
-    runCommand (commandSlug) {
-      console.info('Run command', commandSlug)
+    ...mapActions([
+      'processStart'
+    ]),
+
+    async runCommand (commandSlug) {
+      const command = this.getCommand(commandSlug)
+      if (command) {
+        await this.processStart({ directorySlug: this.directorySlug, commandSlug })
+
+        if (!command.detached) {
+          this.$router.push({ name: 'command', params: { projectSlug: this.projectSlug, directorySlug: this.directorySlug, commandSlug } })
+        }
+      }
     }
   }
 }

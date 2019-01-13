@@ -61,9 +61,9 @@
           >
             <h2 class="flex-extensible-fixed code">{{ command.name }}</h2>
             <sup v-show="command.unread" class="flex-fixed code unread"><span>•</span></sup>
-            <a class="flex-fixed code restart"><span>↻</span></a>
-            <a class="flex-fixed code stop"><span>■</span></a>
-            <a class="flex-fixed code start"><span>►</span></a>
+            <a class="flex-fixed code restart" @click.prevent="processRestart({ directorySlug: directory.slug, commandSlug: command.slug })"><span>↻</span></a>
+            <a class="flex-fixed code stop" @click.prevent="processStop({ directorySlug: directory.slug, commandSlug: command.slug })"><span>■</span></a>
+            <a class="flex-fixed code start" @click.prevent="processStart({ directorySlug: directory.slug, commandSlug: command.slug })"><span>►</span></a>
           </router-link>
         </div>
       </div>
@@ -86,7 +86,10 @@ module.exports = {
 
   methods: {
     ...mapActions([
-      'toggleSidebarProject'
+      'toggleSidebarProject',
+      'processStart',
+      'processStop',
+      'processRestart'
     ])
   }
 }
