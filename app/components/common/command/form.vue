@@ -1,5 +1,5 @@
 <template>
-  <form v-if="!commandSlug && !commandArgs" class="not-so-large" @submit.prevent="setNewCommand">
+  <form v-if="!commandSlug && !commandStartArgs" class="not-so-large" @submit.prevent="setNewCommand">
     <label :for="_uid + '-form-command-single-line'">Command</label>
     <input
       :id="_uid + '-form-command-single-line'"
@@ -22,7 +22,7 @@
     </footer>
   </form>
 
-  <form v-else-if="commandArgs" class="not-so-large" @submit.prevent="submit">
+  <form v-else-if="commandStartArgs" class="not-so-large" @submit.prevent="submit">
     <label :for="_uid + '-form-command-name'">Command name</label>
     <input
       :id="_uid + '-form-command-name'"
@@ -32,14 +32,17 @@
       autofocus
     >
 
-    <label :for="_uid + '-form-command-args-0'">Command arguments</label>
+    <label :for="_uid + '-form-command-start-args-0'">
+      <template v-if="commandHasStop">Start command arguments</template>
+      <template v-else>Command arguments</template>
+    </label>
     <input
-      v-for="(commandArg, $index) in commandArgs"
-      :key="'form-command-args-' + $index"
-      :id="_uid + '-form-command-args-' + $index"
-      v-model="commandArgs[$index]"
+      v-for="(commandArg, $index) in commandStartArgs"
+      :key="'form-command-start-args-' + $index"
+      :id="_uid + '-form-command-start-args-' + $index"
+      v-model="commandStartArgs[$index]"
       :placeholder="`Argument ${$index + 1}`"
-      :style="{ opacity: commandArgs[$index] ? 1 : 0.3 }"
+      :style="{ opacity: commandStartArgs[$index] ? 1 : 0.3 }"
       type="text"
     >
     <blockquote>You can use <code>%dir%</code> to have the current directory.</blockquote>
@@ -53,6 +56,30 @@
       <template>{{ commandDetached ? 'Yes' : 'No' }}</template>
     </button>
     <blockquote>If yes, the command will not be run inside GCE (useful for commands that run external windows, like "<code>explorer.exe</code>", "<code>vscode</code>", etc.).</blockquote>
+
+    <label @click.prevent="commandHasStop = !commandHasStop">Has a stop command</label>
+    <button
+      type="button"
+      class="btn btn-link"
+      @click.prevent="commandHasStop = !commandHasStop"
+    >
+      <template>{{ commandHasStop ? 'Yes' : 'No' }}</template>
+    </button>
+    <blockquote>If yes, you will have to define a start and a stop command (useful for services like "<code>vagrant up</code>" + "<code>vagrant halt</code>", "<code>docker-compose up</code>" + "<code>docker-compose stop</code>", etc.).</blockquote>
+
+    <template v-if="commandHasStop">
+      <label :for="_uid + '-form-command-stop-args-0'">Stop command arguments</label>
+      <input
+        v-for="(commandArg, $index) in commandStopArgs"
+        :key="'form-command-stop-args-' + $index"
+        :id="_uid + '-form-command-stop-args-' + $index"
+        v-model="commandStopArgs[$index]"
+        :placeholder="`Argument ${$index + 1}`"
+        :style="{ opacity: commandStopArgs[$index] ? 1 : 0.3 }"
+        type="text"
+      >
+      <blockquote>You can use <code>%dir%</code> to have the current directory.</blockquote>
+    </template>
 
     <footer>
       <button
@@ -99,8 +126,10 @@ module.exports = {
     return {
       commandSingleLine: '',
       commandName: '',
-      commandArgs: null,
-      commandDetached: false
+      commandStartArgs: null,
+      commandDetached: false,
+      commandHasStop: false,
+      commandStopArgs: null
     }
   },
 
@@ -114,14 +143,28 @@ module.exports = {
   },
 
   watch: {
-    commandArgs: {
+    commandStartArgs: {
       handler () {
-        if (this.commandArgs) {
-          const size = this.commandArgs.length
-          if (!size || this.commandArgs[size - 1]) {
-            this.commandArgs.push('')
-          } else if (size > 2 && !this.commandArgs[size - 2]) {
-            this.commandArgs.splice(-1, 1)
+        if (this.commandStartArgs) {
+          const size = this.commandStartArgs.length
+          if (!size || this.commandStartArgs[size - 1]) {
+            this.commandStartArgs.push('')
+          } else if (size > 2 && !this.commandStartArgs[size - 2]) {
+            this.commandStartArgs.splice(-1, 1)
+          }
+        }
+      },
+      immediate: true
+    },
+
+    commandStopArgs: {
+      handler () {
+        if (this.commandStopArgs) {
+          const size = this.commandStopArgs.length
+          if (!size || this.commandStopArgs[size - 1]) {
+            this.commandStopArgs.push('')
+          } else if (size > 2 && !this.commandStopArgs[size - 2]) {
+            this.commandStopArgs.splice(-1, 1)
           }
         }
       },
@@ -132,8 +175,10 @@ module.exports = {
       handler () {
         if (this.command) {
           this.commandName = this.command.name
-          this.commandArgs = [...this.command.args]
+          this.commandStartArgs = [...this.command.args]
           this.commandDetached = this.command.detached
+          this.commandHasStop = !!(this.command.stopArgs && this.command.stopArgs.length)
+          this.commandStopArgs = this.commandHasStop ? [...this.command.stopArgs] : []
         }
       },
       immediate: true
@@ -155,23 +200,29 @@ module.exports = {
       if (this.commandSingleLine) {
         const args = this.commandSingleLine.split(' ')
         this.commandName = args.slice(0, 3).join(' ')
-        this.commandArgs = args
+        this.commandStartArgs = args
         this.commandDetached = false
+        this.commandHasStop = false
+        this.commandStopArgs = []
       }
     },
 
     async submit () {
       const name = this.commandName
-      const args = this.commandArgs.filter(arg => arg)
+      const args = this.commandStartArgs.filter(arg => arg)
       const detached = this.commandDetached
+      let stopArgs = this.commandHasStop ? this.commandStopArgs.filter(arg => arg) : null
+      if (stopArgs && !stopArgs.length) {
+        stopArgs = null
+      }
 
       if (name && args.length) {
         if (this.commandSlug) {
-          await this.commandUpdate({ commandSlug: this.commandSlug, name, args, detached })
+          await this.commandUpdate({ commandSlug: this.commandSlug, name, args, detached, stopArgs })
         } else if (this.directorySlug) {
-          await this.commandCreate({ directorySlug: this.directorySlug, name, args, detached })
+          await this.commandCreate({ directorySlug: this.directorySlug, name, args, detached, stopArgs })
         } else if (this.groupSlug) {
-          await this.commandCreate({ groupSlug: this.groupSlug, name, args, detached })
+          await this.commandCreate({ groupSlug: this.groupSlug, name, args, detached, stopArgs })
         }
       }
 
