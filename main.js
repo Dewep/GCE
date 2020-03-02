@@ -59,6 +59,10 @@ function createWindow () {
 
   let minimizeOnClose = false
 
+  const menuTemplate = require('./menu')
+  const menu = electron.Menu.buildFromTemplate(menuTemplate)
+  electron.Menu.setApplicationMenu(menu)
+
   const appIcon = new electron.Tray(path.join(__dirname, 'assets', 'icon.png'))
   appIcon.setContextMenu(electron.Menu.buildFromTemplate([
     {
