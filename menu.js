@@ -8,6 +8,7 @@ const learnMore = async () => {
 
 const template = isMac ? [
   {
+    label: 'GCE',
     submenu : [
       { role: 'about' },
       { role: 'quit' }
