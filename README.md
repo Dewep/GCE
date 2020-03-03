@@ -278,7 +278,8 @@ $> npm run dist
 - NodeJS package to parse yaml: [nodeca/js-yaml](https://github.com/nodeca/js-yaml)
 - NodeJS package to kill trees of processes: [pkrumins/node-tree-kill](https://github.com/pkrumins/node-tree-kill)
 - NodeJS package to fix path for MacOS users: [sindresorhus/fix-path](https://github.com/sindresorhus/fix-path)
-- MacOS releases: [Stegoo](https://github.com/Stegoo)
+- Contributors: [QuentinSanchez98](https://github.com/QuentinSanchez98)
+- MacOS releases: [QuentinSanchez98](https://github.com/QuentinSanchez98), [Stegoo](https://github.com/Stegoo)
 
 ## License
 
