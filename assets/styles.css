@@ -123,7 +123,8 @@ a:hover, a:focus, a:active {
 #main {
   display: flex;
   flex: 1 1 auto;
-  height: 100%;
+  height: auto;
+  overflow-y: hidden;
 }
 #status-bar {
   flex: 0 0 auto;

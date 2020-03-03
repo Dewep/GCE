@@ -35,7 +35,8 @@ function createWindow () {
     height: mainWindowState.height,
     autoHideMenuBar: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true
     },
     title: 'GCE'
   })
@@ -147,18 +148,9 @@ function createWindow () {
   })
 }
 
-const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
-  // Someone tried to run a second instance, we should focus our window.
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) {
-      mainWindow.restore()
-    }
-    mainWindow.show()
-    mainWindow.focus()
-  }
-})
+const isFirstInstance = app.requestSingleInstanceLock()
 
-if (isSecondInstance) {
+if (!isFirstInstance) {
   app.quit()
 } else {
   // Notification
@@ -175,6 +167,17 @@ if (isSecondInstance) {
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
       app.quit()
+    }
+  })
+
+  // Someone tried to run a second instance, we should focus our window.
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore()
+      }
+      mainWindow.show()
+      mainWindow.focus()
     }
   })
 
