@@ -1,49 +1,42 @@
 {
   "name": "gce",
-  "version": "1.5.0",
+  "version": "3.0.0",
   "description": "Global Commands Execution",
-  "main": "main.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "webpack-dev-server --host 0.0.0.0 --public gce.dewep.best",
+    "build": "webpack --env.prod"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Dewep/GCE.git"
   },
-  "author": "Maigret Aurélien",
-  "license": "SEE LICENSE IN LICENCE",
-  "scripts": {
-    "start": "electron .",
-    "dist": "electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+  "author": "Maigret Aurélien (Dewep)",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/Dewep/GCE/issues"
   },
-  "build": {
-    "appId": "net.dewep.gce",
-    "productName": "GCE",
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ]
-    },
-    "linux": {
-      "target": "AppImage",
-      "category": "Development"
-    },
-    "mac": {
-      "category": "public.app-category.developer-tools"
-    }
-  },
+  "homepage": "https://github.com/Dewep/GCE#readme",
   "dependencies": {
-    "electron-window-state": "4.1.1",
-    "fix-path": "2.1.0",
-    "js-yaml": "3.13.1",
-    "tree-kill": "1.2.2"
+    "http-proxy": "^1.18.0",
+    "vue": "^3.0.0-beta.2",
+    "ws": "^7.2.3"
   },
   "devDependencies": {
-    "electron": "8.0.3",
-    "electron-builder": "22.3.2"
+    "@vue/compiler-sfc": "^3.0.0-beta.2",
+    "css-loader": "^3.5.2",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-loader": "^16.0.0-alpha.3",
+    "vue-style-loader": "^4.1.2",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   }
 }
