@@ -57,7 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
-# Electron dist
-/dist/
-
+# IntelliJ
 .idea/
+
+# Dist files (for now)
+public/main.js
+public/main.js.map
