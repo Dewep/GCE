@@ -41,6 +41,7 @@ module.exports = (env = {}) => ({
     hot: true,
     contentBase: path.resolve(__dirname, 'public'),
     overlay: true,
-    port: 6731
+    port: 6731,
+    historyApiFallback: true
   }
 })

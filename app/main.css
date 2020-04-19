@@ -1,0 +1,94 @@
+@font-face {
+  font-family: "Cascadia Code";
+  src: url("/Cascadia.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Cascadia Code Mono";
+  src: url("/CascadiaMono.ttf") format("truetype");
+}
+
+html, body, #app {
+  padding: 0;
+  margin: 0;
+  background: #1d1f21;
+  color: #c5c8c6;
+  width: 100%;
+  height: 100%;
+  font-family: 'Cascadia Code Mono', 'Cascadia Code', Ubuntu, Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 14px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px rgba(55, 59, 65, 0.7);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: #373b41;
+}
+::selection {
+  background: #81a2be; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #81a2be; /* Gecko Browsers */
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+a, a:link, a:visited {
+  color: #969896;
+  text-decoration: underline;
+}
+a:hover, a:focus, a:active {
+  color: #c5c8c6;
+}
+
+.tooltip {
+  position: relative;
+}
+.tooltip::after {
+  background: rgba(181, 189, 104, 0.7);
+  border-radius: .4rem;
+  bottom: 100%;
+  color: #373b41;
+  content: attr(data-tooltip);
+  display: block;
+  font-size: .7rem;
+  left: 50%;
+  max-width: 320px;
+  opacity: 0;
+  overflow: hidden;
+  padding: .1rem .4rem;
+  pointer-events: none;
+  position: absolute;
+  text-overflow: ellipsis;
+  transform: translate(-50%,.4rem);
+  transition: all .2s ease;
+  white-space: pre;
+  z-index: 300;
+}
+.tooltip:focus::after, .tooltip:hover::after {
+  opacity: 1;
+  transform: translate(-50%,-.2rem);
+}
+.tooltip.tooltip-left::after {
+  bottom: 50%;
+  left: auto;
+  right: 100%;
+  transform: translate(.4rem,50%);
+}
+.tooltip.tooltip-left:focus::after, .tooltip.tooltip-left:hover::after {
+  transform: translate(-.2rem,50%);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+}

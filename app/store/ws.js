@@ -3,6 +3,7 @@ import configStore from './config'
 
 class WsStore {
   constructor () {
+    this.connected = ref(false)
     this.loading = ref(false)
     this.error = ref(null)
 
@@ -17,6 +18,7 @@ class WsStore {
 
     this.loading.value = true
     this.error.value = null
+    this.connected.value = false
     configStore.loadConfig(null)
 
     const protocol = 'ws' + (window.location.protocol === 'https:' ? 's' : '')
@@ -35,14 +37,15 @@ class WsStore {
     }
 
     this.socket.onmessage = event => {
-      if (this.loading.value) {
-        this.loading.value = false
-      }
-
       try {
         const { type, data } = JSON.parse(event.data)
 
         if (type === 'config') {
+          if (this.loading.value || !this.connected.value) {
+            this.loading.value = false
+            this.connected.value = true
+          }
+
           configStore.loadConfig(data)
         }
       } catch (err) {
@@ -75,9 +78,10 @@ class WsStore {
     }
 
     this.loading.value = false
+    this.connected.value = false
+    this.socket = null
     // this.error.value = null
     configStore.loadConfig(null)
-    this.socket = null
   }
 }
 

@@ -1,53 +1,82 @@
 <template>
-  <div>
-    <h1>Hello Vue 3!</h1>
-    <button @click="inc">
-      Clicked {{ count }} times.
-    </button>
-    <h1>WS</h1>
-    <pre>ConfigLoadBalancers: {{ configLoadBalancers }}</pre>
-    <pre>ConfigProjects: {{ configProjects }}</pre>
-    <pre>ConfigGce: {{ configGce }}</pre>
-    <pre>Loading: {{ wsLoading }}</pre>
-    <pre>Error: {{ wsError }}</pre>
-    <button @click="connect">
-      Connect
-    </button>
-    <button @click="disconnect">
-      Disconnect
-    </button>
+  <div
+    v-if="!wsConnected"
+    id="ws-loading"
+  >
+    <div>
+      <h1>GCE</h1>
+      <template v-if="wsLoading">
+        Connecting to GCE server...
+      </template>
+      <template v-else>
+        <p>{{ wsError || 'Disconnected from server' }}</p>
+        <button @click.prevent="wsConnect()">
+          Try to reconnect
+        </button>
+      </template>
+    </div>
+  </div>
+  <div
+    v-else
+    id="app-content"
+  >
+    <Sidebar id="sidebar" />
+    <RouterView id="main-view" />
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
-import wsStore from './ws'
-import configStore from './config'
+import { onMounted } from 'vue'
+import wsStore from './store/ws'
+import Sidebar from './views/sidebar.vue'
 
 export default {
+  components: {
+    Sidebar
+  },
+
   setup () {
-    const count = ref(0)
-    const inc = () => {
-      count.value++
-    }
+    onMounted(() => {
+      if (!wsStore.connected.value && !wsStore.loading.value) {
+        wsStore.connect()
+      }
+    })
 
     return {
-      count,
-      inc,
+      wsConnected: wsStore.connected,
       wsLoading: wsStore.loading,
       wsError: wsStore.error,
-      configLoadBalancers: configStore.loadBalancers,
-      configProjects: configStore.projects,
-      configGce: configStore.gce,
-      connect: () => wsStore.connect(),
-      disconnect: () => wsStore.disconnect()
+      wsConnect: () => wsStore.connect()
     }
   }
 }
 </script>
 
-<style scoped>
-h1 {
-  font-family: Arial, Helvetica, sans-serif;
+<style>
+#ws-loading {
+  width: 100%;
+  height: 100%;
+  align-content: center;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+#ws-loading > div {
+  flex: 1 1 auto;
+}
+#app-content {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+#sidebar {
+  flex: 0 0 auto;
+  height: 100%;
+  overflow-y: auto;
+  width: 20rem;
+}
+#main-view {
+  flex: 1 1 auto;
+  height: 100%;
 }
 </style>
