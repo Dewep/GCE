@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <h1>Project Index {{ projectSlug }}</h1>
-    <RouterView />
-  </div>
+  <RouterView />
 </template>
 
 <script>
@@ -14,10 +11,7 @@ export default {
     }
   },
 
-  setup (props) {
-    return {
-      projectSlug: props.projectSlug
-    }
+  setup () {
   }
 }
 </script>

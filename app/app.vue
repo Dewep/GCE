@@ -73,7 +73,6 @@ export default {
   flex: 0 0 auto;
   height: 100%;
   overflow-y: auto;
-  width: 20rem;
 }
 #main-view {
   flex: 1 1 auto;

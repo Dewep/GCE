@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    commonjs: true,
+    // commonjs: true,
     es6: true,
     node: true
   },
@@ -15,13 +15,15 @@ module.exports = {
     'vue'
   ],
   parserOptions: {
-    ecmaVersion: 8,
+    ecmaVersion: 6,
+    sourceType: 'module',
     ecmaFeatures: {
-      jsx: true
-    },
-    sourceType: 'module'
+      jsx: true,
+      experimentalObjectRestSpread: true
+    }
   },
   rules: {
+    'semi': 'error',
     'arrow-parens': 0, // allow paren-less arrow functions
     'generator-star-spacing': 0, // allow async-await
     'quote-props': ['error', 'consistent'], // make quotes around object literal property names consistent

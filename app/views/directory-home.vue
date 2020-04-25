@@ -1,11 +1,16 @@
 <template>
   <div>
-    <h1>Directory Home {{ projectSlug }}/{{ directorySlug }}</h1>
+    <h1>{{ directoryName }}</h1>
   </div>
 </template>
 
 <script>
+import { ref, watchEffect } from 'vue'
+import wsConfig from '../store/config'
+
 export default {
+  name: 'directory-home',
+
   props: {
     projectSlug: {
       type: String,
@@ -18,9 +23,15 @@ export default {
   },
 
   setup (props) {
+    const directoryName = ref(null)
+
+    watchEffect(() => {
+      const def = wsConfig.getDirectory(props.projectSlug, props.directorySlug)
+      directoryName.value = (def && def.directory && def.directory.name) || props.directorySlug
+    })
+
     return {
-      projectSlug: props.projectSlug,
-      directorySlug: props.directorySlug
+      directoryName
     }
   }
 }

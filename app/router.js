@@ -2,14 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from './views/dashboard.vue'
 import ProjectIndex from './views/project-index.vue'
 import ProjectHome from './views/project-home.vue'
+import ProjectStream from './views/project-stream.vue'
 import DirectoryIndex from './views/directory-index.vue'
 import DirectoryHome from './views/directory-home.vue'
 import DirectoryStream from './views/directory-stream.vue'
 
-const routerHistory = createWebHistory('/')
-
 const router = createRouter({
-  history: routerHistory,
+  history: createWebHistory(),
+
   routes: [
     {
       name: 'dashboard',
@@ -23,24 +23,30 @@ const router = createRouter({
       children: [
         {
           name: 'project',
-          path: '/',
+          path: '',
           component: ProjectHome,
           props: true
         },
         {
-          path: '/d/:directorySlug',
+          name: 'project-stream',
+          path: 's/:streamSlug',
+          component: ProjectStream,
+          props: true
+        },
+        {
+          path: 'd/:directorySlug',
           component: DirectoryIndex,
           props: true,
           children: [
             {
               name: 'directory',
-              path: '/',
+              path: '',
               component: DirectoryHome,
               props: true
             },
             {
               name: 'directory-stream',
-              path: '/s/:streamSlug',
+              path: 's/:streamSlug',
               component: DirectoryStream,
               props: true
             }

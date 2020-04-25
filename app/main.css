@@ -16,6 +16,11 @@ html, body, #app {
   height: 100%;
   font-family: 'Cascadia Code Mono', 'Cascadia Code', Ubuntu, Verdana, Geneva, Tahoma, sans-serif;
   font-size: 14px;
+  box-sizing: border-box;
+}
+
+*, :after, :before {
+  box-sizing: inherit;
 }
 
 ::-webkit-scrollbar {
@@ -45,6 +50,7 @@ ul {
 a, a:link, a:visited {
   color: #969896;
   text-decoration: underline;
+  cursor: pointer;
 }
 a:hover, a:focus, a:active {
   color: #c5c8c6;
