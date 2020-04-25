@@ -7,6 +7,8 @@
 
 <script>
 export default {
+  name: 'ProjectStream',
+
   props: {
     projectSlug: {
       type: String,
@@ -20,6 +22,7 @@ export default {
 
   setup (props) {
     return {
+      ...props,
       projectSlug: props.projectSlug
     }
   }

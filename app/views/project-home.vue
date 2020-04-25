@@ -10,6 +10,8 @@ import { watchEffect, ref, toRef } from 'vue'
 import wsConfig from '../store/config'
 
 export default {
+  name: 'ProjectHome',
+
   props: {
     projectSlug: {
       type: String,

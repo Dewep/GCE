@@ -41,7 +41,7 @@ import configStore from '../store/config'
 import wsStore from '../store/ws'
 
 export default {
-  name: 'directory-index',
+  name: 'DirectoryIndex',
 
   props: {
     projectSlug: {

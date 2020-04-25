@@ -6,6 +6,8 @@
 
 <script>
 export default {
+  name: 'DirectoryStream',
+
   props: {
     projectSlug: {
       type: String,

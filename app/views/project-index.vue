@@ -4,6 +4,8 @@
 
 <script>
 export default {
+  name: 'ProjectIndex',
+
   props: {
     projectSlug: {
       type: String,

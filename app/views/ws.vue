@@ -25,6 +25,8 @@ import wsStore from './ws'
 import configStore from './config'
 
 export default {
+  name: 'WS',
+
   setup () {
     const count = ref(0)
     const inc = () => {

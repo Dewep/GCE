@@ -9,7 +9,7 @@ import { ref, watchEffect } from 'vue'
 import wsConfig from '../store/config'
 
 export default {
-  name: 'directory-home',
+  name: 'DirectoryHome',
 
   props: {
     projectSlug: {

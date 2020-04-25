@@ -40,6 +40,8 @@
 import configStore from '../store/config'
 
 export default {
+  name: 'Sidebar',
+
   setup () {
     return {
       projects: configStore.projects
