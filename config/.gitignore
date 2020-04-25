@@ -2,4 +2,5 @@
 
 !.gitignore
 !index.js
+!utils.js
 !config.example.js
