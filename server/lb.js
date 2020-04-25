@@ -40,12 +40,14 @@ class GCELB {
   }
 
   async listen () {
-    this.server.listen(443, () => {
-      logger.info('GCE LB', 'Server', 'Started on port', 443)
+    this.server.listen(this.gce.config.gce.ports.loadBalancer, () => {
+      logger.info('GCE LB', 'Server', 'Started on port', this.gce.config.gce.ports.loadBalancer)
     })
   }
 
   _onRequest (req, res) {
+    req.headers.host = req.headers.host.split(':')[0] // Remove port from host
+
     if (this.proxy.proxyRequest(req, res)) {
       return
     }
@@ -58,6 +60,8 @@ class GCELB {
   }
 
   _onUpgrade (req, socket, head) {
+    req.headers.host = req.headers.host.split(':')[0] // Remove port from host
+
     if (this.proxy.proxyUpgrade(req, socket, head)) {
       return
     }
@@ -80,15 +84,17 @@ class GCELB {
   _SNICallback (serverName, callback) {
     let context = null
 
+    const host = '.' + serverName.split(':')[0]
+
     for (const serverNameCertificate of Object.keys(this.certificates)) {
-      if (('.' + serverName).endsWith(serverNameCertificate)) {
+      if (host.endsWith(serverNameCertificate)) {
         context = this.certificates[serverNameCertificate]
         break
       }
     }
 
     if (!context) {
-      logger.error('GCE LB', serverName, 'SSL certificate not found')
+      logger.error('GCE LB', serverName, 'SSL certificate not found, host was', host)
     }
 
     if (callback) {

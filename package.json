@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "webpack-dev-server --host 0.0.0.0 --public gce.dewep.best",
-    "build": "webpack --env.prod"
+    "build": "webpack --env.prod",
+    "proxy-443": "node proxy-to-gce.js 443",
+    "proxy-80": "node proxy-to-gce.js 80"
   },
   "repository": {
     "type": "git",
