@@ -6,7 +6,7 @@
 
 <script>
 import { ref, watchEffect } from 'vue'
-import wsConfig from '../store/config'
+import configStore from '../store/config'
 
 export default {
   name: 'DirectoryHome',
@@ -26,7 +26,7 @@ export default {
     const directoryName = ref(null)
 
     watchEffect(() => {
-      const def = wsConfig.getDirectory(props.projectSlug, props.directorySlug)
+      const def = configStore.getDirectory(props.projectSlug, props.directorySlug)
       directoryName.value = (def && def.directory && def.directory.name) || props.directorySlug
     })
 

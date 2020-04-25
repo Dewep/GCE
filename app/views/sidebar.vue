@@ -1,28 +1,54 @@
 <template>
   <div>
     <div
-      v-for="(project, projectSlug) in projects"
-      :key="projectSlug"
+      v-for="project in projects"
+      :key="'Sidebar/p/' + project.slug"
       class="project"
     >
       <RouterLink
-        :to="{ name: 'project', params: { projectSlug } }"
+        :to="{ name: 'project', params: { projectSlug: project.slug } }"
         exact
       >
-        {{ project.name || projectSlug }}
+        {{ project.name }}
       </RouterLink>
 
       <div
-        v-for="(directory, directorySlug) in project.directories"
-        :key="projectSlug + '/' + directorySlug"
+        v-for="stream in project.streams"
+        :key="'Sidebar/p/' + project.slug + '/s/' + stream.slug"
+        class="stream"
+      >
+        <RouterLink
+          :to="{ name: 'project-stream', params: { projectSlug: project.slug, streamSlug: stream.slug } }"
+          exact
+        >
+          {{ stream.name }}
+        </RouterLink>
+      </div>
+
+      <div
+        v-for="directory in project.directories"
+        :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug"
         class="directory"
       >
         <RouterLink
-          :to="{ name: 'directory', params: { projectSlug, directorySlug } }"
+          :to="{ name: 'directory', params: { projectSlug: project.slug, directorySlug: directory.slug } }"
           exact
         >
-          {{ directory.name || directorySlug }}
+          {{ directory.name }}
         </RouterLink>
+
+        <div
+          v-for="stream in directory.streams"
+          :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug + '/s/' + stream.slug"
+          class="stream"
+        >
+          <RouterLink
+            :to="{ name: 'directory-stream', params: { projectSlug: project.slug, directorySlug: directory.slug, streamSlug: stream.slug } }"
+            exact
+          >
+            {{ stream.name }}
+          </RouterLink>
+        </div>
       </div>
     </div>
 
@@ -38,14 +64,41 @@
 
 <script>
 import configStore from '../store/config'
+import { ref, watchEffect } from 'vue'
 
 export default {
   name: 'Sidebar',
 
   setup () {
-    return {
-      projects: configStore.projects
-    }
+    const projects = ref([])
+
+    watchEffect(() => {
+      projects.value = []
+
+      for (const projectSlug of Object.keys(configStore.projects.value)) {
+        const project = configStore.projects.value[projectSlug]
+        const directories = []
+
+        for (const directorySlug of Object.keys(project.directories)) {
+          const directory = project.directories[directorySlug]
+
+          directories.push({
+            slug: directorySlug,
+            name: directory.name || directorySlug,
+            streams: configStore.getCommandStreams(projectSlug, directorySlug)
+          })
+        }
+
+        projects.value.push({
+          slug: projectSlug,
+          name: project.name || projectSlug,
+          directories,
+          streams: configStore.getCommandStreams(projectSlug, null)
+        })
+      }
+    })
+
+    return { projects }
   }
 }
 </script>
@@ -78,6 +131,12 @@ a:hover, a:active, a:focus, a.router-link-active {
 
 .directory > a {
   padding-left: 1.5rem;
+}
+
+.stream > a {
+  padding-left: 2.5rem;
+  font-size: .8rem;
+  background: #24233e;
 }
 
 a.dashboard {

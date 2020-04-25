@@ -115,7 +115,7 @@ export default {
     })
 
     function runCommand (cmd) {
-      wsStore.newStream(props.projectSlug, props.directorySlug, cmd.args, cmd.name, { redirect: true })
+      wsStore.newCommandStream(props.projectSlug, props.directorySlug, cmd.args, cmd.name, { redirect: true })
     }
 
     return {
@@ -139,7 +139,7 @@ export default {
   right: 2rem;
   width: 20rem;
   text-align: center;
-  opacity: .8;
+  opacity: .5;
   bottom: 1rem;
   background: #282b2d;
   border-radius: .2rem;

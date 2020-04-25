@@ -7,7 +7,7 @@
 
 <script>
 import { watchEffect, ref, toRef } from 'vue'
-import wsConfig from '../store/config'
+import configStore from '../store/config'
 
 export default {
   name: 'ProjectHome',
@@ -23,7 +23,7 @@ export default {
     const projectName = ref(null)
 
     watchEffect(() => {
-      const project = wsConfig.getProject(props.projectSlug)
+      const project = configStore.getProject(props.projectSlug)
       projectName.value = (project && project.name) || props.projectSlug
     })
 

@@ -49,16 +49,16 @@ class WsStore {
           configStore.loadConfig(data)
         }
 
-        if (type === 'stream-update') {
+        if (type === 'streamUpdate') {
+          configStore.streamUpdate(data)
+        }
+
+        if (type === 'streamRedirect') {
           // TODO
         }
 
-        if (type === 'stream-redirect') {
-          // TODO
-        }
-
-        if (type === 'stream-output') {
-          // TODO
+        if (type === 'streamOutput') {
+          configStore.streamOutput(data)
         }
       } catch (err) {
         console.warn('WS.message', err)
@@ -84,15 +84,15 @@ class WsStore {
     this.socket.send(JSON.stringify({ type, data }))
   }
 
-  newStream (projectSlug, directorySlug, args, name = null, options = {}) {
+  newCommandStream (projectSlug, directorySlug, args, name = null, options = {}) {
     if (!name) {
       name = args.join(' ')
     }
-    this.send('newStream', { projectSlug, directorySlug, args, name, options })
+    this.send('newCommandStream', { projectSlug, directorySlug, args, name, options })
   }
 
-  updateStream (streamSlug, action) {
-    this.send('updateStream', { streamSlug, action })
+  updateCommandStream (streamSlug, action) {
+    this.send('updateCommandStream', { streamSlug, action })
   }
 
   disconnect (alreadyClosed = false) {

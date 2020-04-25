@@ -1,12 +1,22 @@
 <template>
   <div>
-    <h1>Directory Stream {{ projectSlug }}/{{ directorySlug }}/{{ streamSlug }}</h1>
+    <Stream
+      :project-slug="projectSlug"
+      :directory-slug="directorySlug"
+      :stream-slug="streamSlug"
+    />
   </div>
 </template>
 
 <script>
+import Stream from './stream.vue'
+
 export default {
   name: 'DirectoryStream',
+
+  components: {
+    Stream
+  },
 
   props: {
     projectSlug: {
