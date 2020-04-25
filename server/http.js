@@ -44,14 +44,16 @@ class GCEHttp {
         ws.isAlive = true
       })
 
-      ws.on('message', message => {
-        logger.log('GCE HTTP', 'WS message', message)
+      ws.on('message', async message => {
+        try {
+          const { type, data } = JSON.parse(message)
+          await this.gce.onConnectionMessage(type, data, ws)
+        } catch (err) {
+          logger.warn('GCE HTTP', 'WS message', message, err)
+        }
       })
 
-      ws.send(JSON.stringify({
-        type: 'config',
-        data: this.gce.config
-      }))
+      this.gce.onNewConnection(ws)
     })
 
     this._setupWssPingPong()
@@ -106,6 +108,18 @@ class GCEHttp {
     this.wss.on('close', () => {
       clearInterval(pingPong)
     })
+  }
+
+  async sendToWsConnections (type, data, wsInstance = null) {
+    const payload = JSON.stringify({ type, data })
+
+    for (const ws of this.wss.clients) {
+      if (wsInstance && wsInstance !== ws) {
+        continue
+      }
+
+      ws.send(payload)
+    }
   }
 }
 
