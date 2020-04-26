@@ -1,3 +1,4 @@
+const GCEConfigure = require('./configure')
 const GCEHttp = require('./http')
 const GCELB = require('./lb')
 const GCECommandStream = require('./command-stream')
@@ -24,9 +25,9 @@ class GCEServer {
   }
 
   async loadConfig (config) {
-    this.config = config
-    // Check path, existing directories, slug, bad config, ...
-    // Set error message for directory/project
+    this.config = new GCEConfigure(config)
+
+    await this.config.reconfigure()
   }
 
   async createHttp () {
@@ -43,7 +44,7 @@ class GCEServer {
   }
 
   async onNewConnection (ws) {
-    await this.http.sendToWsConnections('config', this.config, ws)
+    await this.http.sendToWsConnections('config', this.config.getForClient(), ws)
 
     for (const commandStream of this.commandStreams) {
       await commandStream.sendUpdate(ws)

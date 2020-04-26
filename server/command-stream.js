@@ -31,11 +31,22 @@ class GCECommandStream {
   }
 
   async create ({ projectSlug, directorySlug, args, name, options }, ws) {
+    let cwd = process.cwd()
+    if (options.cwd) {
+      cwd = options.cwd
+    } else if (projectSlug && this.gce.config.projects[projectSlug]) {
+      if (directorySlug && this.gce.config.projects[projectSlug].directories[directorySlug]) {
+        cwd = this.gce.config.projects[projectSlug].directories[directorySlug].path
+      } else {
+        cwd = this.gce.config.projects[projectSlug].path
+      }
+    }
+
     this.projectSlug = projectSlug
     this.directorySlug = directorySlug
     this.args = args
     this.name = name
-    this.cwd = process.cwd()
+    this.cwd = cwd
     this.runningDate = Date.now()
 
     await this.sendUpdate()
@@ -50,6 +61,9 @@ class GCECommandStream {
   async update () {}
 
   async start (withUpdate = true) {
+    this.addOutput('info', 'Command: ' + this.args.join(' '))
+    this.addOutput('info', this.cwd)
+
     this.proc = childProcess.spawn(this.args[0], this.args.slice(1), {
       cwd: this.cwd,
       shell: true,

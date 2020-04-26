@@ -75,9 +75,6 @@ class GCELB {
       key: options.key
     })
 
-    delete options.crt
-    delete options.key
-
     return context
   }
 
