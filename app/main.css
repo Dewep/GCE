@@ -42,17 +42,17 @@ html, body, #app {
   background: #81a2be; /* Gecko Browsers */
 }
 
-ul {
+/* ul {
   list-style: none;
   margin: 0;
   padding: 0;
-}
+} */
 a, a:link, a:visited {
   color: #969896;
   text-decoration: underline;
   cursor: pointer;
 }
-a:hover, a:focus, a:active {
+a:hover, a:focus, a:active, a.router-link-active {
   color: #c5c8c6;
 }
 

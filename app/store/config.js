@@ -4,24 +4,24 @@ import CommandStreamStore from './command-stream'
 
 class ConfigStore {
   constructor () {
-    this.loadBalancers = ref(null)
+    this.warnings = ref([])
+    this.loadBalancers = ref([])
     this.projects = ref(null)
-    this.gce = ref(null)
     this.commandStreams = ref([])
   }
 
   loadConfig (config) {
     if (!config) {
-      this.loadBalancers.value = null
+      this.warnings.value = []
+      this.loadBalancers.value = []
       this.projects.value = null
-      this.gce.value = null
       this.commandStreams.value = []
       return
     }
 
+    this.warnings.value = config.warnings
     this.loadBalancers.value = config.loadBalancers
     this.projects.value = config.projects
-    this.gce.value = config.gce
   }
 
   streamUpdate (data) {
@@ -33,6 +33,16 @@ class ConfigStore {
       this.commandStreams.value.push(commandStream)
     } else {
       commandStream.update(data)
+    }
+  }
+
+  streamRedirect ({ streamSlug }) {
+    const stream = this.commandStreams.value.find(commandStream => commandStream.slug === streamSlug)
+
+    if (stream && stream.projectSlug && stream.directorySlug) {
+      router.push({ name: 'directory-stream', params: { projectSlug: stream.projectSlug, directorySlug: stream.directorySlug, streamSlug } })
+    } else if (stream && stream.projectSlug) {
+      router.push({ name: 'project-stream', params: { projectSlug: stream.projectSlug, streamSlug } })
     }
   }
 

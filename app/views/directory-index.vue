@@ -1,6 +1,8 @@
 <template>
   <div class="dir-index">
-    <RouterView />
+    <RouterView
+      class="dir-content"
+    />
 
     <div class="dir-index-commands">
       <h2>
@@ -131,6 +133,13 @@ export default {
 <style scoped>
 .dir-index {
   position: relative;
+  display: flex;
+}
+
+.dir-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: 22rem;
 }
 
 .dir-index-commands {

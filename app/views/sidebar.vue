@@ -1,5 +1,14 @@
 <template>
   <div>
+    <RouterLink
+      v-if="warnings.length"
+      :to="{ name: 'dashboard' }"
+      class="warnings"
+      exact
+    >
+      {{ warnings.length }} config warning{{ warnings.length > 1 ? 's' : '' }}
+    </RouterLink>
+
     <div
       v-for="project in projects"
       :key="'Sidebar/p/' + project.slug"
@@ -98,7 +107,10 @@ export default {
       }
     })
 
-    return { projects }
+    return {
+      projects,
+      warnings: configStore.warnings
+    }
   }
 }
 </script>
@@ -145,5 +157,13 @@ a.dashboard {
   padding: .5rem 1rem 2rem;
   font-weight: bold;
   margin-top: 1rem;
+}
+
+a.warnings {
+  padding: 1rem .5rem;
+  font-weight: bold;
+  background: #3e2222;
+  text-align: center;
+  text-transform: uppercase;
 }
 </style>

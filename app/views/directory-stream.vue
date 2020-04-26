@@ -10,6 +10,7 @@
 
 <script>
 import Stream from './stream.vue'
+import { toRefs } from 'vue'
 
 export default {
   name: 'DirectoryStream',
@@ -35,9 +36,7 @@ export default {
 
   setup (props) {
     return {
-      projectSlug: props.projectSlug,
-      directorySlug: props.directorySlug,
-      streamSlug: props.streamSlug
+      ...toRefs(props)
     }
   }
 }

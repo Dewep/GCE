@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import { toRefs } from 'vue'
+
 export default {
   name: 'ProjectStream',
 
@@ -22,8 +24,7 @@ export default {
 
   setup (props) {
     return {
-      ...props,
-      projectSlug: props.projectSlug
+      ...toRefs(props)
     }
   }
 }

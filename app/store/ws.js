@@ -54,7 +54,7 @@ class WsStore {
         }
 
         if (type === 'streamRedirect') {
-          // TODO
+          configStore.streamRedirect(data)
         }
 
         if (type === 'streamOutput') {
