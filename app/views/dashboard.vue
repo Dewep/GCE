@@ -13,10 +13,81 @@
         </p>
       </template>
 
-      <h2>How to configure</h2>
+      <h2>TODO</h2>
       <p class="toast-info">
-        TODO: list of projects, with message if errors (path not found, slug not slugify)
+        sidebar start (primary true config)
       </p>
+      <p class="toast-info">
+        dir index start primary color
+      </p>
+      <p class="toast-info">
+        update stream newexec (start)
+      </p>
+      <p class="toast-info">
+        update stream stop
+      </p>
+      <p class="toast-info">
+        update stream restart
+      </p>
+      <p class="toast-info">
+        sidebar stop
+      </p>
+      <p class="toast-info">
+        sidebar restart
+      </p>
+      <p class="toast-info">
+        stream vue toolbar
+      </p>
+      <p class="toast-info">
+        stream toolbar start, stop, restart, newexec, details on/off
+      </p>
+      <p class="toast-info">
+        stream details : path, cmd, created, dates, exit code, ...
+      </p>
+      <p class="toast-info">
+        stream statut
+      </p>
+      <p class="toast-info">
+        stream unread
+      </p>
+      <p class="toast-info">
+        update stream close
+      </p>
+      <p class="toast-info">
+        set bookmark
+      </p>
+      <p class="toast-info">
+        filter bookmark
+      </p>
+      <p class="toast-info">
+        dir index vue content
+      </p>
+      <p class="toast-info">
+        new custom command
+      </p>
+      <p class="toast-info">
+        advanced command write
+      </p>
+      <p class="toast-info">
+        ctrl+c
+      </p>
+      <p class="toast-info">
+        input stdin
+      </p>
+      <p class="toast-info">
+        home project
+      </p>
+      <p class="toast-info">
+        variables command
+      </p>
+      <p class="toast-info">
+        set initial config files
+      </p>
+      <p class="toast-info">
+        PandaLab configs 
+      </p>
+
+      <h2>How to configure</h2>
       <p class="toast-info">
         TODO: tuto
       </p>
@@ -40,6 +111,10 @@ export default {
 </script>
 
 <style scoped>
+#main-view {
+  overflow: auto;
+}
+
 .dashboard {
   padding: 1rem;
 }

@@ -66,7 +66,7 @@
       class="dashboard"
       exact
     >
-      GCE <sup>3.0.0</sup>
+      GCE <sup>{{ gceVersion }}</sup>
     </RouterLink>
   </div>
 </template>
@@ -108,6 +108,7 @@ export default {
     })
 
     return {
+      gceVersion: window.gceVersion,
       projects,
       warnings: configStore.warnings
     }
