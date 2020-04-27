@@ -1,20 +1,26 @@
 <template>
   <div>
-    <template v-if="warnings.length">
-      <h1>Config warnings</h1>
-      <ul>
-        <li
+    <div class="dashboard">
+      <h1>GCE <sup>{{ gceVersion }}</sup></h1>
+      <template v-if="warnings.length">
+        <h2>Config warnings</h2>
+        <p
           v-for="(warning, $index) in warnings"
           :key="'Dashboard/w/' + $index"
+          class="toast-error"
         >
           {{ warning }}
-        </li>
-      </ul>
-    </template>
+        </p>
+      </template>
 
-    <h1>Dashboard</h1>
-    <p>TODO: list of projects, with message if errors (path not found, slug not slugify)</p>
-    <p>TODO: tuto</p>
+      <h2>How to configure</h2>
+      <p class="toast-info">
+        TODO: list of projects, with message if errors (path not found, slug not slugify)
+      </p>
+      <p class="toast-info">
+        TODO: tuto
+      </p>
+    </div>
   </div>
 </template>
 
@@ -26,8 +32,15 @@ export default {
 
   setup () {
     return {
+      gceVersion: window.gceVersion,
       warnings: configStore.warnings
     }
   }
 }
 </script>
+
+<style scoped>
+.dashboard {
+  padding: 1rem;
+}
+</style>

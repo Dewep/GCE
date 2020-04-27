@@ -94,6 +94,18 @@ a:hover, a:focus, a:active, a.router-link-active {
   transform: translate(-.2rem,50%);
 }
 
+.toast-error, .toast-info {
+  padding: .5rem;
+  background: #3e2222;
+  border: .1rem solid #772c2c;
+  border-radius: .2rem;
+  margin: 1rem .5rem;
+}
+.toast-info {
+  background: #24223e;
+  border-color: #413b88;
+}
+
 #app {
   display: flex;
   flex-direction: column;
