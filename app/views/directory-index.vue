@@ -100,9 +100,9 @@ export default {
         }
       }
 
-      if (dir.commands) {
-        for (const slug of Object.keys(dir.commands)) {
-          const cmd = dir.commands[slug]
+      if (dir.extras) {
+        for (const slug of Object.keys(dir.extras)) {
+          const cmd = dir.extras[slug]
           newCommands.push({
             type: 'command',
             slug,

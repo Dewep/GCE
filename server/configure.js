@@ -139,7 +139,8 @@ class GCEConfigure {
       name: directoryName,
       path: directoryPath,
       loadBalancer: {},
-      commands: {}
+      args: null,
+      extras: {}
     }
 
     if (directory.loadBalancer) {
@@ -186,40 +187,44 @@ class GCEConfigure {
       }
     }
 
-    if (!directory.commands) {
-      return this._addWarning(`${slug}.commands`, 'is empty')
+    if (!directory.args || !directory.args.length) {
+      return this._addWarning(`${slug}.args`, 'is empty')
     }
 
-    for (const commandSlug of Object.keys(directory.commands)) {
-      const command = directory.commands[commandSlug]
-
-      if (!command) {
-        continue
-      }
-
-      if (!command.args || !command.args.length) {
-        this._addWarning(`${slug}.commands[${commandSlug}].args`, 'not defined or empty')
-        continue
-      }
-
-      if (!this._checkArrayOfStrings(`${slug}.commands[${commandSlug}].args`, command.args)) {
-        continue
-      }
-
-      let commandName = commandSlug
-      if (command.name && this._checkString(`${slug}.commands[${commandSlug}].name`, command.name)) {
-        commandName = command.name
-      }
-
-      directoryDefinition.commands[commandSlug] = {
-        slug: commandSlug,
-        name: commandName,
-        args: command.args
-      }
+    if (!this._checkArrayOfStrings(`${slug}.args`, directory.args)) {
+      return
     }
 
-    if (!Object.keys(directoryDefinition.commands).length) {
-      return this._addWarning(`${slug}.commands`, 'is empty')
+    directoryDefinition.args = directory.args
+
+    if (directory.extras) {
+      for (const extraSlug of Object.keys(directory.extras)) {
+        const extra = directory.extras[extraSlug]
+
+        if (!extra) {
+          continue
+        }
+
+        if (!extra.args || !extra.args.length) {
+          this._addWarning(`${slug}.extras[${extraSlug}].args`, 'not defined or empty')
+          continue
+        }
+
+        if (!this._checkArrayOfStrings(`${slug}.extras[${extraSlug}].args`, extra.args)) {
+          continue
+        }
+
+        let extraName = extraSlug
+        if (extra.name && this._checkString(`${slug}.extras[${extraSlug}].name`, extra.name)) {
+          extraName = extra.name
+        }
+
+        directoryDefinition.extras[extraSlug] = {
+          slug: extraSlug,
+          name: extraName,
+          args: extra.args
+        }
+      }
     }
 
     projectDefinition.directories[directorySlug] = directoryDefinition
