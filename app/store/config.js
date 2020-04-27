@@ -87,13 +87,30 @@ class ConfigStore {
 
   getCommandStreams (projectSlug, directorySlug) {
     return this.commandStreams.value.filter(commandStream => {
-      return commandStream.projectSlug === projectSlug && commandStream.directorySlug === directorySlug
+      return commandStream.projectSlug === projectSlug &&
+        commandStream.directorySlug === directorySlug
     })
+  }
+
+  getDirectoryStreamPrimary (projectSlug, directorySlug) {
+    const stream = this.commandStreams.value.find(commandStream => {
+      return commandStream.projectSlug === projectSlug &&
+        commandStream.directorySlug === directorySlug &&
+        commandStream.primary === true
+    })
+
+    if (!stream) {
+      return null
+    }
+
+    return stream.slug
   }
 
   getCommandStream (projectSlug, directorySlug, streamSlug) {
     const stream = this.commandStreams.value.find(commandStream => {
-      return commandStream.projectSlug === projectSlug && commandStream.directorySlug === directorySlug && commandStream.slug === streamSlug
+      return commandStream.projectSlug === projectSlug &&
+        commandStream.directorySlug === directorySlug &&
+        commandStream.slug === streamSlug
     })
 
     if (!stream) {

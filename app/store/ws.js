@@ -84,11 +84,11 @@ class WsStore {
     this.socket.send(JSON.stringify({ type, data }))
   }
 
-  newCommandStream (projectSlug, directorySlug, args, name = null, options = {}) {
+  newCommandStream (projectSlug, directorySlug, primary, args, name = null, options = {}) {
     if (!name) {
       name = args.join(' ')
     }
-    this.send('newCommandStream', { projectSlug, directorySlug, args, name, options })
+    this.send('newCommandStream', { projectSlug, directorySlug, primary, args, name, options })
   }
 
   updateCommandStream (streamSlug, action) {

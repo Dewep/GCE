@@ -5,6 +5,7 @@ class CommandStreamStore {
     this.slug = null
     this.projectSlug = null
     this.directorySlug = null
+    this.primary = false
     this.name = null
     this.args = null
     this.cwd = null
@@ -25,10 +26,11 @@ class CommandStreamStore {
     return ansiUp
   }
 
-  update ({ slug, projectSlug, directorySlug, name, args, cwd, creationDate, runningDate, stoppedDate }) {
+  update ({ slug, projectSlug, directorySlug, primary, name, args, cwd, creationDate, runningDate, stoppedDate }) {
     this.slug = slug
     this.projectSlug = projectSlug
     this.directorySlug = directorySlug
+    this.primary = primary || false
     this.name = name
     this.args = args
     this.cwd = cwd

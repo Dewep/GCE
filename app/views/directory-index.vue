@@ -117,7 +117,7 @@ export default {
     })
 
     function runCommand (cmd) {
-      wsStore.newCommandStream(props.projectSlug, props.directorySlug, cmd.args, cmd.name, { redirect: true })
+      wsStore.newCommandStream(props.projectSlug, props.directorySlug, false, cmd.args, cmd.name, { redirect: true })
     }
 
     return {

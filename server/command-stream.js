@@ -10,6 +10,7 @@ class GCECommandStream {
 
     this.projectSlug = null
     this.directorySlug = null
+    this.primary = false
     this.name = null
     this.args = null
     this.cwd = null
@@ -30,7 +31,7 @@ class GCECommandStream {
     return instance
   }
 
-  async create ({ projectSlug, directorySlug, args, name, options }, ws) {
+  async create ({ projectSlug, directorySlug, primary, args, name, options }, ws) {
     let cwd = process.cwd()
     if (options.cwd) {
       cwd = options.cwd
@@ -44,6 +45,7 @@ class GCECommandStream {
 
     this.projectSlug = projectSlug
     this.directorySlug = directorySlug
+    this.primary = primary || false
     this.args = args
     this.name = name
     this.cwd = cwd
@@ -116,6 +118,7 @@ class GCECommandStream {
       slug: this.slug,
       projectSlug: this.projectSlug,
       directorySlug: this.directorySlug,
+      primary: this.primary,
       name: this.name,
       args: this.args,
       cwd: this.cwd,

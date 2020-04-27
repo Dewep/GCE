@@ -15,10 +15,7 @@
 
       <h2>TODO</h2>
       <p class="toast-info">
-        sidebar start (primary true config)
-      </p>
-      <p class="toast-info">
-        dir index start primary color
+        sidebar start
       </p>
       <p class="toast-info">
         update stream newexec (start)
@@ -60,9 +57,6 @@
         filter bookmark
       </p>
       <p class="toast-info">
-        dir index vue content
-      </p>
-      <p class="toast-info">
         new custom command
       </p>
       <p class="toast-info">
@@ -84,7 +78,10 @@
         set initial config files
       </p>
       <p class="toast-info">
-        PandaLab configs 
+        PandaLab configs
+      </p>
+      <p class="toast-info">
+        Limit output lines
       </p>
 
       <h2>How to configure</h2>

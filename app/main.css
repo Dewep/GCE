@@ -106,6 +106,20 @@ a:hover, a:focus, a:active, a.router-link-active {
   border-color: #413b88;
 }
 
+button {
+  background: #24223e;
+  border: .1rem solid #413b88;
+  color: #969896;
+  border-radius: 0.2rem;
+  padding: .3rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover, button:active, button:focus, button.active, button.router-link-active {
+  color: #c5c8c6;
+}
+
 #app {
   display: flex;
   flex-direction: column;
