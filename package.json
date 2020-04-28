@@ -23,6 +23,7 @@
   "dependencies": {
     "ansi_up": "^4.0.4",
     "http-proxy": "^1.18.0",
+    "tree-kill": "^1.2.2",
     "vue": "^3.0.0-beta.2",
     "vue-router": "^4.0.0-alpha.7",
     "ws": "^7.2.3"

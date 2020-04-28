@@ -1,4 +1,5 @@
 const childProcess = require('child_process')
+const treeKill = require('tree-kill')
 const logger = require('./logger')
 
 class GCECommandStream {
@@ -57,16 +58,33 @@ class GCECommandStream {
       await this.sendToWsConnections('streamRedirect', { streamSlug: this.slug }, ws)
     }
 
-    this.start(false)
+    this.start({ withUpdate: false })
   }
 
-  async update () {}
+  async update ({ type, options = {} }) {
+    if (type === 'start') {
+      await this.start(options)
+    } else if (type === 'stop') {
+      await this.stop(options)
+    } else if (type === 'restart') {
+      await this.restart(options)
+    } else if (type === 'clear') {
+      await this.clear(options)
+    }
+  }
 
-  async start (withUpdate = true) {
-    this.addOutput('info', 'Command: ' + this.args.join(' '))
+  async start ({ withUpdate = true, args = this.args } = {}) {
+    if (!args.length) {
+      throw new Error('Bad command args')
+    }
+    if (this.proc) {
+      throw new Error('Command already running')
+    }
+
+    this.addOutput('info', 'Command: ' + args.join(' '))
     this.addOutput('info', this.cwd)
 
-    this.proc = childProcess.spawn(this.args[0], this.args.slice(1), {
+    this.proc = childProcess.spawn(args[0], args.slice(1), {
       cwd: this.cwd,
       shell: true,
       env: process.env
@@ -89,6 +107,7 @@ class GCECommandStream {
     this.proc.on('close', code => {
       this.addOutput('info', `Process exited with code ${code}`)
       this.exitCode = code
+      this.proc = null
 
       this.sendUpdate()
     })
@@ -96,6 +115,34 @@ class GCECommandStream {
     if (withUpdate) {
       await this.sendUpdate()
     }
+  }
+
+  async stop () {
+    if (!this.proc) {
+      return
+    }
+
+    return new Promise((resolve, reject) => {
+      this.addOutput('info', 'Killing the process...')
+      treeKill(this.proc.pid, err => {
+        if (err) {
+          this.addOutput('info', 'Error during killing the process:')
+          this.addOutput('info', err.message)
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    })
+  }
+
+  async restart () {
+    await this.stop()
+    await this.start()
+  }
+
+  async clear () {
+    this.output = []
   }
 
   async addOutput (type, content) {
