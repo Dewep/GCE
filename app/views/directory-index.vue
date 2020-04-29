@@ -151,7 +151,7 @@ export default {
   opacity: .5;
   bottom: 1rem;
   background: #282b2d;
-  border-radius: .2rem;
+  border-radius: .5rem .5rem .5rem 0rem;
 }
 
 .dir-index-commands:hover {

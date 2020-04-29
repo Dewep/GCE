@@ -1,13 +1,74 @@
 <template>
-  <div v-if="stream">
-    <div
-      v-for="line in stream.output"
-      :key="line.date"
-      :class="[line.type]"
-      :data-time="line.date"
-      class="output"
-    >
-      <div v-html="line.content" />
+  <div
+    v-if="stream"
+    class="stream"
+    :class="{ 'with-information': withInformation }"
+  >
+    <div class="outputs">
+      <div
+        v-for="line in stream.output"
+        :key="line.date"
+        :class="[line.type]"
+        :data-time="line.date"
+        class="output"
+      >
+        <div v-html="line.content" />
+      </div>
+    </div>
+    <div class="information">
+      <label>
+        <b>CWD</b>
+        <span>{{ cwd }}</span>
+      </label>
+      <label v-if="creationDate">
+        <b>Creation</b>
+        <span>{{ creationDate }}</span>
+      </label>
+      <label v-if="runningDate">
+        <b>Running</b>
+        <span>{{ runningDate }}</span>
+      </label>
+      <label v-if="stoppedDate">
+        <b>Stopped</b>
+        <span>{{ stoppedDate }}</span>
+      </label>
+      <label v-if="exitCode !== null">
+        <b>Exit code</b>
+        <span>{{ exitCode }}</span>
+      </label>
+    </div>
+    <div class="toolbar">
+      <a
+        class="details"
+        @click.prevent="withInformation = !withInformation"
+      >
+        <i class="fa fa-angle-up" />
+        <i class="fa fa-angle-down" />
+        DETAILS
+      </a>
+      <a
+        v-if="stoppedDate"
+      >
+        <i class="fa fa-play" />
+        Start
+      </a>
+      <a
+        v-if="!stoppedDate"
+      >
+        <i class="fa fa-stop" />
+        Stop
+      </a>
+      <a
+        v-if="!stoppedDate"
+      >
+        <i class="fa fa-redo" />
+        Restart
+      </a>
+      <a
+        class="args"
+      >
+        {{ name }}: {{ argsName }}
+      </a>
     </div>
   </div>
 </template>
@@ -36,21 +97,148 @@ export default {
 
   setup (props) {
     const stream = ref(null)
+    const name = ref('N/A')
+    const args = ref([])
+    const argsName = ref('N/A')
+    const cwd = ref('N/A')
+    const creationDate = ref(null)
+    const runningDate = ref(null)
+    const stoppedDate = ref(null)
+    const exitCode = ref(null)
+    const withInformation = ref(false)
+
+    function formatDate (value, diffWith) {
+      const date = new Date(value)
+
+      let hours = date.getHours()
+      hours = (hours < 10 ? '0' : '') + hours
+      let minutes = date.getMinutes()
+      minutes = (minutes < 10 ? '0' : '') + minutes
+      let seconds = date.getSeconds()
+      seconds = (seconds < 10 ? '0' : '') + seconds
+      let milliseconds = date.getMilliseconds()
+      milliseconds = (milliseconds < 10 ? '0' : '') + (milliseconds < 100 ? '0' : '') + milliseconds
+
+      const str = `${hours}:${minutes}:${seconds}:${milliseconds}`
+
+      if (diffWith) {
+        const diff = Math.round(value - diffWith) / 1000
+        if (diff < 5 * 60) {
+          return `${str} (${diff}s)`
+        }
+        return `${str} (${diff / 60} min)`
+      }
+
+      return str
+    }
 
     watchEffect(() => {
       const def = configStore.getCommandStream(props.projectSlug, props.directorySlug, props.streamSlug)
       stream.value = def
+
+      if (def) {
+        name.value = def.name
+        args.value = def.args
+        argsName.value = def.args.join(' ')
+        cwd.value = def.cwd
+        creationDate.value = def.creationDate ? formatDate(def.creationDate) : null
+        runningDate.value = def.runningDate ? formatDate(def.runningDate) : null
+        stoppedDate.value = def.stoppedDate ? formatDate(def.stoppedDate, def.runningDate) : null
+        exitCode.value = def.exitCode
+      }
     })
 
     return {
       ...toRefs(props),
-      stream
+      stream,
+      name,
+      args,
+      argsName,
+      cwd,
+      creationDate,
+      runningDate,
+      stoppedDate,
+      exitCode,
+      withInformation
     }
   }
 }
 </script>
 
 <style scoped>
+.stream {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.outputs {
+  flex: 1 1 auto;
+}
+
+.information {
+  flex: 0 0 auto;
+  background: #c5c8c6;
+  margin-left: 1rem;
+  padding: 1rem;
+  border-radius: .5rem 0 0 0;
+  color: #282b2d;
+  font-size: 90%;
+  display: none;
+}
+
+.information label {
+  margin: .3rem 2rem .3rem 0;
+  display: inline-block;
+}
+
+.information label span {
+  margin-left: .5rem;
+  font-size: 90%;
+}
+
+.toolbar {
+  flex: 0 0 auto;
+  background: #282b2d;
+  margin: 0 0 1rem 1rem;
+  padding: .5rem;
+  border-radius: .5rem 0 0 .5rem;
+}
+
+.toolbar a {
+  padding: .5rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.toolbar a.details {
+  float: right;
+  font-size: 80%;
+  opacity: .5;
+  user-select: none;
+}
+
+.toolbar a.args {
+  font-size: 80%;
+  opacity: .5;
+}
+
+.fa-angle-down {
+  display: none;
+}
+.with-information .information {
+  display: block;
+}
+.with-information .toolbar {
+  border-radius: 0 0 0 .5rem;
+}
+.with-information .fa-angle-up {
+  display: none;
+}
+.with-information .fa-angle-down {
+  display: inline;
+}
+
 .output {
   padding: .1rem 6rem .1rem .5rem;
   position: relative;

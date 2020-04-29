@@ -27,6 +27,9 @@
         update stream restart
       </p>
       <p class="toast-info">
+        icons <i class="fa fa-play" /> <i class="fa fa-stop" /> <i class="fa fa-redo" /> <a href="https://fontawesome.com/icons?d=gallery&amp;s=solid&amp;m=free">link</a>
+      </p>
+      <p class="toast-info">
         sidebar stop
       </p>
       <p class="toast-info">
@@ -82,6 +85,9 @@
       </p>
       <p class="toast-info">
         Limit output lines
+      </p>
+      <p class="toast-info">
+        Notifications
       </p>
 
       <h2>How to configure</h2>
