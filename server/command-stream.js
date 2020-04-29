@@ -70,6 +70,8 @@ class GCECommandStream {
       await this.restart(options)
     } else if (type === 'clear') {
       await this.clear(options)
+    } else if (type === 'close') {
+      await this.close(options)
     }
   }
 
@@ -106,6 +108,7 @@ class GCECommandStream {
 
     this.proc.on('close', code => {
       this.addOutput('info', `Process exited with code ${code}`)
+      this.stoppedDate = Date.now()
       this.exitCode = code
       this.proc = null
 
@@ -145,6 +148,14 @@ class GCECommandStream {
     this.output = []
   }
 
+  async close () {
+    if (this.proc) {
+      throw new Error('Process not stopped')
+    }
+
+    // TODO
+  }
+
   async addOutput (type, content) {
     logger.debug('GCE Output', this.slug, type, content)
 
@@ -171,7 +182,8 @@ class GCECommandStream {
       cwd: this.cwd,
       creationDate: this.creationDate,
       runningDate: this.runningDate,
-      stoppedDate: this.stoppedDate
+      stoppedDate: this.stoppedDate,
+      exitCode: this.exitCode
     }, wsInstance)
   }
 
