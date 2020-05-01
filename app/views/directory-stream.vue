@@ -1,9 +1,9 @@
 <template>
   <div>
     <Stream
+      :stream-slug="streamSlug"
       :project-slug="projectSlug"
       :directory-slug="directorySlug"
-      :stream-slug="streamSlug"
     />
   </div>
 </template>

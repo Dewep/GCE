@@ -2,15 +2,15 @@
   <div
     v-if="stream"
     class="stream"
-    :class="{ 'with-information': withInformation }"
+    :class="{ 'in-directory': directorySlug !== null, 'with-information': withInformation }"
   >
     <div
       ref="outputsRef"
       class="outputs"
     >
       <div
-        v-for="line in outputs"
-        :key="line.date"
+        v-for="(line, $index) in outputs"
+        :key="line.date + $index"
         :class="[line.type]"
         :data-time="line.date"
         class="output"
@@ -101,17 +101,17 @@ export default {
   name: 'Stream',
 
   props: {
-    projectSlug: {
-      type: String,
-      required: true
-    },
-    directorySlug: {
-      type: String,
-      required: true
-    },
     streamSlug: {
       type: String,
       required: true
+    },
+    projectSlug: {
+      type: String,
+      default: null
+    },
+    directorySlug: {
+      type: String,
+      default: null
     }
   },
 
@@ -156,7 +156,7 @@ export default {
     }
 
     watchEffect(() => {
-      const def = configStore.getCommandStream(props.projectSlug, props.directorySlug, props.streamSlug)
+      const def = configStore.getCommandStream(props.streamSlug, props.projectSlug, props.directorySlug)
       stream.value = def
 
       if (def) {
@@ -250,7 +250,7 @@ export default {
 .outputs {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: 0 22rem 1rem 0;
+  padding: 0 0 1rem 0;
 }
 
 .information {
@@ -262,7 +262,6 @@ export default {
   color: #282b2d;
   font-size: 90%;
   display: none;
-  margin-right: 22rem;
 }
 
 .information label {
@@ -281,6 +280,12 @@ export default {
   margin: 0 0 1rem 1rem;
   padding: .5rem;
   border-radius: .5rem 0 0 .5rem;
+}
+
+.in-directory .outputs {
+  padding-right: 22rem;
+}
+.in-directory .information, .in-directory .toolbar {
   margin-right: 22rem;
 }
 

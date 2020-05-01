@@ -6,6 +6,7 @@ import ProjectStream from './views/project-stream.vue'
 import DirectoryIndex from './views/directory-index.vue'
 import DirectoryHome from './views/directory-home.vue'
 import DirectoryStream from './views/directory-stream.vue'
+import ViewStream from './views/stream.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,6 +16,12 @@ const router = createRouter({
       name: 'dashboard',
       path: '/',
       component: Dashboard
+    },
+    {
+      name: 'stream',
+      path: '/s/:streamSlug',
+      component: ViewStream,
+      props: true
     },
     {
       path: '/p/:projectSlug',

@@ -85,6 +85,10 @@ class ConfigStore {
     }
   }
 
+  getAllCommandStreams () {
+    return this.commandStreams.value
+  }
+
   getCommandStreams (projectSlug, directorySlug) {
     return this.commandStreams.value.filter(commandStream => {
       return commandStream.projectSlug === projectSlug &&
@@ -106,12 +110,8 @@ class ConfigStore {
     return stream.slug
   }
 
-  getCommandStream (projectSlug, directorySlug, streamSlug) {
-    const stream = this.commandStreams.value.find(commandStream => {
-      return commandStream.projectSlug === projectSlug &&
-        commandStream.directorySlug === directorySlug &&
-        commandStream.slug === streamSlug
-    })
+  getCommandStream (streamSlug, projectSlug, directorySlug) {
+    const stream = this.commandStreams.value.find(commandStream => commandStream.slug === streamSlug)
 
     if (!stream) {
       if (directorySlug) {

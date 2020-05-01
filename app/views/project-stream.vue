@@ -1,15 +1,22 @@
 <template>
   <div>
-    <h1>Project Stream {{ projectSlug }} {{ streamSlug }}</h1>
-    <RouterView />
+    <Stream
+      :stream-slug="streamSlug"
+      :project-slug="projectSlug"
+    />
   </div>
 </template>
 
 <script>
+import Stream from './stream.vue'
 import { toRefs } from 'vue'
 
 export default {
   name: 'ProjectStream',
+
+  components: {
+    Stream
+  },
 
   props: {
     projectSlug: {

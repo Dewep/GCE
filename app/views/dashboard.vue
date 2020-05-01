@@ -30,6 +30,9 @@
         sidebar restart
       </p>
       <p class="toast-info">
+        sidebar primary
+      </p>
+      <p class="toast-info">
         stream statut
       </p>
       <p class="toast-info">

@@ -1,5 +1,11 @@
 const AnsiUp = require('ansi_up').default
 
+const STATUS = {
+  STOPPED: 'STOPPED',
+  RUNNING: 'RUNNING',
+  ERROR: 'ERROR'
+}
+
 class CommandStreamStore {
   constructor () {
     this.slug = null
@@ -15,6 +21,8 @@ class CommandStreamStore {
     this.stoppedDate = null
     this.exitCode = null
     this.output = []
+    this.status = STATUS.STOPPED
+    this.unread = false
 
     this.ansiUpStdout = this._newAnsiUp()
     this.ansiUpStderr = this._newAnsiUp()
@@ -41,6 +49,14 @@ class CommandStreamStore {
     this.runningArgs = runningArgs
     this.stoppedDate = stoppedDate
     this.exitCode = exitCode
+
+    if (this.exitCode > 0) {
+      this.status = STATUS.ERROR
+    } else if (this.runningDate && !this.stoppedDate) {
+      this.status = STATUS.RUNNING
+    } else {
+      this.status = STATUS.STOPPED
+    }
   }
 
   _convertDate (value) {
@@ -73,6 +89,8 @@ class CommandStreamStore {
         date: this._convertDate(output.date),
         content
       })
+
+      this.unread = true
     }
     // TODO: remove old output
   }
@@ -80,5 +98,10 @@ class CommandStreamStore {
   clear () {
     this.output = []
   }
+
+  static get STATUS () {
+    return STATUS
+  }
+}
 
 export default CommandStreamStore
