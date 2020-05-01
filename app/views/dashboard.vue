@@ -15,67 +15,46 @@
 
       <h2>TODO</h2>
       <p class="toast-info">
-        sidebar start
+        ISO: Limit output lines
       </p>
       <p class="toast-info">
-        update stream newexec custom start
+        ISO: Notifications
       </p>
       <p class="toast-info">
-        icons <i class="fa fa-play" /> <i class="fa fa-stop" /> <i class="fa fa-redo" /> <a href="https://fontawesome.com/icons?d=gallery&amp;s=solid&amp;m=free">link</a>
+        ISO: Stream unread
       </p>
       <p class="toast-info">
-        sidebar stop
+        ISO: Home project
       </p>
       <p class="toast-info">
-        sidebar restart
+        ISO: Set initial config files PandaLab
       </p>
       <p class="toast-info">
-        sidebar primary
+        ISO: PandaLab configs
       </p>
       <p class="toast-info">
-        stream statut
+        ISO: Variables command
       </p>
       <p class="toast-info">
-        stream unread
+        NEW: Update stream close
       </p>
       <p class="toast-info">
-        update stream close
+        NEW: Bookmarks
       </p>
       <p class="toast-info">
-        set bookmark
+        NEW: Icons <i class="fa fa-play" /> <i class="fa fa-stop" /> <i class="fa fa-redo" /> <a href="https://fontawesome.com/icons?d=gallery&amp;s=solid&amp;m=free">link</a>
       </p>
       <p class="toast-info">
-        filter bookmark
+        NEW: Update stream newexec custom start
       </p>
       <p class="toast-info">
-        new custom command
+        NEW: Custom stream command
       </p>
       <p class="toast-info">
-        advanced command write
+        NEW: Advanced command write
       </p>
       <p class="toast-info">
-        ctrl+c
-      </p>
-      <p class="toast-info">
-        input stdin
-      </p>
-      <p class="toast-info">
-        home project
-      </p>
-      <p class="toast-info">
-        variables command
-      </p>
-      <p class="toast-info">
-        set initial config files PandaLab
-      </p>
-      <p class="toast-info">
-        PandaLab configs
-      </p>
-      <p class="toast-info">
-        Limit output lines
-      </p>
-      <p class="toast-info">
-        Notifications
+        NEW: Stdin + ctrl+c
       </p>
 
       <h2>How to configure</h2>
