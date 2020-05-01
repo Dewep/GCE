@@ -11,6 +11,7 @@ class CommandStreamStore {
     this.cwd = null
     this.creationDate = null
     this.runningDate = null
+    this.runningArgs = null
     this.stoppedDate = null
     this.exitCode = null
     this.output = []
@@ -27,7 +28,7 @@ class CommandStreamStore {
     return ansiUp
   }
 
-  update ({ slug, projectSlug, directorySlug, primary, name, args, cwd, creationDate, runningDate, stoppedDate, exitCode }) {
+  update ({ slug, projectSlug, directorySlug, primary, name, args, cwd, creationDate, runningDate, runningArgs, stoppedDate, exitCode }) {
     this.slug = slug
     this.projectSlug = projectSlug
     this.directorySlug = directorySlug
@@ -37,6 +38,7 @@ class CommandStreamStore {
     this.cwd = cwd
     this.creationDate = creationDate
     this.runningDate = runningDate
+    this.runningArgs = runningArgs
     this.stoppedDate = stoppedDate
     this.exitCode = exitCode
   }
@@ -74,6 +76,9 @@ class CommandStreamStore {
     }
     // TODO: remove old output
   }
-}
+
+  clear () {
+    this.output = []
+  }
 
 export default CommandStreamStore

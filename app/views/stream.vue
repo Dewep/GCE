@@ -4,9 +4,12 @@
     class="stream"
     :class="{ 'with-information': withInformation }"
   >
-    <div class="outputs">
+    <div
+      ref="outputsRef"
+      class="outputs"
+    >
       <div
-        v-for="line in stream.output"
+        v-for="line in outputs"
         :key="line.date"
         :class="[line.type]"
         :data-time="line.date"
@@ -48,26 +51,42 @@
       </a>
       <a
         v-if="stoppedDate"
+        @click.prevent="actionStart()"
       >
         <i class="fa fa-play" />
         Start
       </a>
       <a
         v-if="!stoppedDate"
+        @click.prevent="actionStop()"
       >
         <i class="fa fa-stop" />
         Stop
       </a>
       <a
         v-if="!stoppedDate"
+        @click.prevent="actionRestart()"
       >
         <i class="fa fa-redo" />
         Restart
       </a>
       <a
+        @click.prevent="actionClear()"
+      >
+        <i class="fa fa-broom" />
+        Clear
+      </a>
+      <a
+        v-if="!stoppedDate"
+        @click.prevent="actionClose()"
+      >
+        <i class="fa fa-trash" />
+        Close
+      </a>
+      <a
         class="args"
       >
-        {{ name }}: {{ argsName }}
+        {{ fullName }}
       </a>
     </div>
   </div>
@@ -76,6 +95,7 @@
 <script>
 import configStore from '../store/config'
 import { ref, watchEffect, toRefs } from 'vue'
+import wsStore from '../store/ws'
 
 export default {
   name: 'Stream',
@@ -100,12 +120,15 @@ export default {
     const name = ref('N/A')
     const args = ref([])
     const argsName = ref('N/A')
+    const fullName = ref('N/A')
     const cwd = ref('N/A')
     const creationDate = ref(null)
     const runningDate = ref(null)
     const stoppedDate = ref(null)
     const exitCode = ref(null)
     const withInformation = ref(false)
+    const outputs = ref([])
+    const outputsRef = ref(null)
 
     function formatDate (value, diffWith) {
       const date = new Date(value)
@@ -140,6 +163,10 @@ export default {
         name.value = def.name
         args.value = def.args
         argsName.value = def.args.join(' ')
+        fullName.value = name.value
+        if (name.value !== argsName.value) {
+          fullName.value += ': ' + argsName.value
+        }
         cwd.value = def.cwd
         creationDate.value = def.creationDate ? formatDate(def.creationDate) : null
         runningDate.value = def.runningDate ? formatDate(def.runningDate) : null
@@ -148,18 +175,66 @@ export default {
       }
     })
 
+    watchEffect(() => {
+      if (!stream.value) {
+        return
+      }
+
+      outputs.value = [...stream.value.output]
+
+      setTimeout(function () {
+        if (outputsRef.value) {
+          outputsRef.value.scrollTop = outputsRef.value.scrollHeight
+        }
+      })
+    })
+
+    function actionStart (args) {
+      const options = {}
+      if (args) {
+        options.args = args
+      }
+      wsStore.updateCommandStream(props.streamSlug, 'start', options)
+    }
+
+    function actionStop () {
+      wsStore.updateCommandStream(props.streamSlug, 'stop')
+    }
+
+    function actionRestart () {
+      wsStore.updateCommandStream(props.streamSlug, 'restart')
+    }
+
+    function actionClear () {
+      if (stream.value) {
+        stream.value.clear()
+      }
+    }
+
+    function actionClose () {
+      wsStore.updateCommandStream(props.streamSlug, 'close')
+    }
+
     return {
       ...toRefs(props),
       stream,
       name,
       args,
       argsName,
+      fullName,
       cwd,
       creationDate,
       runningDate,
       stoppedDate,
       exitCode,
-      withInformation
+      withInformation,
+      outputs,
+      outputsRef,
+      actionStart,
+      actionStop,
+      actionRestart,
+      actionClear,
+      actionClose
     }
   }
 }
@@ -174,6 +249,8 @@ export default {
 
 .outputs {
   flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0 22rem 1rem 0;
 }
 
 .information {
@@ -185,6 +262,7 @@ export default {
   color: #282b2d;
   font-size: 90%;
   display: none;
+  margin-right: 22rem;
 }
 
 .information label {
@@ -203,6 +281,7 @@ export default {
   margin: 0 0 1rem 1rem;
   padding: .5rem;
   border-radius: .5rem 0 0 .5rem;
+  margin-right: 22rem;
 }
 
 .toolbar a {
@@ -253,7 +332,7 @@ export default {
 }
 
 .output:after {
-  top: .3rem;
+  top: .2rem;
   opacity: .5;
   content: attr(data-time);
   display: block;

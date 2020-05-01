@@ -139,14 +139,13 @@ export default {
 .dir-content {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding-right: 22rem;
 }
 
 .dir-index-commands {
   position: absolute;
   top: 1rem;
-  right: 2rem;
-  width: 20rem;
+  right: 1.5rem;
+  width: 20.5rem;
   text-align: center;
   opacity: .5;
   bottom: 1rem;

@@ -89,6 +89,9 @@
       <p class="toast-info">
         Notifications
       </p>
+      <p class="toast-info">
+        Stream auto scroll bot
+      </p>
 
       <h2>How to configure</h2>
       <p class="toast-info">

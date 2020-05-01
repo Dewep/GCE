@@ -17,6 +17,7 @@ class GCECommandStream {
     this.cwd = null
 
     this.runningDate = null
+    this.runningArgs = null
     this.stoppedDate = null
     this.exitCode = null
     this.output = []
@@ -61,16 +62,14 @@ class GCECommandStream {
     this.start({ withUpdate: false })
   }
 
-  async update ({ type, options = {} }) {
-    if (type === 'start') {
+  async update ({ action, options = {} }) {
+    if (action === 'start') {
       await this.start(options)
-    } else if (type === 'stop') {
+    } else if (action === 'stop') {
       await this.stop(options)
-    } else if (type === 'restart') {
+    } else if (action === 'restart') {
       await this.restart(options)
-    } else if (type === 'clear') {
-      await this.clear(options)
-    } else if (type === 'close') {
+    } else if (action === 'close') {
       await this.close(options)
     }
   }
@@ -93,6 +92,7 @@ class GCECommandStream {
     })
 
     this.runningDate = Date.now()
+    this.runningArgs = args
     this.stoppedDate = null
     this.exitCode = null
 
@@ -107,10 +107,15 @@ class GCECommandStream {
     })
 
     this.proc.on('close', code => {
-      this.addOutput('info', `Process exited with code ${code}`)
+      if (code) {
+        this.addOutput('info', `Process exited with code ${code}`)
+      } else {
+        this.addOutput('info', 'Process killed')
+      }
       this.stoppedDate = Date.now()
       this.exitCode = code
       this.proc = null
+      this.runningArgs = null
 
       this.sendUpdate()
     })
@@ -140,12 +145,11 @@ class GCECommandStream {
   }
 
   async restart () {
+    const args = this.runningArgs || this.args
     await this.stop()
-    await this.start()
-  }
-
-  async clear () {
-    this.output = []
+    await new Promise(resolve => setTimeout(resolve, 250))
+    this.addOutput('info', 'Restarting process...')
+    await this.start({ args })
   }
 
   async close () {
@@ -182,6 +186,7 @@ class GCECommandStream {
       cwd: this.cwd,
       creationDate: this.creationDate,
       runningDate: this.runningDate,
+      runningArgs: this.runningArgs,
       stoppedDate: this.stoppedDate,
       exitCode: this.exitCode
     }, wsInstance)

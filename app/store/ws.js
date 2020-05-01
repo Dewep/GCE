@@ -91,8 +91,8 @@ class WsStore {
     this.send('newCommandStream', { projectSlug, directorySlug, primary, args, name, options })
   }
 
-  updateCommandStream (streamSlug, action) {
-    this.send('updateCommandStream', { streamSlug, action })
+  updateCommandStream (streamSlug, action, options = {}) {
+    this.send('updateCommandStream', { streamSlug, action, options })
   }
 
   disconnect (alreadyClosed = false) {
