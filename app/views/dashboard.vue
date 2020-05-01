@@ -18,13 +18,7 @@
         sidebar start
       </p>
       <p class="toast-info">
-        update stream newexec (start)
-      </p>
-      <p class="toast-info">
-        update stream stop
-      </p>
-      <p class="toast-info">
-        update stream restart
+        update stream newexec custom start
       </p>
       <p class="toast-info">
         icons <i class="fa fa-play" /> <i class="fa fa-stop" /> <i class="fa fa-redo" /> <a href="https://fontawesome.com/icons?d=gallery&amp;s=solid&amp;m=free">link</a>
@@ -34,15 +28,6 @@
       </p>
       <p class="toast-info">
         sidebar restart
-      </p>
-      <p class="toast-info">
-        stream vue toolbar
-      </p>
-      <p class="toast-info">
-        stream toolbar start, stop, restart, newexec, details on/off
-      </p>
-      <p class="toast-info">
-        stream details : path, cmd, created, dates, exit code, ...
       </p>
       <p class="toast-info">
         stream statut
@@ -78,7 +63,7 @@
         variables command
       </p>
       <p class="toast-info">
-        set initial config files
+        set initial config files PandaLab
       </p>
       <p class="toast-info">
         PandaLab configs
@@ -88,9 +73,6 @@
       </p>
       <p class="toast-info">
         Notifications
-      </p>
-      <p class="toast-info">
-        Stream auto scroll bot
       </p>
 
       <h2>How to configure</h2>
