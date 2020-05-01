@@ -21,6 +21,7 @@ class CommandStreamStore {
     this.stoppedDate = null
     this.exitCode = null
     this.output = []
+    this.outputSize = 0
     this.status = STATUS.STOPPED
     this.unread = false
 
@@ -84,19 +85,27 @@ class CommandStreamStore {
         content = this.ansiUpStderr.ansi_to_html(content)
       }
 
+      const size = 1 + (content.match(/\n/g) || []).length
+      this.outputSize += size
+
       this.output.push({
         type: output.type,
         date: this._convertDate(output.date),
-        content
+        content,
+        size
       })
-
-      this.unread = true
     }
-    // TODO: remove old output
+
+    this.unread = true
+    while (this.outputSize > 5000) {
+      const output = this.output.shift()
+      this.outputSize -= output.size
+    }
   }
 
   clear () {
     this.output = []
+    this.outputSize = 0
   }
 
   static get STATUS () {

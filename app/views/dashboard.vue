@@ -15,9 +15,6 @@
 
       <h2>TODO</h2>
       <p class="toast-info">
-        ISO: Limit output lines
-      </p>
-      <p class="toast-info">
         ISO: Notifications
       </p>
       <p class="toast-info">
@@ -55,6 +52,9 @@
       </p>
       <p class="toast-info">
         NEW: Stdin + ctrl+c
+      </p>
+      <p class="toast-info">
+        NEW: Reconfigure
       </p>
 
       <h2>How to configure</h2>

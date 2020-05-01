@@ -170,9 +170,12 @@ class GCECommandStream {
     }
 
     this.output.push(output)
-    // TODO: Remove old outputs
 
     await this.sendOutput(output)
+
+    while (this.output.length > 100) {
+      this.output.shift()
+    }
   }
 
   async sendUpdate (wsInstance = null) {
