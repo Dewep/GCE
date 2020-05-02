@@ -15,10 +15,8 @@ class Notification {
     }
   }
 
-  send (title, body, routeName, routeParams, force) {
-    const route = this._formatRoute(routeName, routeParams)
-
-    if (!this._shouldSendNotifications(name, route, force)) {
+  send (title, body, route, force) {
+    if (!this._shouldSendNotifications(name, force)) {
       return
     }
 
@@ -55,29 +53,8 @@ class Notification {
     }
   }
 
-  _formatRoute (routeName, routeParams) {
-    const route = { name: routeName, params: routeParams }
-    const currentRoute = router.currentRoute.value
-
-    if (currentRoute.name !== route.name) {
-      return route
-    }
-
-    for (const param of Object.keys(routeParams)) {
-      if (routeParams[param] !== currentRoute.params[param]) {
-        return route
-      }
-    }
-
-    return null
-  }
-
-  _shouldSendNotifications (name, route, force) {
+  _shouldSendNotifications (name, force) {
     if (this.permission !== 'granted') {
-      return false
-    }
-
-    if (!route) {
       return false
     }
 

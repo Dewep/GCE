@@ -54,6 +54,14 @@ class ConfigStore {
     }
   }
 
+  markAsRead (streamSlug) {
+    const commandStream = this.commandStreams.value.find(commandStream => commandStream.slug === streamSlug)
+
+    if (commandStream.unread) {
+      commandStream.unread = false
+    }
+  }
+
   getProject (projectSlug) {
     const project = (this.projects.value && this.projects.value[projectSlug]) || null
 

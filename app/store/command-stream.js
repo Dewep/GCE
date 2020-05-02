@@ -1,5 +1,6 @@
 import AnsiUp from 'ansi_up'
 import notification from './notification'
+import { getStreamRoute, isCurrentRoute } from '../router-utils'
 
 const STATUS = {
   STOPPED: 'STOPPED',
@@ -69,24 +70,7 @@ class CommandStreamStore {
       notification.askPermission()
     }
 
-    this.routeName = 'directory-stream'
-    this.routeParams = {
-      projectSlug: this.projectSlug,
-      directorySlug: this.directorySlug,
-      streamSlug: this.slug
-    }
-    if (!this.directorySlug) {
-      this.routeName = 'project-stream'
-      delete this.routeParams.directorySlug
-    }
-    if (!this.projectSlug) {
-      this.routeName = 'stream'
-      delete this.routeParams.projectSlug
-    }
-    if (this.routeName === 'directory-stream' && this.primary) {
-      this.routeName = 'directory'
-      delete this.routeParams.streamSlug
-    }
+    this.route = getStreamRoute(this.projectSlug, this.directorySlug, this.slug, this.primary)
   }
 
   _convertDate (value) {
@@ -105,6 +89,8 @@ class CommandStreamStore {
   }
 
   addOutput (outputs, initial = false) {
+    const onSameRoute = isCurrentRoute(this.route)
+
     for (const output of outputs) {
       let content = output.content
 
@@ -124,12 +110,12 @@ class CommandStreamStore {
         size
       })
 
-      if (!initial && output.type === 'stderr' && this.notifications) {
-        notification.send(this.name, output.content, this.routeName, this.routeParams)
+      if (!onSameRoute && !initial && this.notifications && output.type === 'stderr') {
+        notification.send(this.name, output.content, this.route)
       }
     }
 
-    if (!initial) {
+    if (!onSameRoute && !initial) {
       this.unread = true
     }
 

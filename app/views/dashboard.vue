@@ -15,9 +15,6 @@
 
       <h2>TODO</h2>
       <p class="toast-info">
-        ISO: Stream unread
-      </p>
-      <p class="toast-info">
         ISO: Home project
       </p>
       <p class="toast-info">

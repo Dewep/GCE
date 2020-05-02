@@ -176,6 +176,12 @@ export default {
     })
 
     watchEffect(() => {
+      if (stream.value && stream.value.unread) {
+        configStore.markAsRead(stream.value.slug)
+      }
+    })
+
+    watchEffect(() => {
       if (!stream.value) {
         return
       }
