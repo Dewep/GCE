@@ -299,14 +299,14 @@ class GCEConfigure {
   _path (projectPath, directoryPath) {
     let fullpath = process.cwd()
 
-    if (projectPath[0] === '/') {
+    if (path.isAbsolute(projectPath)) {
       fullpath = projectPath
     } else {
       fullpath = path.join(fullpath, projectPath)
     }
 
     if (directoryPath) {
-      if (directoryPath[0] === '/') {
+      if (path.isAbsolute(directoryPath)) {
         return directoryPath
       }
       fullpath = path.join(fullpath, directoryPath)
