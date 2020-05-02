@@ -35,12 +35,6 @@
         NEW: Update stream close
       </p>
       <p class="toast-info">
-        NEW: Bookmarks
-      </p>
-      <p class="toast-info">
-        NEW: Icons <i class="fa fa-play" /> <i class="fa fa-stop" /> <i class="fa fa-redo" /> <a href="https://fontawesome.com/icons?d=gallery&amp;s=solid&amp;m=free">link</a>
-      </p>
-      <p class="toast-info">
         NEW: Update stream newexec custom start
       </p>
       <p class="toast-info">

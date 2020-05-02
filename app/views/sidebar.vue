@@ -9,6 +9,24 @@
       {{ warnings.length }} config warning{{ warnings.length > 1 ? 's' : '' }}
     </RouterLink>
 
+    <a
+      class="bookmark"
+      :class="{ active: bookmarkedOnly }"
+      @click.prevent="bookmarkedOnly = !bookmarkedOnly"
+    >
+      <i
+        :class="[bookmarkedOnly ? 'fa' : 'far']"
+        class="fa-bookmark"
+      />
+      Bookmarks
+    </a>
+    <p
+      v-if="bookmarkedOnly && !bookmarks.length"
+      class="bookmark-explain"
+    >
+      Set bookmarks from the sidebars of the directories.
+    </p>
+
     <div
       v-for="stream in globalStreams"
       :key="'Sidebar/s/' + stream.slug"
@@ -236,6 +254,7 @@
 import configStore from '../store/config'
 import { ref, watchEffect } from 'vue'
 import wsStore from '../store/ws'
+import bookmarkStore from '../store/bookmark'
 
 export default {
   name: 'Sidebar',
@@ -243,7 +262,7 @@ export default {
   setup () {
     const allStreams = ref([])
     const globalStreams = ref([])
-    const projects = ref([])
+    const allProjects = ref([])
 
     watchEffect(() => {
       allStreams.value = configStore.getAllCommandStreams()
@@ -251,7 +270,7 @@ export default {
 
     watchEffect(() => {
       globalStreams.value = []
-      projects.value = []
+      allProjects.value = []
       const usedStreams = []
 
       if (configStore.projects.value) {
@@ -301,7 +320,7 @@ export default {
             }
           }
 
-          projects.value.push(item)
+          allProjects.value.push(item)
         }
       }
 
@@ -323,13 +342,54 @@ export default {
       wsStore.newCommandStream(directory.projectSlug, directory.slug, true, directory.args, directory.notifications)
     }
 
+    const bookmarkedOnly = ref(false)
+    const bookmarks = ref([])
+    const projects = ref([])
+
+    watchEffect(() => {
+      bookmarks.value = [...bookmarkStore.slugs.value]
+    })
+
+    if (bookmarks.value.length) {
+      bookmarkedOnly.value = true
+    }
+
+    watchEffect(() => {
+      if (!bookmarkedOnly.value) {
+        projects.value = allProjects.value
+        return
+      }
+
+      projects.value = []
+
+      for (const project of allProjects.value) {
+        const overrideDirectories = []
+
+        for (const directory of project.directories) {
+          const slug = project.slug + '/' + directory.slug
+          if (directory.stream || directory.streams.length || bookmarks.value.includes(slug)) {
+            overrideDirectories.push(directory)
+          }
+        }
+
+        if (overrideDirectories.length || project.streams.length) {
+          projects.value.push({
+            ...project,
+            directories: overrideDirectories
+          })
+        }
+      }
+    })
+
     return {
       gceVersion: window.gceVersion,
       globalStreams,
       projects,
       warnings: configStore.warnings,
       startDirectoryCommand,
-      streamUpdate
+      streamUpdate,
+      bookmarks,
+      bookmarkedOnly
     }
   }
 }
@@ -363,9 +423,7 @@ a.router-link-active {
   margin-top: 1rem;
 }
 .project > a {
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: .5rem 1rem;
+  font-size: .7rem;
 }
 
 .directory > a {
@@ -439,5 +497,22 @@ a.warnings {
   background: #3e2222;
   text-align: center;
   text-transform: uppercase;
+}
+
+a.bookmark {
+  text-align: center;
+  padding: .5rem;
+  opacity: .5;
+  font-size: 90%;
+}
+a.bookmark.active {
+  opacity: 1;
+}
+.bookmark-explain {
+  font-style: italic;
+  font-size: 80%;
+  text-align: center;
+  opacity: .5;
+  margin-top: 0;
 }
 </style>
