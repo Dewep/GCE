@@ -50,7 +50,7 @@ class ConfigStore {
     let commandStream = this.commandStreams.value.find(commandStream => commandStream.slug === data.slug)
 
     if (commandStream && data.output) {
-      commandStream.addOutput(data.output)
+      commandStream.addOutput(data.output, data.initial)
     }
   }
 

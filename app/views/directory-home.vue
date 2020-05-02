@@ -43,6 +43,7 @@ export default {
   },
 
   setup (props) {
+    const directory = ref(null)
     const directoryName = ref(null)
     const directoryArgs = ref([])
     const directoryArgsName = ref('')
@@ -50,8 +51,9 @@ export default {
 
     watchEffect(() => {
       const def = configStore.getDirectory(props.projectSlug, props.directorySlug)
-      directoryName.value = (def && def.directory && def.directory.name) || props.directorySlug
-      directoryArgs.value = (def && def.directory && def.directory.args) || ['N/A']
+      directory.value =  (def && def.directory) || null
+      directoryName.value = (directory.value && directory.value.name) || props.directorySlug
+      directoryArgs.value = (directory.value && directory.value.args) || ['N/A']
       directoryArgsName.value = directoryArgs.value.join(' ')
     })
 
@@ -60,8 +62,8 @@ export default {
     })
 
     function runCommand () {
-      if (directoryArgs.value && directoryArgs.value.length) {
-        wsStore.newCommandStream(props.projectSlug, props.directorySlug, true, directoryArgs.value, directoryArgsName.value)
+      if (directory.value && directory.value.args && directory.value.args.length) {
+        wsStore.newCommandStream(props.projectSlug, props.directorySlug, true, directory.value.args, directory.value.notifications, directory.value.name)
       }
     }
 

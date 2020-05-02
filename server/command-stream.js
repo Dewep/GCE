@@ -15,6 +15,7 @@ class GCECommandStream {
     this.name = null
     this.args = null
     this.cwd = null
+    this.notifications = null
 
     this.runningDate = null
     this.runningArgs = null
@@ -33,7 +34,7 @@ class GCECommandStream {
     return instance
   }
 
-  async create ({ projectSlug, directorySlug, primary, args, name, options }, ws) {
+  async create ({ projectSlug, directorySlug, primary, args, name, notifications, options }, ws) {
     let cwd = process.cwd()
     if (options.cwd) {
       cwd = options.cwd
@@ -51,6 +52,7 @@ class GCECommandStream {
     this.args = args
     this.name = name
     this.cwd = cwd
+    this.notifications = notifications
     this.runningDate = Date.now()
 
     await this.sendUpdate()
@@ -74,7 +76,7 @@ class GCECommandStream {
     }
   }
 
-  async start ({ withUpdate = true, args = this.args } = {}) {
+  async start ({ withUpdate = true, args = this.args, notifications = this.notifications } = {}) {
     if (!args.length) {
       throw new Error('Bad command args')
     }
@@ -91,6 +93,7 @@ class GCECommandStream {
       env: process.env
     })
 
+    this.notifications = notifications
     this.runningDate = Date.now()
     this.runningArgs = args
     this.stoppedDate = null
@@ -187,6 +190,7 @@ class GCECommandStream {
       name: this.name,
       args: this.args,
       cwd: this.cwd,
+      notifications: this.notifications,
       creationDate: this.creationDate,
       runningDate: this.runningDate,
       runningArgs: this.runningArgs,
@@ -198,8 +202,9 @@ class GCECommandStream {
   async sendOutput (output = null, wsInstance = null) {
     await this.sendToWsConnections('streamOutput', {
       slug: this.slug,
-      output: output ? [output] : this.output
-    })
+      output: output ? [output] : this.output,
+      initial: wsInstance !== null
+    }, wsInstance)
   }
 
   async sendToWsConnections (type, data, wsInstance = null) {

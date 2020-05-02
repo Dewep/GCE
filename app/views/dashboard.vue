@@ -15,9 +15,6 @@
 
       <h2>TODO</h2>
       <p class="toast-info">
-        ISO: Notifications
-      </p>
-      <p class="toast-info">
         ISO: Stream unread
       </p>
       <p class="toast-info">
@@ -31,6 +28,9 @@
       </p>
       <p class="toast-info">
         ISO: Variables command
+      </p>
+      <p class="toast-info">
+        ISO: Spawn detached command
       </p>
       <p class="toast-info">
         NEW: Update stream close

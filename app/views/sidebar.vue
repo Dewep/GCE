@@ -266,6 +266,7 @@ export default {
             projectSlug,
             name: directory.name || directorySlug,
             args: directory.args,
+            notifications: directory.notifications,
             stream: null,
             streams: []
           }
@@ -317,7 +318,7 @@ export default {
       if (directory.stream) {
         return streamUpdate(directory.stream.slug, 'start')
       }
-      wsStore.newCommandStream(directory.projectSlug, directory.slug, true, directory.args)
+      wsStore.newCommandStream(directory.projectSlug, directory.slug, true, directory.args, directory.notifications)
     }
 
     return {
@@ -342,7 +343,8 @@ export default {
 a, a:link, a:visited {
   text-decoration: none;
   display: block;
-  padding: .3rem 1rem;
+  padding: .3rem;
+  padding-left: 1rem;
   opacity: .9;
 }
 

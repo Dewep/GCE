@@ -1,4 +1,5 @@
-const AnsiUp = require('ansi_up').default
+import AnsiUp from 'ansi_up'
+import notification from './notification'
 
 const STATUS = {
   STOPPED: 'STOPPED',
@@ -15,6 +16,7 @@ class CommandStreamStore {
     this.name = null
     this.args = null
     this.cwd = null
+    this.notifications = null
     this.creationDate = null
     this.runningDate = null
     this.runningArgs = null
@@ -24,6 +26,9 @@ class CommandStreamStore {
     this.outputSize = 0
     this.status = STATUS.STOPPED
     this.unread = false
+
+    this.routeName = null
+    this.routeParams = null
 
     this.ansiUpStdout = this._newAnsiUp()
     this.ansiUpStderr = this._newAnsiUp()
@@ -37,7 +42,7 @@ class CommandStreamStore {
     return ansiUp
   }
 
-  update ({ slug, projectSlug, directorySlug, primary, name, args, cwd, creationDate, runningDate, runningArgs, stoppedDate, exitCode }) {
+  update ({ slug, projectSlug, directorySlug, primary, name, args, cwd, notifications, creationDate, runningDate, runningArgs, stoppedDate, exitCode }) {
     this.slug = slug
     this.projectSlug = projectSlug
     this.directorySlug = directorySlug
@@ -45,6 +50,7 @@ class CommandStreamStore {
     this.name = name
     this.args = args
     this.cwd = cwd
+    this.notifications = notifications
     this.creationDate = creationDate
     this.runningDate = runningDate
     this.runningArgs = runningArgs
@@ -57,6 +63,29 @@ class CommandStreamStore {
       this.status = STATUS.RUNNING
     } else {
       this.status = STATUS.STOPPED
+    }
+
+    if (this.notifications) {
+      notification.askPermission()
+    }
+
+    this.routeName = 'directory-stream'
+    this.routeParams = {
+      projectSlug: this.projectSlug,
+      directorySlug: this.directorySlug,
+      streamSlug: this.slug
+    }
+    if (!this.directorySlug) {
+      this.routeName = 'project-stream'
+      delete this.routeParams.directorySlug
+    }
+    if (!this.projectSlug) {
+      this.routeName = 'stream'
+      delete this.routeParams.projectSlug
+    }
+    if (this.routeName === 'directory-stream' && this.primary) {
+      this.routeName = 'directory'
+      delete this.routeParams.streamSlug
     }
   }
 
@@ -75,7 +104,7 @@ class CommandStreamStore {
     return `${hours}:${minutes}:${seconds}:${milliseconds}`
   }
 
-  addOutput (outputs) {
+  addOutput (outputs, initial = false) {
     for (const output of outputs) {
       let content = output.content
 
@@ -94,9 +123,16 @@ class CommandStreamStore {
         content,
         size
       })
+
+      if (!initial && output.type === 'stderr' && this.notifications) {
+        notification.send(this.name, output.content, this.routeName, this.routeParams)
+      }
     }
 
-    this.unread = true
+    if (!initial) {
+      this.unread = true
+    }
+
     while (this.outputSize > 5000) {
       const output = this.output.shift()
       this.outputSize -= output.size

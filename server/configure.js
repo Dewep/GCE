@@ -91,7 +91,12 @@ class GCEConfigure {
       slug: projectSlug,
       name: projectName,
       path: projectPath,
-      directories: {}
+      directories: {},
+      notifications: this.gce.notifications
+    }
+
+    if (project.notifications === true || project.notifications === false) {
+      projectDefinition.notifications = project.notifications
     }
 
     for (const directorySlug of Object.keys(project.directories)) {
@@ -140,7 +145,12 @@ class GCEConfigure {
       path: directoryPath,
       loadBalancer: {},
       args: null,
-      extras: {}
+      extras: {},
+      notifications: projectDefinition.notifications
+    }
+
+    if (directory.notifications === true || directory.notifications === false) {
+      directoryDefinition.notifications = directory.notifications
     }
 
     if (directory.loadBalancer) {
@@ -222,7 +232,12 @@ class GCEConfigure {
         directoryDefinition.extras[extraSlug] = {
           slug: extraSlug,
           name: extraName,
-          args: extra.args
+          args: extra.args,
+          notifications: directoryDefinition.notifications
+        }
+
+        if (extra.notifications === true || extra.notifications === false) {
+          directoryDefinition.extras[extraSlug].notifications = extra.notifications
         }
       }
     }
@@ -258,7 +273,8 @@ class GCEConfigure {
         server: 6730,
         loadBalancer: 6731
       },
-      secure: true
+      secure: true,
+      notifications: true
     }
 
     if (!this._initialConfig.gce) {
@@ -278,6 +294,9 @@ class GCEConfigure {
     }
     if (this._initialConfig.gce.secure === true || this._initialConfig.gce.secure === false) {
       this.gce.secure = this._initialConfig.gce.secure
+    }
+    if (this._initialConfig.gce.notifications === true || this._initialConfig.gce.notifications === false) {
+      this.gce.notifications = this._initialConfig.gce.notifications
     }
   }
 

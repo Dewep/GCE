@@ -8,7 +8,8 @@ const defaultConfiguration = {
       server: 6730,
       loadBalancer: 6731
     },
-    secure: true
+    secure: true,
+    notifications: true
   }
 }
 
