@@ -91,6 +91,10 @@ class WsStore {
     this.send('newCommandStream', { projectSlug, directorySlug, primary, args, notifications, name, options })
   }
 
+  newCommandDetached (projectSlug, directorySlug, args, options = {}) {
+    this.send('newCommandDetached', { projectSlug, directorySlug, args, options })
+  }
+
   updateCommandStream (streamSlug, action, options = {}) {
     this.send('updateCommandStream', { streamSlug, action, options })
   }

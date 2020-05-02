@@ -32,12 +32,6 @@
         ISO: PandaLab configs
       </p>
       <p class="toast-info">
-        ISO: Variables command
-      </p>
-      <p class="toast-info">
-        ISO: Spawn detached command
-      </p>
-      <p class="toast-info">
         NEW: Update stream close
       </p>
       <p class="toast-info">

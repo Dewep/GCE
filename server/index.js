@@ -60,6 +60,8 @@ class GCEServer {
       await this.newCommandStream(data, ws)
     } else if (type === 'updateCommandStream') {
       await this.updateCommandStream(data, ws)
+    } else if (type === 'newCommandDetached') {
+      await this.newCommandDetached(data, ws)
     } else {
       throw new Error('Unknown WS action type: ' + type)
     }
@@ -68,6 +70,10 @@ class GCEServer {
   async newCommandStream (data) {
     const commandStream = await GCECommandStream.create(this, data)
     this.commandStreams.push(commandStream)
+  }
+
+  async newCommandDetached (data) {
+    await GCECommandStream.create(this, data, true)
   }
 
   async updateCommandStream (data) {

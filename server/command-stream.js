@@ -26,15 +26,27 @@ class GCECommandStream {
     this.proc = null
   }
 
-  static async create (gce, data) {
+  static async create (gce, data, detached = false) {
     const instance = new this(gce)
 
     await instance.create(data)
 
+    if (detached) {
+      await instance._startDetached()
+    } else {
+      await instance.sendUpdate()
+
+      if (data && data.redirect) {
+        await instance._sendToWsConnections('streamRedirect', { streamSlug: instance.slug })
+      }
+
+      await instance._start({ withUpdate: false })
+    }
+
     return instance
   }
 
-  async create ({ projectSlug, directorySlug, primary, args, name, notifications, options }, ws) {
+  async create ({ projectSlug, directorySlug, primary = false, args, name = null, notifications = false, options = {} }, ws) {
     let cwd = process.cwd()
     if (options.cwd) {
       cwd = options.cwd
@@ -50,36 +62,26 @@ class GCECommandStream {
     this.directorySlug = directorySlug
     this.primary = primary || false
     this.args = args
-    this.name = name
+    this.name = name || args.join(' ')
     this.cwd = cwd
     this.notifications = notifications
     this.runningDate = Date.now()
-
-    await this.sendUpdate()
-
-    if (options && options.redirect) {
-      await this.sendToWsConnections('streamRedirect', { streamSlug: this.slug }, ws)
-    }
-
-    this.start({ withUpdate: false })
   }
 
   async update ({ action, options = {} }) {
     if (action === 'start') {
-      await this.start(options)
+      await this._start(options)
     } else if (action === 'stop') {
-      await this.stop(options)
+      await this._stop(options)
     } else if (action === 'restart') {
-      await this.restart(options)
+      await this._restart(options)
     } else if (action === 'close') {
-      await this.close(options)
+      await this._close(options)
     }
   }
 
-  async start ({ withUpdate = true, args = this.args, notifications = this.notifications } = {}) {
-    if (!args.length) {
-      throw new Error('Bad command args')
-    }
+  async _start ({ withUpdate = true, args = this.args, notifications = this.notifications } = {}) {
+    args = await this._convertArgs(args)
     if (this.proc) {
       throw new Error('Command already running')
     }
@@ -128,7 +130,32 @@ class GCECommandStream {
     }
   }
 
-  async stop () {
+  async _startDetached () {
+    const args = await this._convertArgs(this.args)
+    const subprocess = childProcess.spawn(args[0], args.slice(1), {
+      cwd: this.cwd,
+      env: process.env,
+      detached: true,
+      stdio: 'ignore'
+    })
+
+    subprocess.on('error', err => {
+      logger.warn('Command detached', this.slug, err.message)
+    })
+
+    subprocess.unref()
+  }
+
+  async _convertArgs (args) {
+    if (!args.length) {
+      throw new Error('Bad command args')
+    }
+    return args.map(arg => {
+      return arg.replace(/%\{GCE:CWD\}/g, this.cwd)
+    })
+  }
+
+  async _stop () {
     if (!this.proc) {
       return
     }
@@ -147,15 +174,15 @@ class GCECommandStream {
     })
   }
 
-  async restart () {
+  async _restart () {
     const args = this.runningArgs || this.args
-    await this.stop()
+    await this._stop()
     await new Promise(resolve => setTimeout(resolve, 250))
     this.addOutput('info', 'Restarting process...')
-    await this.start({ args })
+    await this._start({ args })
   }
 
-  async close () {
+  async _close () {
     if (this.proc) {
       throw new Error('Process not stopped')
     }
@@ -182,7 +209,7 @@ class GCECommandStream {
   }
 
   async sendUpdate (wsInstance = null) {
-    await this.sendToWsConnections('streamUpdate', {
+    await this._sendToWsConnections('streamUpdate', {
       slug: this.slug,
       projectSlug: this.projectSlug,
       directorySlug: this.directorySlug,
@@ -200,14 +227,14 @@ class GCECommandStream {
   }
 
   async sendOutput (output = null, wsInstance = null) {
-    await this.sendToWsConnections('streamOutput', {
+    await this._sendToWsConnections('streamOutput', {
       slug: this.slug,
       output: output ? [output] : this.output,
       initial: wsInstance !== null
     }, wsInstance)
   }
 
-  async sendToWsConnections (type, data, wsInstance = null) {
+  async _sendToWsConnections (type, data, wsInstance = null) {
     await this.gce.http.sendToWsConnections(type, data, wsInstance)
   }
 }

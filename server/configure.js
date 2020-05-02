@@ -229,7 +229,12 @@ class GCEConfigure {
           slug: extraSlug,
           name: extraName,
           args: extra.args,
+          detached: false,
           notifications: directoryDefinition.notifications
+        }
+
+        if (extra.detached === true || extra.detached === false) {
+          directoryDefinition.extras[extraSlug].detached = extra.detached
         }
 
         if (extra.notifications === true || extra.notifications === false) {
@@ -240,8 +245,6 @@ class GCEConfigure {
 
     projectDefinition.directories[directorySlug] = directoryDefinition
   }
-
-  async _reconfigureProjectDirectoryLoadBalancer () {}
 
   async _reconfigureLoadBalancers () {
     if (!this._initialConfig.loadBalancers) {

@@ -27,6 +27,7 @@
         <a
           v-else-if="cmd.type === 'command'"
           class="command"
+          :class="{ detached: cmd.detached }"
           @click.prevent="runCommand(cmd)"
         >
           <b>{{ cmd.name }}</b>
@@ -108,6 +109,7 @@ export default {
             slug,
             name: cmd.name || (slug === 'main' ? cmd.args.join(' ') : slug),
             args: cmd.args,
+            detached: cmd.detached,
             description: cmd.args.join(' ')
           })
         }
@@ -117,7 +119,11 @@ export default {
     })
 
     function runCommand (cmd) {
-      wsStore.newCommandStream(props.projectSlug, props.directorySlug, false, cmd.args, cmd.notifications, cmd.name, { redirect: true })
+      if (cmd.detached) {
+        wsStore.newCommandDetached(props.projectSlug, props.directorySlug, cmd.args)
+      } else {
+        wsStore.newCommandStream(props.projectSlug, props.directorySlug, false, cmd.args, cmd.notifications, cmd.name, { redirect: true })
+      }
     }
 
     return {
@@ -179,5 +185,9 @@ a.external-link {
 
 a.command {
   background: #353544;
+}
+
+a.command.detached {
+  background: #401656;
 }
 </style>
