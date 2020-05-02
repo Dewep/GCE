@@ -1,108 +1,45 @@
 <template>
   <div>
-    <RouterLink
-      v-if="warnings.length"
-      :to="{ name: 'dashboard' }"
-      class="warnings"
-      exact
-    >
-      {{ warnings.length }} config warning{{ warnings.length > 1 ? 's' : '' }}
-    </RouterLink>
-
-    <a
-      class="bookmark"
-      :class="{ active: bookmarkedOnly }"
-      @click.prevent="bookmarkedOnly = !bookmarkedOnly"
-    >
-      <i
-        :class="[bookmarkedOnly ? 'fa' : 'far']"
-        class="fa-bookmark"
-      />
-      Bookmarks
-    </a>
-    <p
-      v-if="bookmarkedOnly && !bookmarks.length"
-      class="bookmark-explain"
-    >
-      Set bookmarks from the sidebars of the directories.
-    </p>
-
-    <div
-      v-for="stream in globalStreams"
-      :key="'Sidebar/s/' + stream.slug"
-      :class="[stream.status]"
-      class="streamer"
-    >
+    <div class="main-sidebar-content">
       <RouterLink
-        :to="{ name: 'stream', params: { streamSlug: stream.slug } }"
-        class="streamer"
+        v-if="warnings.length"
+        :to="{ name: 'dashboard' }"
+        class="warnings"
         exact
       >
-        <span :key="'Sidebar/s/' + stream.slug + '/name'">{{ stream.name }}</span>
+        {{ warnings.length }} config warning{{ warnings.length > 1 ? 's' : '' }}
+      </RouterLink>
+
+      <a
+        class="bookmark"
+        :class="{ active: bookmarkedOnly }"
+        @click.prevent="bookmarkedOnly = !bookmarkedOnly"
+      >
         <i
-          :key="'Sidebar/s/' + stream.slug + '/unread'"
-          v-show="stream.unread"
-          class="stream-unread fa fa-dot-circle"
+          :class="[bookmarkedOnly ? 'fa' : 'far']"
+          class="fa-bookmark"
         />
-        <a
-          v-if="stream.status !== 'RUNNING'"
-          :key="'Sidebar/s/' + stream.slug + '/close'"
-          class="stream-action"
-          @click.prevent.stop="streamUpdate(stream.slug, 'close')"
-        >
-          <i class="fa fa-trash" />
-        </a>
-        <a
-          v-if="stream.status !== 'RUNNING'"
-          :key="'Sidebar/s/' + stream.slug + '/start'"
-          class="stream-action"
-          @click.prevent.stop="streamUpdate(stream.slug, 'start')"
-        >
-          <i class="fa fa-play" />
-        </a>
-        <a
-          v-if="stream.status === 'RUNNING'"
-          :key="'Sidebar/s/' + stream.slug + '/stop'"
-          class="stream-action"
-          @click.prevent.stop="streamUpdate(stream.slug, 'stop')"
-        >
-          <i class="fa fa-stop" />
-        </a>
-        <a
-          v-if="stream.status === 'RUNNING'"
-          :key="'Sidebar/s/' + stream.slug + '/restart'"
-          class="stream-action"
-          @click.prevent.stop="streamUpdate(stream.slug, 'restart')"
-        >
-          <i class="fa fa-redo" />
-        </a>
-      </RouterLink>
-    </div>
-
-    <div
-      v-for="project in projects"
-      :key="'Sidebar/p/' + project.slug"
-      class="project"
-    >
-      <RouterLink
-        :to="{ name: 'project', params: { projectSlug: project.slug } }"
-        exact
+        Bookmarks
+      </a>
+      <p
+        v-if="bookmarkedOnly && !bookmarks.length"
+        class="bookmark-explain"
       >
-        <span>{{ project.name }}</span>
-      </RouterLink>
+        Set bookmarks from the sidebars of the directories.
+      </p>
 
       <div
-        v-for="stream in project.streams"
-        :key="'Sidebar/p/' + project.slug + '/s/' + stream.slug"
+        v-for="stream in globalStreams"
+        :key="'Sidebar/s/' + stream.slug"
         :class="[stream.status]"
-        class="stream"
+        class="streamer"
       >
         <RouterLink
-          :to="{ name: 'project-stream', params: { projectSlug: project.slug, streamSlug: stream.slug } }"
+          :to="{ name: 'stream', params: { streamSlug: stream.slug } }"
           class="streamer"
           exact
         >
-          <span :key="'Sidebar/s/' + stream.slug + '/unread'">{{ stream.name }}</span>
+          <span :key="'Sidebar/s/' + stream.slug + '/name'">{{ stream.name }}</span>
           <i
             :key="'Sidebar/s/' + stream.slug + '/unread'"
             v-show="stream.unread"
@@ -144,60 +81,29 @@
       </div>
 
       <div
-        v-for="directory in project.directories"
-        :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug"
-        :class="directory.stream ? ['stream', directory.stream.status] : []"
-        class="directory"
+        v-for="project in projects"
+        :key="'Sidebar/p/' + project.slug"
+        class="project"
       >
         <RouterLink
-          :to="{ name: 'directory', params: { projectSlug: project.slug, directorySlug: directory.slug } }"
-          class="streamer"
+          :to="{ name: 'project', params: { projectSlug: project.slug } }"
           exact
         >
-          <span :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug + '/name'">{{ directory.name }}</span>
-          <i
-            v-show="directory.stream && directory.stream.unread"
-            :key="'Sidebar/s/' + project.slug + '/d/' + directory.slug + '/unread'"
-            class="stream-unread fa fa-dot-circle"
-          />
-          <a
-            v-if="!directory.stream || directory.stream.status !== 'RUNNING'"
-            :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug + '/start'"
-            class="stream-action"
-            @click.prevent.stop="startDirectoryCommand(directory)"
-          >
-            <i class="fa fa-play" />
-          </a>
-          <a
-            v-if="directory.stream && directory.stream.status === 'RUNNING'"
-            :key="'Sidebar/s/' + project.slug + '/d/' + directory.slug + '/stop'"
-            class="stream-action"
-            @click.prevent.stop="streamUpdate(directory.stream.slug, 'stop')"
-          >
-            <i class="fa fa-stop" />
-          </a>
-          <a
-            v-if="directory.stream && directory.stream.status === 'RUNNING'"
-            :key="'Sidebar/s/' + project.slug + '/d/' + directory.slug + '/restart'"
-            class="stream-action"
-            @click.prevent.stop="streamUpdate(directory.stream.slug, 'restart')"
-          >
-            <i class="fa fa-redo" />
-          </a>
+          <span>{{ project.name }}</span>
         </RouterLink>
 
         <div
-          v-for="stream in directory.streams"
-          :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug + '/s/' + stream.slug"
+          v-for="stream in project.streams"
+          :key="'Sidebar/p/' + project.slug + '/s/' + stream.slug"
           :class="[stream.status]"
           class="stream"
         >
           <RouterLink
-            :to="{ name: 'directory-stream', params: { projectSlug: project.slug, directorySlug: directory.slug, streamSlug: stream.slug } }"
+            :to="{ name: 'project-stream', params: { projectSlug: project.slug, streamSlug: stream.slug } }"
             class="streamer"
             exact
           >
-            <span :key="'Sidebar/s/' + stream.slug + '/name'">{{ stream.name }}</span>
+            <span :key="'Sidebar/s/' + stream.slug + '/unread'">{{ stream.name }}</span>
             <i
               :key="'Sidebar/s/' + stream.slug + '/unread'"
               v-show="stream.unread"
@@ -236,6 +142,102 @@
               <i class="fa fa-redo" />
             </a>
           </RouterLink>
+        </div>
+
+        <div
+          v-for="directory in project.directories"
+          :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug"
+          :class="directory.stream ? ['stream', directory.stream.status] : []"
+          class="directory"
+        >
+          <RouterLink
+            :to="{ name: 'directory', params: { projectSlug: project.slug, directorySlug: directory.slug } }"
+            class="streamer"
+            exact
+          >
+            <span :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug + '/name'">{{ directory.name }}</span>
+            <i
+              v-show="directory.stream && directory.stream.unread"
+              :key="'Sidebar/s/' + project.slug + '/d/' + directory.slug + '/unread'"
+              class="stream-unread fa fa-dot-circle"
+            />
+            <a
+              v-if="!directory.stream || directory.stream.status !== 'RUNNING'"
+              :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug + '/start'"
+              class="stream-action"
+              @click.prevent.stop="startDirectoryCommand(directory)"
+            >
+              <i class="fa fa-play" />
+            </a>
+            <a
+              v-if="directory.stream && directory.stream.status === 'RUNNING'"
+              :key="'Sidebar/s/' + project.slug + '/d/' + directory.slug + '/stop'"
+              class="stream-action"
+              @click.prevent.stop="streamUpdate(directory.stream.slug, 'stop')"
+            >
+              <i class="fa fa-stop" />
+            </a>
+            <a
+              v-if="directory.stream && directory.stream.status === 'RUNNING'"
+              :key="'Sidebar/s/' + project.slug + '/d/' + directory.slug + '/restart'"
+              class="stream-action"
+              @click.prevent.stop="streamUpdate(directory.stream.slug, 'restart')"
+            >
+              <i class="fa fa-redo" />
+            </a>
+          </RouterLink>
+
+          <div
+            v-for="stream in directory.streams"
+            :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug + '/s/' + stream.slug"
+            :class="[stream.status]"
+            class="stream"
+          >
+            <RouterLink
+              :to="{ name: 'directory-stream', params: { projectSlug: project.slug, directorySlug: directory.slug, streamSlug: stream.slug } }"
+              class="streamer"
+              exact
+            >
+              <span :key="'Sidebar/s/' + stream.slug + '/name'">{{ stream.name }}</span>
+              <i
+                :key="'Sidebar/s/' + stream.slug + '/unread'"
+                v-show="stream.unread"
+                class="stream-unread fa fa-dot-circle"
+              />
+              <a
+                v-if="stream.status !== 'RUNNING'"
+                :key="'Sidebar/s/' + stream.slug + '/close'"
+                class="stream-action"
+                @click.prevent.stop="streamUpdate(stream.slug, 'close')"
+              >
+                <i class="fa fa-trash" />
+              </a>
+              <a
+                v-if="stream.status !== 'RUNNING'"
+                :key="'Sidebar/s/' + stream.slug + '/start'"
+                class="stream-action"
+                @click.prevent.stop="streamUpdate(stream.slug, 'start')"
+              >
+                <i class="fa fa-play" />
+              </a>
+              <a
+                v-if="stream.status === 'RUNNING'"
+                :key="'Sidebar/s/' + stream.slug + '/stop'"
+                class="stream-action"
+                @click.prevent.stop="streamUpdate(stream.slug, 'stop')"
+              >
+                <i class="fa fa-stop" />
+              </a>
+              <a
+                v-if="stream.status === 'RUNNING'"
+                :key="'Sidebar/s/' + stream.slug + '/restart'"
+                class="stream-action"
+                @click.prevent.stop="streamUpdate(stream.slug, 'restart')"
+              >
+                <i class="fa fa-redo" />
+              </a>
+            </RouterLink>
+          </div>
         </div>
       </div>
     </div>
@@ -402,6 +404,10 @@ export default {
   box-shadow: #282b2d 0 0 .5rem;
 }
 
+.main-sidebar-content {
+  min-height: calc(100vh - 3.6rem);
+}
+
 a, a:link, a:visited {
   text-decoration: none;
   display: block;
@@ -485,10 +491,9 @@ a:hover > .stream-action {
 
 a.dashboard {
   text-align: center;
-  font-size: 1.2rem;
-  padding: .5rem 1rem;
-  font-weight: bold;
-  margin: 1rem 0 2rem;
+  font-size: 1rem;
+  padding: .5rem 1rem .7rem;
+  margin-top: 1rem;
 }
 
 a.warnings {
