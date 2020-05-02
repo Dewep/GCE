@@ -40,6 +40,10 @@ class ConfigStore {
     }
   }
 
+  streamRemove (data) {
+    this.commandStreams.value = this.commandStreams.value.filter(commandStream => commandStream.slug !== data.slug)
+  }
+
   streamRedirect ({ streamSlug }) {
     const stream = this.commandStreams.value.find(commandStream => commandStream.slug === streamSlug)
 

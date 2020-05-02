@@ -36,7 +36,7 @@ class GCECommandStream {
     } else {
       await instance.sendUpdate()
 
-      if (data && data.redirect) {
+      if (data.options && data.options.redirect) {
         await instance._sendToWsConnections('streamRedirect', { streamSlug: instance.slug })
       }
 
@@ -187,7 +187,10 @@ class GCECommandStream {
       throw new Error('Process not stopped')
     }
 
-    // TODO
+    await this.gce.removeCommandStream(this)
+    await this._sendToWsConnections('streamRemove', {
+      slug: this.slug
+    })
   }
 
   async addOutput (type, content) {

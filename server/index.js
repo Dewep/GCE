@@ -86,6 +86,10 @@ class GCEServer {
 
     await commandStream.update(data)
   }
+
+  async removeCommandStream (streamSlug) {
+    this.commandStreams = this.commandStreams.filter(cmd => cmd.slug !== streamSlug)
+  }
 }
 
 module.exports = GCEServer

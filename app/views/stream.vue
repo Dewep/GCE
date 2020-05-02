@@ -77,7 +77,7 @@
         Clear
       </a>
       <a
-        v-if="!stoppedDate"
+        v-if="stoppedDate"
         @click.prevent="actionClose()"
       >
         <i class="fa fa-trash" />

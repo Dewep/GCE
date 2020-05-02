@@ -60,6 +60,10 @@ class WsStore {
         if (type === 'streamOutput') {
           configStore.streamOutput(data)
         }
+
+        if (type === 'streamRemove') {
+          configStore.streamRemove(data)
+        }
       } catch (err) {
         console.warn('WS.message', err)
       }

@@ -23,28 +23,28 @@
 
       <h2>TODO</h2>
       <p class="toast-info">
-        ISO: Home project
+        ISO: Home project / Home directory
       </p>
       <p class="toast-info">
-        ISO: Set initial config files PandaLab
+        ISO: PandaLab: Repository configs
       </p>
       <p class="toast-info">
-        ISO: PandaLab configs
+        NEW: PandaLab: Set initial local config files
       </p>
       <p class="toast-info">
-        NEW: Update stream close
+        NEW: PandaLab: Reset oasis
       </p>
       <p class="toast-info">
-        NEW: Update stream newexec custom start
+        NEW: Git clone stream on directory not found
       </p>
       <p class="toast-info">
         NEW: Custom stream command
       </p>
       <p class="toast-info">
-        NEW: Advanced command write
+        NEW: Update stream custom start command
       </p>
       <p class="toast-info">
-        NEW: Stdin + ctrl+c
+        NEW: Stdin + Ctrl+C
       </p>
 
       <h2>How to configure</h2>
