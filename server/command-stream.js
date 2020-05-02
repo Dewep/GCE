@@ -187,7 +187,8 @@ class GCECommandStream {
       throw new Error('Process not stopped')
     }
 
-    await this.gce.removeCommandStream(this)
+    await this.gce.removeCommandStream(this.slug)
+
     await this._sendToWsConnections('streamRemove', {
       slug: this.slug
     })
