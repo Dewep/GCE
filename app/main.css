@@ -115,6 +115,10 @@ button {
   font-weight: bold;
   cursor: pointer;
 }
+button.sm {
+  font-size: .8rem;
+  padding: .2rem .5rem;
+}
 
 button:hover, button:active, button:focus, button.active, button.router-link-active {
   color: #c5c8c6;

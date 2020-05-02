@@ -3,7 +3,15 @@
     <div class="dashboard">
       <h1>GCE <sup>{{ gceVersion }}</sup></h1>
       <template v-if="warnings.length">
-        <h2>Config warnings</h2>
+        <h2>
+          Config warnings
+          <button
+            class="sm"
+            @click.prevent="reconfigure()"
+          >
+            Rescan path
+          </button>
+        </h2>
         <p
           v-for="(warning, $index) in warnings"
           :key="'Dashboard/w/' + $index"
@@ -50,9 +58,6 @@
       <p class="toast-info">
         NEW: Stdin + ctrl+c
       </p>
-      <p class="toast-info">
-        NEW: Reconfigure
-      </p>
 
       <h2>How to configure</h2>
       <p class="toast-info">
@@ -64,14 +69,20 @@
 
 <script>
 import configStore from '../store/config'
+import wsStore from '../store/ws'
 
 export default {
   name: 'Dashboard',
 
   setup () {
+    function reconfigure () {
+      wsStore.reconfigure()
+    }
+
     return {
       gceVersion: window.gceVersion,
-      warnings: configStore.warnings
+      warnings: configStore.warnings,
+      reconfigure
     }
   }
 }

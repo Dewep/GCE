@@ -15,13 +15,17 @@ class ConfigStore {
       this.warnings.value = []
       this.loadBalancers.value = []
       this.projects.value = null
-      this.commandStreams.value = []
       return
     }
 
     this.warnings.value = config.warnings
     this.loadBalancers.value = config.loadBalancers
     this.projects.value = config.projects
+  }
+
+  reset () {
+    this.loadConfig(null)
+    this.commandStreams.value = []
   }
 
   streamUpdate (data) {

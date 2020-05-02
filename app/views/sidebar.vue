@@ -254,53 +254,55 @@ export default {
       projects.value = []
       const usedStreams = []
 
-      for (const projectSlug of Object.keys(configStore.projects.value)) {
-        const project = configStore.projects.value[projectSlug]
-        const directories = []
+      if (configStore.projects.value) {
+        for (const projectSlug of Object.keys(configStore.projects.value)) {
+          const project = configStore.projects.value[projectSlug]
+          const directories = []
 
-        for (const directorySlug of Object.keys(project.directories)) {
-          const directory = project.directories[directorySlug]
+          for (const directorySlug of Object.keys(project.directories)) {
+            const directory = project.directories[directorySlug]
+
+            const item = {
+              slug: directorySlug,
+              projectSlug,
+              name: directory.name || directorySlug,
+              args: directory.args,
+              notifications: directory.notifications,
+              stream: null,
+              streams: []
+            }
+
+            for (const stream of allStreams.value) {
+              if (stream.projectSlug === projectSlug && stream.directorySlug === directorySlug) {
+                usedStreams.push(stream.slug)
+
+                if (stream.primary) {
+                  item.stream = stream
+                } else {
+                  item.streams.push(stream)
+                }
+              }
+            }
+
+            directories.push(item)
+          }
 
           const item = {
-            slug: directorySlug,
-            projectSlug,
-            name: directory.name || directorySlug,
-            args: directory.args,
-            notifications: directory.notifications,
-            stream: null,
+            slug: projectSlug,
+            name: project.name || projectSlug,
+            directories,
             streams: []
           }
 
           for (const stream of allStreams.value) {
-            if (stream.projectSlug === projectSlug && stream.directorySlug === directorySlug) {
+            if (stream.projectSlug === projectSlug && stream.directorySlug === null) {
               usedStreams.push(stream.slug)
-
-              if (stream.primary) {
-                item.stream = stream
-              } else {
-                item.streams.push(stream)
-              }
+              item.streams.push(stream)
             }
           }
 
-          directories.push(item)
+          projects.value.push(item)
         }
-
-        const item = {
-          slug: projectSlug,
-          name: project.name || projectSlug,
-          directories,
-          streams: []
-        }
-
-        for (const stream of allStreams.value) {
-          if (stream.projectSlug === projectSlug && stream.directorySlug === null) {
-            usedStreams.push(stream.slug)
-            item.streams.push(stream)
-          }
-        }
-
-        projects.value.push(item)
       }
 
       for (const stream of allStreams.value) {
@@ -426,9 +428,9 @@ a:hover > .stream-action {
 a.dashboard {
   text-align: center;
   font-size: 1.2rem;
-  padding: .5rem 1rem 2rem;
+  padding: .5rem 1rem;
   font-weight: bold;
-  margin-top: 1rem;
+  margin: 1rem 0 2rem;
 }
 
 a.warnings {

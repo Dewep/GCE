@@ -53,7 +53,10 @@ class GCEServer {
   }
 
   async onConnectionMessage (type, data, ws) {
-    if (type === 'newCommandStream') {
+    if (type === 'reconfigure') {
+      await this.config.reconfigure()
+      await this.http.sendToWsConnections('config', this.config.getForClient())
+    } else if (type === 'newCommandStream') {
       await this.newCommandStream(data, ws)
     } else if (type === 'updateCommandStream') {
       await this.updateCommandStream(data, ws)

@@ -95,6 +95,11 @@ class WsStore {
     this.send('updateCommandStream', { streamSlug, action, options })
   }
 
+  reconfigure () {
+    configStore.loadConfig(null)
+    this.send('reconfigure', {})
+  }
+
   disconnect (alreadyClosed = false) {
     if (!alreadyClosed && this.socket) {
       this.socket.close()
@@ -104,7 +109,7 @@ class WsStore {
     this.connected.value = false
     this.socket = null
     // this.error.value = null
-    configStore.loadConfig(null)
+    configStore.reset()
   }
 }
 

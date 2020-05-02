@@ -15,8 +15,6 @@ class GCEConfigure {
     }
   }
 
-  // Check path, existing directories, slug, bad config, ...
-  // Set error message for directory/project
   async reconfigure () {
     this.gce = {}
     this.loadBalancers = {}
@@ -40,8 +38,6 @@ class GCEConfigure {
     } catch (err) {
       this._addWarning('projects', err.message)
     }
-
-    // TODO: send ws events
   }
 
   async _reconfigureProjects () {
