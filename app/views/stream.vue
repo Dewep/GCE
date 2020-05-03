@@ -49,14 +49,6 @@
     </div>
     <div class="toolbar">
       <a
-        class="details"
-        @click.prevent="withInformation = !withInformation"
-      >
-        <i class="fa fa-angle-up" />
-        <i class="fa fa-angle-down" />
-        DETAILS
-      </a>
-      <a
         v-if="stoppedDate"
         @click.prevent="actionStart()"
       >
@@ -94,6 +86,14 @@
         class="args"
       >
         {{ fullName }}
+      </a>
+      <a
+        class="details"
+        @click.prevent="withInformation = !withInformation"
+      >
+        <i class="fa fa-angle-up" />
+        <i class="fa fa-angle-down" />
+        DETAILS
       </a>
     </div>
   </div>
@@ -311,6 +311,7 @@ export default {
   margin: 0 0 1rem 1rem;
   padding: .5rem;
   border-radius: .5rem 0 0 .5rem;
+  display: flex;
 }
 
 .in-directory .outputs {
@@ -324,18 +325,22 @@ export default {
   padding: .5rem;
   text-decoration: none;
   display: inline-block;
+  flex: 0 0 auto;
 }
 
 .toolbar a.details {
-  float: right;
   font-size: 80%;
   opacity: .5;
   user-select: none;
+  padding: .6rem .5rem;
 }
 
 .toolbar a.args {
-  font-size: 80%;
   opacity: .5;
+  flex: 1 1 auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .fa-angle-down {
