@@ -39,6 +39,13 @@
         <b>Exit code</b>
         <span>{{ exitCode }}</span>
       </label>
+      <label
+        v-for="(item, $index) in env"
+        :key="'env-' + $index"
+      >
+        <b>ENV</b>
+        <span>{{ item }}</span>
+      </label>
     </div>
     <div class="toolbar">
       <a
@@ -120,6 +127,7 @@ export default {
     const name = ref('N/A')
     const args = ref([])
     const argsName = ref('N/A')
+    const env = ref([])
     const fullName = ref('N/A')
     const cwd = ref('N/A')
     const creationDate = ref(null)
@@ -163,6 +171,7 @@ export default {
         name.value = def.name
         args.value = def.args
         argsName.value = def.args.join(' ')
+        env.value = Object.keys(def.env).map(key => key + '=' + def.env[key])
         fullName.value = name.value
         if (name.value !== argsName.value) {
           fullName.value += ': ' + argsName.value
@@ -227,6 +236,7 @@ export default {
       name,
       args,
       argsName,
+      env,
       fullName,
       cwd,
       creationDate,

@@ -119,6 +119,7 @@ export default {
             type: 'command',
             slug,
             name: cmd.name || (slug === 'main' ? cmd.args.join(' ') : slug),
+            env: cmd.env,
             args: cmd.args,
             detached: cmd.detached,
             description: cmd.args.join(' ')
@@ -131,9 +132,9 @@ export default {
 
     function runCommand (cmd) {
       if (cmd.detached) {
-        wsStore.newCommandDetached(props.projectSlug, props.directorySlug, cmd.args)
+        wsStore.newCommandDetached(props.projectSlug, props.directorySlug, cmd.args, cmd.env)
       } else {
-        wsStore.newCommandStream(props.projectSlug, props.directorySlug, false, cmd.args, cmd.notifications, cmd.name, { redirect: true })
+        wsStore.newCommandStream(props.projectSlug, props.directorySlug, false, cmd.args, cmd.env, cmd.notifications, cmd.name, { redirect: true })
       }
     }
 

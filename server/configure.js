@@ -142,7 +142,8 @@ class GCEConfigure {
       loadBalancer: {},
       args: null,
       extras: {},
-      notifications: projectDefinition.notifications
+      notifications: projectDefinition.notifications,
+      env: {}
     }
 
     if (directory.notifications === true || directory.notifications === false) {
@@ -201,6 +202,10 @@ class GCEConfigure {
       return
     }
 
+    if (directory.env && this._checkObjectOfStrings(`${slug}.env`, directory.env)) {
+      directoryDefinition.env = directory.env
+    }
+
     directoryDefinition.args = directory.args
 
     if (directory.extras) {
@@ -230,7 +235,8 @@ class GCEConfigure {
           name: extraName,
           args: extra.args,
           detached: false,
-          notifications: directoryDefinition.notifications
+          notifications: directoryDefinition.notifications,
+          env: {}
         }
 
         if (extra.detached === true || extra.detached === false) {
@@ -239,6 +245,10 @@ class GCEConfigure {
 
         if (extra.notifications === true || extra.notifications === false) {
           directoryDefinition.extras[extraSlug].notifications = extra.notifications
+        }
+
+        if (extra.env && this._checkObjectOfStrings(`${slug}.extras[${extraSlug}].env`, extra.env)) {
+          directoryDefinition.extras[extraSlug].env = extra.env
         }
       }
     }
@@ -336,6 +346,18 @@ class GCEConfigure {
     }
     if (array.some(value => typeof value !== 'string')) {
       return this._addWarning(slug, 'some items are not strings')
+    }
+    return true
+  }
+
+  _checkObjectOfStrings (slug, val) {
+    if (typeof val !== 'object' || val === null) {
+      return this._addWarning(slug, 'not an object')
+    }
+    for (const key of Object.keys(val)) {
+      if (!this._checkString(`${slug}.${key}`, val[key])) {
+        return false
+      }
     }
     return true
   }

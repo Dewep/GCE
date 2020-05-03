@@ -17,6 +17,7 @@ class CommandStreamStore {
     this.name = null
     this.args = null
     this.cwd = null
+    this.env = null
     this.notifications = null
     this.creationDate = null
     this.runningDate = null
@@ -43,7 +44,7 @@ class CommandStreamStore {
     return ansiUp
   }
 
-  update ({ slug, projectSlug, directorySlug, primary, name, args, cwd, notifications, creationDate, runningDate, runningArgs, stoppedDate, exitCode }) {
+  update ({ slug, projectSlug, directorySlug, primary, name, args, cwd, env, notifications, creationDate, runningDate, runningArgs, stoppedDate, exitCode }) {
     this.slug = slug
     this.projectSlug = projectSlug
     this.directorySlug = directorySlug
@@ -51,6 +52,7 @@ class CommandStreamStore {
     this.name = name
     this.args = args
     this.cwd = cwd
+    this.env = env
     this.notifications = notifications
     this.creationDate = creationDate
     this.runningDate = runningDate
@@ -119,7 +121,7 @@ class CommandStreamStore {
       this.unread = true
     }
 
-    while (this.outputSize > 5000) {
+    while (this.outputSize > 500) {
       const output = this.output.shift()
       this.outputSize -= output.size
     }

@@ -63,7 +63,7 @@ export default {
 
     function runCommand () {
       if (directory.value && directory.value.args && directory.value.args.length) {
-        wsStore.newCommandStream(props.projectSlug, props.directorySlug, true, directory.value.args, directory.value.notifications, directory.value.name)
+        wsStore.newCommandStream(props.projectSlug, props.directorySlug, true, directory.value.args, directory.value.env, directory.value.notifications, directory.value.name)
       }
     }
 

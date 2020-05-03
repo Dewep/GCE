@@ -88,15 +88,15 @@ class WsStore {
     this.socket.send(JSON.stringify({ type, data }))
   }
 
-  newCommandStream (projectSlug, directorySlug, primary, args, notifications, name = null, options = {}) {
+  newCommandStream (projectSlug, directorySlug, primary, args, env, notifications, name = null, options = {}) {
     if (!name) {
       name = args.join(' ')
     }
-    this.send('newCommandStream', { projectSlug, directorySlug, primary, args, notifications, name, options })
+    this.send('newCommandStream', { projectSlug, directorySlug, primary, args, env, notifications, name, options })
   }
 
-  newCommandDetached (projectSlug, directorySlug, args, options = {}) {
-    this.send('newCommandDetached', { projectSlug, directorySlug, args, options })
+  newCommandDetached (projectSlug, directorySlug, args, env, options = {}) {
+    this.send('newCommandDetached', { projectSlug, directorySlug, args, env, options })
   }
 
   updateCommandStream (streamSlug, action, options = {}) {

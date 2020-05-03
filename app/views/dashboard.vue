@@ -23,7 +23,13 @@
 
       <h2>TODO</h2>
       <p class="toast-info">
+        BUG: Vue very slow perf with a lot of outputs
+      </p>
+      <p class="toast-info">
         ISO: Home project / Home directory
+      </p>
+      <p class="toast-info">
+        ISO: Custom env variables
       </p>
       <p class="toast-info">
         ISO: PandaLab: Repository configs
@@ -45,6 +51,9 @@
       </p>
       <p class="toast-info">
         NEW: Stdin + Ctrl+C
+      </p>
+      <p class="toast-info">
+        NEW: Login protection WS
       </p>
 
       <h2>How to configure</h2>

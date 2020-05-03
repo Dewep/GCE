@@ -15,6 +15,7 @@ class GCECommandStream {
     this.name = null
     this.args = null
     this.cwd = null
+    this.env = null
     this.notifications = null
 
     this.runningDate = null
@@ -46,7 +47,7 @@ class GCECommandStream {
     return instance
   }
 
-  async create ({ projectSlug, directorySlug, primary = false, args, name = null, notifications = false, options = {} }, ws) {
+  async create ({ projectSlug, directorySlug, primary = false, args, env = null, name = null, notifications = false, options = {} }, ws) {
     let cwd = process.cwd()
     if (options.cwd) {
       cwd = options.cwd
@@ -64,6 +65,7 @@ class GCECommandStream {
     this.args = args
     this.name = name || args.join(' ')
     this.cwd = cwd
+    this.env = env || {}
     this.notifications = notifications
     this.runningDate = Date.now()
   }
@@ -92,7 +94,7 @@ class GCECommandStream {
     this.proc = childProcess.spawn(args[0], args.slice(1), {
       cwd: this.cwd,
       shell: true,
-      env: process.env
+      env: { ...process.env, ...this.env }
     })
 
     this.notifications = notifications
@@ -134,7 +136,7 @@ class GCECommandStream {
     const args = await this._convertArgs(this.args)
     const subprocess = childProcess.spawn(args[0], args.slice(1), {
       cwd: this.cwd,
-      env: process.env,
+      env: { ...process.env, ...this.env },
       detached: true,
       stdio: 'ignore'
     })
@@ -220,6 +222,7 @@ class GCECommandStream {
       primary: this.primary,
       name: this.name,
       args: this.args,
+      env: this.env,
       cwd: this.cwd,
       notifications: this.notifications,
       creationDate: this.creationDate,

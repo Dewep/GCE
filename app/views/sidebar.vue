@@ -288,6 +288,7 @@ export default {
               projectSlug,
               name: directory.name || directorySlug,
               args: directory.args,
+              env: directory.env,
               notifications: directory.notifications,
               stream: null,
               streams: []
@@ -341,7 +342,7 @@ export default {
       if (directory.stream) {
         return streamUpdate(directory.stream.slug, 'start')
       }
-      wsStore.newCommandStream(directory.projectSlug, directory.slug, true, directory.args, directory.notifications)
+      wsStore.newCommandStream(directory.projectSlug, directory.slug, true, directory.args, directory.env, directory.notifications)
     }
 
     const bookmarkedOnly = ref(false)
