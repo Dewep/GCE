@@ -4,12 +4,15 @@ import notification from './notification'
 import { getStreamRoute, isCurrentRoute } from '../router-utils'
 
 class CommandStreamOutputStore {
-  constructor () {
+  constructor (defaultNotificationName) {
+    this.defaultNotificationName = defaultNotificationName
+
     this.slug = null
+    this.name = null
     this.projectSlug = null
     this.directorySlug = null
     this.primary = false
-    this.notifications = false
+    this.notificationName = null
 
     this.output = reactive([])
     // this.outputSize = 0
@@ -29,15 +32,22 @@ class CommandStreamOutputStore {
     return ansiUp
   }
 
-  update ({ slug, projectSlug, directorySlug, primary, notifications }) {
+  update ({ slug, name, projectSlug, directorySlug, primary, notifications }) {
     this.slug = slug
+    this.name = name
     this.projectSlug = projectSlug
     this.directorySlug = directorySlug
     this.primary = primary || false
-    this.notifications = notifications || false
+    this.notificationName = null
 
-    if (this.notifications) {
+    if (notifications) {
       notification.askPermission()
+      if (this.primary) {
+        this.notificationName = this.defaultNotificationName
+      }
+      if (!this.notificationName) {
+        this.notificationName = this.name || this.slug
+      }
     }
 
     this.route = getStreamRoute(this.projectSlug, this.directorySlug, this.slug, this.primary)
@@ -59,8 +69,6 @@ class CommandStreamOutputStore {
   }
 
   addOutput (outputs, initial = false) {
-    const onSameRoute = isCurrentRoute(this.route)
-
     for (const output of outputs) {
       let content = output.content
 
@@ -80,8 +88,8 @@ class CommandStreamOutputStore {
         // size
       })
 
-      if (!onSameRoute && !initial && this.notifications && output.type === 'stderr') {
-        notification.send(this.name, output.content, this.route)
+      if (!initial && this.notificationName && output.type === 'stderr') {
+        notification.send(this.notificationName, output.content, this.route)
       }
     }
 
@@ -91,7 +99,7 @@ class CommandStreamOutputStore {
       // this.outputSize -= output.size
     }
 
-    const unread = !onSameRoute && !initial
+    const unread = !isCurrentRoute(this.route) && !initial
 
     return unread
   }

@@ -26,15 +26,6 @@
         ISO: Home project / Home directory
       </p>
       <p class="toast-info">
-        ISO: PandaLab: Repository configs
-      </p>
-      <p class="toast-info">
-        NEW: PandaLab: Set initial local config files
-      </p>
-      <p class="toast-info">
-        NEW: PandaLab: Reset oasis
-      </p>
-      <p class="toast-info">
         NEW: Git clone stream on directory not found
       </p>
       <p class="toast-info">

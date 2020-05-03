@@ -38,7 +38,11 @@ class ConfigStore {
       commandStream = new CommandStreamStore()
       commandStream.update(data)
       this.commandStreams.value.push(commandStream)
-      this.commandStreamsOutput[data.slug] = new CommandStreamOutputStore()
+
+      const project = (data.projectSlug && this.projects.value && this.projects.value[data.projectSlug]) || null
+      const directory = (data.directorySlug && project && project.directories && project.directories[data.directorySlug]) || null
+      const defaultNotificationName = (directory && directory.name) || (project && project.name) || null
+      this.commandStreamsOutput[data.slug] = new CommandStreamOutputStore(defaultNotificationName)
       this.commandStreamsOutput[data.slug].update(data)
     } else {
       commandStream.update(data)
