@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import router from '../router'
 import CommandStreamStore from './command-stream'
+import CommandStreamOutputStore from './command-stream-output'
 
 class ConfigStore {
   constructor () {
@@ -8,6 +9,7 @@ class ConfigStore {
     this.loadBalancers = ref([])
     this.projects = ref(null)
     this.commandStreams = ref([])
+    this.commandStreamsOutput = {}
   }
 
   loadConfig (config) {
@@ -26,6 +28,7 @@ class ConfigStore {
   reset () {
     this.loadConfig(null)
     this.commandStreams.value = []
+    this.commandStreamsOutput = {}
   }
 
   streamUpdate (data) {
@@ -35,13 +38,19 @@ class ConfigStore {
       commandStream = new CommandStreamStore()
       commandStream.update(data)
       this.commandStreams.value.push(commandStream)
+      this.commandStreamsOutput[data.slug] = new CommandStreamOutputStore()
+      this.commandStreamsOutput[data.slug].update(data)
     } else {
       commandStream.update(data)
+      if (this.commandStreamsOutput[data.slug]) {
+        this.commandStreamsOutput[data.slug].update(data)
+      }
     }
   }
 
   streamRemove (data) {
     this.commandStreams.value = this.commandStreams.value.filter(commandStream => commandStream.slug !== data.slug)
+    delete this.commandStreamsOutput[data.slug]
   }
 
   streamRedirect ({ streamSlug }) {
@@ -55,10 +64,19 @@ class ConfigStore {
   }
 
   streamOutput (data) {
-    let commandStream = this.commandStreams.value.find(commandStream => commandStream.slug === data.slug)
+    const streamSlug = data.slug
 
-    if (commandStream && data.output) {
-      commandStream.addOutput(data.output, data.initial)
+    if (this.commandStreamsOutput[streamSlug]) {
+      const unread = this.commandStreamsOutput[streamSlug].addOutput(data.output, data.initial)
+
+      if (!unread) {
+        return
+      }
+
+      const commandStream = this.commandStreams.value.find(commandStream => commandStream.slug === streamSlug)
+      if (!commandStream.unread) {
+        commandStream.unread = true
+      }
     }
   }
 
@@ -139,6 +157,10 @@ class ConfigStore {
     }
 
     return stream
+  }
+
+  getCommandStreamsOutput (streamSlug) {
+    return this.commandStreamsOutput[streamSlug] || null
   }
 }
 

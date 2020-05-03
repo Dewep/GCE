@@ -197,8 +197,6 @@ class GCECommandStream {
   }
 
   async addOutput (type, content) {
-    logger.debug('GCE Output', this.slug, type, content)
-
     const output = {
       date: Date.now(),
       type,

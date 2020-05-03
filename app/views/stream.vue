@@ -10,7 +10,7 @@
     >
       <div
         v-for="(line, $index) in outputs"
-        :key="line.date + $index"
+        :key="'line-' + $index"
         :class="[line.type]"
         :data-time="line.date"
         class="output"
@@ -101,7 +101,7 @@
 
 <script>
 import configStore from '../store/config'
-import { ref, watchEffect, toRefs } from 'vue'
+import { ref, watchEffect, toRefs, watch } from 'vue'
 import wsStore from '../store/ws'
 
 export default {
@@ -190,18 +190,32 @@ export default {
       }
     })
 
-    watchEffect(() => {
-      if (!stream.value) {
-        return
-      }
-
-      outputs.value = [...stream.value.output]
-
+    const bufferOutput = ref([])
+    function replaceOutput () {
+      outputs.value = [...bufferOutput.value]
       setTimeout(function () {
         if (outputsRef.value) {
           outputsRef.value.scrollTop = outputsRef.value.scrollHeight
         }
       })
+    }
+    let replaceOutputDebounceTimer = null
+    function replaceOutputDebounce () {
+      if (replaceOutputDebounceTimer) {
+        return
+      }
+      replaceOutputDebounceTimer = setTimeout(() => {
+        replaceOutputDebounceTimer = null
+        replaceOutput()
+      }, 100)
+      replaceOutput()
+    }
+    watchEffect(() => {
+      const commandStreamsOutput = configStore.getCommandStreamsOutput(props.streamSlug)
+      if (commandStreamsOutput) {
+        bufferOutput.value = [...commandStreamsOutput.output]
+        replaceOutputDebounce()
+      }
     })
 
     function actionStart (args) {
@@ -221,8 +235,9 @@ export default {
     }
 
     function actionClear () {
-      if (stream.value) {
-        stream.value.clear()
+      const commandStreamsOutput = configStore.getCommandStreamsOutput(props.streamSlug)
+      if (commandStreamsOutput) {
+        commandStreamsOutput.clear()
       }
     }
 
