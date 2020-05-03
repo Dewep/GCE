@@ -114,13 +114,16 @@ class GCECommandStream {
     })
 
     this.proc.on('close', code => {
-      if (code) {
+      this.exitCode = code
+      if (this.stoppedDate) {
+        this.exitCode = 0
+        this.addOutput('info', 'Process stopped')
+      } else if (code) {
         this.addOutput('info', `Process exited with code ${code}`)
       } else {
         this.addOutput('info', 'Process killed')
       }
       this.stoppedDate = Date.now()
-      this.exitCode = code
       this.proc = null
       this.runningArgs = null
 
@@ -164,6 +167,7 @@ class GCECommandStream {
 
     return new Promise((resolve, reject) => {
       this.addOutput('info', 'Killing the process...')
+      this.stoppedDate = Date.now()
       treeKill(this.proc.pid, err => {
         if (err) {
           this.addOutput('info', 'Error during killing the process:')
