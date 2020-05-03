@@ -1,14 +1,14 @@
 {
   "name": "gce",
-  "version": "3.0.0",
+  "version": "3.0.0-beta.0",
   "description": "Global Commands Execution",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm run build",
     "start": "node index.js",
     "dev": "webpack-dev-server --host 0.0.0.0 --public gce.dewep.best",
     "build": "webpack --env.prod",
-    "proxy-443": "node proxy-to-gce.js 443",
-    "proxy-80": "node proxy-to-gce.js 80"
+    "proxy-443": "node proxy-to-gce.js 443"
   },
   "repository": {
     "type": "git",
