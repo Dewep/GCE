@@ -2,15 +2,17 @@
   "name": "gce",
   "version": "3.0.0-beta.0",
   "description": "Global Commands Execution",
-  "main": "index.js",
+  "main": "electron/main.js",
   "scripts": {
-    "postinstall": "npm run build",
+    "postinstall": "electron-builder install-app-deps",
     "start": "node index.js",
     "dev": "webpack-dev-server --host 0.0.0.0 --public gce.dewep.best",
     "dev-launcher": "webpack-dev-server --env.launcher --host 0.0.0.0 --public gce.dewep.best",
+    "electron": "electron .",
     "build-app": "webpack --env.prod",
     "build-launcher": "webpack --env.prod --env.launcher",
     "build": "npm run build-app && npm run build-launcher",
+    "build-windows": "electron-builder",
     "proxy-443": "node proxy-to-gce.js 443"
   },
   "repository": {
@@ -18,33 +20,62 @@
     "url": "git+https://github.com/Dewep/GCE.git"
   },
   "author": "Maigret Aurélien (Dewep)",
+  "build": {
+    "appId": "net.dewep.gce",
+    "productName": "GCE",
+    "artifactName": "GCE-${version}.${ext}",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Development"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "extraResources": [
+      "proxy-to-gce.js"
+    ]
+  },
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
     "url": "https://github.com/Dewep/GCE/issues"
   },
   "homepage": "https://github.com/Dewep/GCE#readme",
   "dependencies": {
-    "ansi_up": "^4.0.4",
-    "http-proxy": "^1.18.0",
-    "tree-kill": "^1.2.2",
-    "vue": "^3.0.0-beta.2",
-    "vue-router": "^4.0.0-alpha.7",
-    "ws": "^7.2.3"
+    "ansi_up": "4.0.4",
+    "electron-store": "5.1.1",
+    "http-proxy": "1.18.0",
+    "sudo-prompt": "^9.2.1",
+    "tree-kill": "1.2.2",
+    "vue": "3.0.0-beta.2",
+    "vue-router": "4.0.0-alpha.7",
+    "ws": "7.2.3"
   },
   "devDependencies": {
-    "@vue/compiler-sfc": "^3.0.0-beta.2",
-    "css-loader": "^3.5.2",
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "eslint-plugin-vue": "^7.0.0-alpha.1",
-    "vue-loader": "^16.0.0-alpha.3",
-    "vue-style-loader": "^4.1.2",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "@vue/compiler-sfc": "3.0.0-beta.2",
+    "css-loader": "3.5.2",
+    "electron": "8.2.5",
+    "electron-builder": "22.6.0",
+    "eslint": "6.8.0",
+    "eslint-config-standard": "14.1.1",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1",
+    "eslint-plugin-vue": "7.0.0-alpha.1",
+    "vue-loader": "16.0.0-alpha.3",
+    "vue-style-loader": "4.1.2",
+    "webpack": "4.42.1",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "3.10.3"
   }
 }
