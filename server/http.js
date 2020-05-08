@@ -60,8 +60,8 @@ class GCEHttp {
   }
 
   async listen () {
-    this.server.listen(this.gce.config.gce.ports.server, () => {
-      logger.info('GCE HTTP', 'Server', 'Started on port', this.gce.config.gce.ports.server)
+    this.server.listen(6730, () => {
+      logger.info('GCE HTTP', 'Server', 'Started on port', 6730)
     })
   }
 

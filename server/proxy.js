@@ -48,7 +48,7 @@ class GCEProxy {
     this.serversAvailable.push({
       slug: 'GCE:HTTP',
       hosts: this.gce.config.gce.hosts,
-      ports: [this.gce.config.gce.ports.server],
+      ports: [6730],
       path: null,
       pathNot: null,
       roundRobinPortIndex: 0

@@ -1,15 +1,36 @@
 const net = require('net')
-const config = require('./config')
+const http = require('http')
 
-const server = net.createServer(function (client) {
+const proxy = net.createServer(function (client) {
   client.once('data', function (buf) {
-    const proxy = net.createConnection(config.gce.ports.loadBalancer, function () {
+    const proxy = net.createConnection(6731, function () {
       proxy.write(buf)
       client.pipe(proxy).pipe(client)
     })
-    proxy.on('error', console.warn)
+    proxy.on('error', () => {})
   })
-  client.on('error', console.warn)
+  client.on('error', () => {})
 })
-server.listen(+(process.argv[2] || '443'))
-server.on('error', console.warn)
+
+const manager = http.createServer(function (req, res) {
+  res.writeHead(200, { 'Content-Type': 'text/plain' })
+  res.end('github.com/Dewep/GCE:proxy-to-gce', function () {
+    if (req.url === '/stop-proxy-to-gce') {
+      shutdown()
+    }
+  })
+})
+
+function shutdown () {
+  proxy.close(function () {
+    manager.close(function () {
+      process.exit(0)
+    })
+  })
+}
+
+proxy.on('error', shutdown)
+manager.on('error', shutdown)
+
+proxy.listen(443)
+manager.listen(6732)

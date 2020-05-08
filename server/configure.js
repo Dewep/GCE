@@ -278,10 +278,6 @@ class GCEConfigure {
   async _reconfigureGce () {
     this.gce = {
       hosts: [],
-      ports: {
-        server: 6730,
-        loadBalancer: 6731
-      },
       secure: true,
       notifications: true
     }
@@ -292,14 +288,6 @@ class GCEConfigure {
 
     if (this._initialConfig.gce.hosts && this._checkArrayOfStrings('gce.hosts', this._initialConfig.gce.hosts)) {
       this.gce.hosts = this._initialConfig.gce.hosts
-    }
-    if (this._initialConfig.gce.ports) {
-      if (this._initialConfig.gce.ports.server && this._checkInteger('gce.ports.server', this._initialConfig.gce.ports.server)) {
-        this.gce.ports.server = this._initialConfig.gce.ports.server
-      }
-      if (this._initialConfig.gce.ports.loadBalancer && this._checkInteger('gce.ports.loadBalancer', this._initialConfig.gce.ports.loadBalancer)) {
-        this.gce.ports.loadBalancer = this._initialConfig.gce.ports.loadBalancer
-      }
     }
     if (this._initialConfig.gce.secure === true || this._initialConfig.gce.secure === false) {
       this.gce.secure = this._initialConfig.gce.secure
