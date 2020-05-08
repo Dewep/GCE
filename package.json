@@ -7,7 +7,10 @@
     "postinstall": "npm run build",
     "start": "node index.js",
     "dev": "webpack-dev-server --host 0.0.0.0 --public gce.dewep.best",
-    "build": "webpack --env.prod",
+    "dev-launcher": "webpack-dev-server --env.launcher --host 0.0.0.0 --public gce.dewep.best",
+    "build-app": "webpack --env.prod",
+    "build-launcher": "webpack --env.prod --env.launcher",
+    "build": "npm run build-app && npm run build-launcher",
     "proxy-443": "node proxy-to-gce.js 443"
   },
   "repository": {

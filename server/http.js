@@ -69,7 +69,7 @@ class GCEHttp {
     try {
       let fullpath = path.normalize(req.url)
       if (fullpath === '/') {
-        fullpath = '/index.html'
+        fullpath = '/app.html'
       }
 
       try {
@@ -79,7 +79,7 @@ class GCEHttp {
         }
       } catch (err) {
         logger.warn('GCE HTTP', req.headers.host, fullpath, err)
-        fullpath = '/index.html'
+        fullpath = '/app.html'
       }
 
       logger.debug('GCE HTTP', req.headers.host, fullpath)
