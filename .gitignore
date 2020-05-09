@@ -60,6 +60,9 @@ typings/
 # IntelliJ
 .idea/
 
-# Dist files (for now)
-public/main.js
-public/main.js.map
+# Dist files
+dist/
+public/app.js
+public/app.js.map
+public/launcher.js
+public/launcher.js.map

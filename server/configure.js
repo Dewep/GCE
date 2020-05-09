@@ -75,7 +75,7 @@ class GCEConfigure {
     }
 
     const projectPath = this._path(project.path)
-    if (!await this._checkDirectory(`${slug}.path`, projectPath)) {
+    if (!await this._checkDirectory(`${slug}.path`, projectPath, true)) {
       return
     }
 
@@ -277,12 +277,12 @@ class GCEConfigure {
 
   async _reconfigureGce () {
     this.gce = {
-      hosts: [],
+      host: null,
       ports: {
         server: 6730,
         loadBalancer: 6731
       },
-      secure: true,
+      secure: false,
       notifications: true
     }
 
@@ -290,8 +290,14 @@ class GCEConfigure {
       return
     }
 
-    if (this._initialConfig.gce.hosts && this._checkArrayOfStrings('gce.hosts', this._initialConfig.gce.hosts)) {
-      this.gce.hosts = this._initialConfig.gce.hosts
+    if (this._initialConfig.gce.host && this._checkString('gce.host', this._initialConfig.gce.host)) {
+      this.gce.host = this._initialConfig.gce.host
+    }
+    if (this._initialConfig.gce.secure === true || this._initialConfig.gce.secure === false) {
+      if (this._initialConfig.gce.secure && !this.gce.host) {
+        return this._addWarning('gce.secure', 'You have to define a gce.host if you want to secure the connections.')
+      }
+      this.gce.secure = this._initialConfig.gce.secure
     }
     if (this._initialConfig.gce.ports) {
       if (this._initialConfig.gce.ports.server && this._checkInteger('gce.ports.server', this._initialConfig.gce.ports.server)) {
@@ -300,9 +306,6 @@ class GCEConfigure {
       if (this._initialConfig.gce.ports.loadBalancer && this._checkInteger('gce.ports.loadBalancer', this._initialConfig.gce.ports.loadBalancer)) {
         this.gce.ports.loadBalancer = this._initialConfig.gce.ports.loadBalancer
       }
-    }
-    if (this._initialConfig.gce.secure === true || this._initialConfig.gce.secure === false) {
-      this.gce.secure = this._initialConfig.gce.secure
     }
     if (this._initialConfig.gce.notifications === true || this._initialConfig.gce.notifications === false) {
       this.gce.notifications = this._initialConfig.gce.notifications
@@ -328,8 +331,11 @@ class GCEConfigure {
     return fullpath
   }
 
-  async _checkDirectory (slug, directory) {
+  async _checkDirectory (slug, directory, mustBeAbsolute) {
     try {
+      if (mustBeAbsolute && !path.isAbsolute(directory)) {
+        throw new Error('Must be an absolute directory')
+      }
       const stat = await fs.stat(directory)
       if (!stat.isDirectory()) {
         throw new Error('Not a directory')

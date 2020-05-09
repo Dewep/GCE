@@ -1,10 +1,10 @@
 @font-face {
   font-family: "Cascadia Code";
-  src: url("/Cascadia.ttf") format("truetype");
+  src: url("./Cascadia.ttf") format("truetype");
 }
 @font-face {
   font-family: "Cascadia Code Mono";
-  src: url("/CascadiaMono.ttf") format("truetype");
+  src: url("./CascadiaMono.ttf") format("truetype");
 }
 
 html, body, #app {
@@ -127,4 +127,13 @@ button:hover, button:active, button:focus, button.active, button.router-link-act
 #app {
   display: flex;
   flex-direction: column;
+}
+
+input {
+  width: 100%;
+  padding: .3rem .5rem;
+  border-radius: .3rem;
+  border: .1rem solid #1d1f21;
+  box-shadow: #1d1f21 0 0 .5rem;
+  font-family: 'Cascadia Code Mono', 'Cascadia Code', Ubuntu, Verdana, Geneva, Tahoma, sans-serif;
 }

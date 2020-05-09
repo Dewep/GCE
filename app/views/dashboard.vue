@@ -23,6 +23,24 @@
 
       <h2>TODO</h2>
       <p class="toast-info">
+        BUG: "Process killed"
+      </p>
+      <p class="toast-info">
+        BUG: Do not ask request Notification granted
+      </p>
+      <p class="toast-info">
+        BUG: Do not sync files on missing repositories
+      </p>
+      <p class="toast-info">
+        BUG: Error status but process running
+      </p>
+      <p class="toast-info">
+        BUG: PandaLab config PdfTemplates missing
+      </p>
+      <p class="toast-info">
+        NEW: Possibility to choose repositories to sync-files (docs) or run watch (shared)
+      </p>
+      <p class="toast-info">
         ISO: Home project / Home directory
       </p>
       <p class="toast-info">
@@ -39,6 +57,12 @@
       </p>
       <p class="toast-info">
         NEW: Login protection WS
+      </p>
+      <p class="toast-info">
+        NEW: Electron app to run the 2 commands (<a href="https://github.com/jorangreef/sudo-prompt">sudo-prompt</a>)
+      </p>
+      <p class="toast-info">
+        NEW: Offline mode HTML
       </p>
 
       <h2>How to configure</h2>
