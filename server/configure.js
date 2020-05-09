@@ -277,8 +277,12 @@ class GCEConfigure {
 
   async _reconfigureGce () {
     this.gce = {
-      hosts: [],
-      secure: true,
+      host: null,
+      ports: {
+        server: 6730,
+        loadBalancer: 6731
+      },
+      secure: false,
       notifications: true
     }
 
@@ -286,11 +290,22 @@ class GCEConfigure {
       return
     }
 
-    if (this._initialConfig.gce.hosts && this._checkArrayOfStrings('gce.hosts', this._initialConfig.gce.hosts)) {
-      this.gce.hosts = this._initialConfig.gce.hosts
+    if (this._initialConfig.gce.host && this._checkString('gce.host', this._initialConfig.gce.host)) {
+      this.gce.host = this._initialConfig.gce.host
     }
     if (this._initialConfig.gce.secure === true || this._initialConfig.gce.secure === false) {
+      if (this._initialConfig.gce.secure && !this.gce.host) {
+        return this._addWarning('gce.secure', 'You have to define a gce.host if you want to secure the connections.')
+      }
       this.gce.secure = this._initialConfig.gce.secure
+    }
+    if (this._initialConfig.gce.ports) {
+      if (this._initialConfig.gce.ports.server && this._checkInteger('gce.ports.server', this._initialConfig.gce.ports.server)) {
+        this.gce.ports.server = this._initialConfig.gce.ports.server
+      }
+      if (this._initialConfig.gce.ports.loadBalancer && this._checkInteger('gce.ports.loadBalancer', this._initialConfig.gce.ports.loadBalancer)) {
+        this.gce.ports.loadBalancer = this._initialConfig.gce.ports.loadBalancer
+      }
     }
     if (this._initialConfig.gce.notifications === true || this._initialConfig.gce.notifications === false) {
       this.gce.notifications = this._initialConfig.gce.notifications

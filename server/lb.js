@@ -40,8 +40,8 @@ class GCELB {
   }
 
   async listen () {
-    this.server.listen(6731, () => {
-      logger.info('GCE LB', 'Server', 'Started on port', 6731)
+    this.server.listen(this.gce.config.gce.ports.loadBalancer, () => {
+      logger.info('GCE LB', 'Server', 'Started on port', this.gce.config.gce.ports.loadBalancer)
     })
   }
 
