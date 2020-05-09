@@ -3,12 +3,14 @@
   "version": "3.0.0-beta.0",
   "description": "Global Commands Execution",
   "main": "gui/main.js",
+  "bin": "cli/index.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "node index.js",
     "dev": "webpack-dev-server --host 0.0.0.0 --public gce.dewep.best",
     "dev-launcher": "webpack-dev-server --env.launcher --host 0.0.0.0 --public gce.dewep.best",
     "electron": "electron .",
+    "build-cli": "pkg cli/index.js -c pkg.json --debug --out-path dist",
     "build-app": "webpack --env.prod",
     "build-launcher": "webpack --env.prod --env.launcher",
     "build": "npm run build-app && npm run build-launcher",
@@ -32,18 +34,33 @@
             "x64"
           ]
         }
+      ],
+      "extraResources": [
+        {
+          "from": "dist/gce-cli-win.exe",
+          "to": "gce-cli.exe"
+        }
       ]
     },
     "linux": {
       "target": "AppImage",
-      "category": "Development"
+      "category": "Development",
+      "extraResources": [
+        {
+          "from": "dist/gce-cli-linux",
+          "to": "gce-cli"
+        }
+      ]
     },
     "mac": {
-      "category": "public.app-category.developer-tools"
-    },
-    "extraResources": [
-      "proxy-to-gce.js"
-    ]
+      "category": "public.app-category.developer-tools",
+      "extraResources": [
+        {
+          "from": "dist/gce-cli-macos",
+          "to": "gce-cli"
+        }
+      ]
+    }
   },
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
@@ -52,6 +69,7 @@
   "homepage": "https://github.com/Dewep/GCE#readme",
   "dependencies": {
     "ansi_up": "4.0.4",
+    "commander": "5.1.0",
     "electron-store": "5.1.1",
     "http-proxy": "1.18.0",
     "sudo-prompt": "^9.2.1",
@@ -72,6 +90,7 @@
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
     "eslint-plugin-vue": "7.0.0-alpha.1",
+    "pkg": "4.4.8",
     "vue-loader": "16.0.0-alpha.3",
     "vue-style-loader": "4.1.2",
     "webpack": "4.42.1",
