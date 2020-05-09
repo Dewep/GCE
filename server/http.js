@@ -1,7 +1,7 @@
 const logger = require('./logger')
 const http = require('http')
 const path = require('path')
-const fs = require('fs').promises
+const fs = require('fs')
 const WebSocket = require('ws')
 
 class GCEHttp {
@@ -68,12 +68,14 @@ class GCEHttp {
   async _onRequest (req, res) {
     try {
       let fullpath = path.normalize(req.url)
-      if (fullpath === '/') {
+      if (fullpath === '/' || fullpath === '\\') {
         fullpath = '/app.html'
       }
 
       try {
-        const stat = await fs.stat(path.join(__dirname, '../public/', fullpath))
+        // Don't use fs promises, they are issues with them on pkg: https://github.com/zeit/pkg/issues/455
+        // const stat = await fs.promises.stat(path.join(__dirname, '../public/', fullpath))
+        const stat = fs.statSync(path.join(__dirname, '../public/', fullpath))
         if (!stat.isFile()) {
           throw new Error('Not a file')
         }
@@ -83,7 +85,9 @@ class GCEHttp {
       }
 
       logger.debug('GCE HTTP', req.headers.host, fullpath)
-      const content = await fs.readFile(path.join(__dirname, '../public/', fullpath))
+      // Don't use fs promises, they are issues with them on pkg: https://github.com/zeit/pkg/issues/455
+      // const content = await fs.promises.readFile(path.join(__dirname, '../public/', fullpath))
+      const content = fs.readFileSync(path.join(__dirname, '../public/', fullpath))
       const extension = path.parse(fullpath).ext
       res.writeHead(200, { 'Content-type': this.mimeTypes[extension] || 'text/plain' })
       res.end(content)

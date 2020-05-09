@@ -75,7 +75,7 @@ class GCEConfigure {
     }
 
     const projectPath = this._path(project.path)
-    if (!await this._checkDirectory(`${slug}.path`, projectPath)) {
+    if (!await this._checkDirectory(`${slug}.path`, projectPath, true)) {
       return
     }
 
@@ -331,8 +331,11 @@ class GCEConfigure {
     return fullpath
   }
 
-  async _checkDirectory (slug, directory) {
+  async _checkDirectory (slug, directory, mustBeAbsolute) {
     try {
+      if (mustBeAbsolute && !path.isAbsolute(directory)) {
+        throw new Error('Must be an absolute directory')
+      }
       const stat = await fs.stat(directory)
       if (!stat.isDirectory()) {
         throw new Error('Not a directory')

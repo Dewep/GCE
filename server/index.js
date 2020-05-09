@@ -1,6 +1,7 @@
 const utils = require('./utils')
 const logger = require('./logger')
 const GCEServer = require('./server')
+const path = require('path')
 
 module.exports = async function ({ serverPort = 6730, loadBalancerPort = 6731, ssl = null, configDirectories = [] }) {
   try {
@@ -10,7 +11,7 @@ module.exports = async function ({ serverPort = 6730, loadBalancerPort = 6731, s
 
     const configs = []
     for (const configDirectory of configDirectories) {
-      configs.push(require(configDirectory))
+      configs.push(require(path.join(process.cwd(), configDirectory)))
     }
 
     const config = utils.mergeDeep(
