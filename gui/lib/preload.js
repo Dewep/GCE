@@ -1,5 +1,5 @@
 const { ipcRenderer } = require('electron')
-const runProxy = require('./preload-run-proxy')
+const runGCE = require('./preload-run-gce')
 
 process.once('loaded', () => {
   global.isFocus = false
@@ -26,7 +26,7 @@ process.once('loaded', () => {
     ipcRenderer.send('select-directory')
   }
 
-  global.runProxy = runProxy
+  global.runGCE = runGCE
 
   global.runServer = function (env, onExit, onStdout, onStderr) {
     ipcRenderer.send('run-server')
