@@ -2,7 +2,7 @@
   "name": "gce",
   "version": "3.0.0-beta.0",
   "description": "Global Commands Execution",
-  "main": "electron/main.js",
+  "main": "gui/main.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "node index.js",
