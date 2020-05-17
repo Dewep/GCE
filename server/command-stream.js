@@ -117,11 +117,11 @@ class GCECommandStream {
       this.exitCode = code
       if (this.stoppedDate) {
         this.exitCode = 0
-        this.addOutput('info', 'Process stopped')
+        this.addOutput('info', 'Process killed')
       } else if (code) {
         this.addOutput('info', `Process exited with code ${code}`)
       } else {
-        this.addOutput('info', 'Process killed')
+        this.addOutput('info', 'Process exited successfully')
       }
       this.stoppedDate = Date.now()
       this.proc = null

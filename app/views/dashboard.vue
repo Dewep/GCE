@@ -23,9 +23,6 @@
 
       <h2>TODO</h2>
       <p class="toast-info">
-        BUG: "Process killed"
-      </p>
-      <p class="toast-info">
         BUG: Do not ask request Notification granted
       </p>
       <p class="toast-info">
