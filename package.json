@@ -1,6 +1,6 @@
 {
   "name": "gce",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.2",
   "description": "Global Commands Execution",
   "main": "gui/main.js",
   "bin": "cli/index.js",
@@ -13,7 +13,7 @@
     "build-cli": "pkg cli/index.js -c pkg.json --debug --out-path dist",
     "build-app": "webpack --env.prod",
     "build-launcher": "webpack --env.prod --env.launcher",
-    "build": "npm run build-app && npm run build-launcher",
+    "build": "npm run build-app && npm run build-launcher && npm run build-cli",
     "build-windows": "electron-builder",
     "proxy-443": "node proxy-to-gce.js 443"
   },
