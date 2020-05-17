@@ -11,7 +11,7 @@ module.exports = (env = {}) => ({
   output: {
     filename: env.launcher ? 'launcher.js' : 'app.js',
     path: path.resolve(__dirname, './public'),
-    publicPath: './'
+    publicPath: env.prod ? './' : '/'
   },
 
   resolve: {

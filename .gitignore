@@ -62,6 +62,7 @@ typings/
 
 # Dist files
 dist/
+public/index.html
 public/app.js
 public/app.js.map
 public/launcher.js
