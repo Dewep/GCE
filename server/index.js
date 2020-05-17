@@ -1,5 +1,5 @@
 const utils = require('./utils')
-const logger = require('./logger')
+const logger = require('../shared/logger')
 const GCEServer = require('./server')
 const path = require('path')
 

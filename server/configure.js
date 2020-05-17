@@ -1,4 +1,4 @@
-const logger = require('./logger')
+const logger = require('../shared/logger')
 const path = require('path')
 const fs = require('fs').promises
 

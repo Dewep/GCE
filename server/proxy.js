@@ -1,4 +1,4 @@
-const logger = require('./logger')
+const logger = require('../shared/logger')
 const httpProxy = require('http-proxy')
 
 class GCEProxy {

@@ -1,6 +1,6 @@
 const childProcess = require('child_process')
 const treeKill = require('tree-kill')
-const logger = require('./logger')
+const logger = require('../shared/logger')
 
 class GCECommandStream {
   constructor (gce) {
@@ -68,9 +68,13 @@ class GCECommandStream {
     this.env = env || {}
     this.notifications = notifications
     this.runningDate = Date.now()
+
+    logger.info('New command', `${this.projectSlug || 'null'}/${this.directorySlug || 'null'}`, this.args.join(' '))
   }
 
   async update ({ action, options = {} }) {
+    logger.info('Update command', `${this.projectSlug || 'null'}/${this.directorySlug || 'null'}`, `${action}:`, this.args.join(' '))
+
     if (action === 'start') {
       await this._start(options)
     } else if (action === 'stop') {

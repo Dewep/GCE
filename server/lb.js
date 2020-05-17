@@ -1,4 +1,4 @@
-const logger = require('./logger')
+const logger = require('../shared/logger')
 const https = require('https')
 const tls = require('tls')
 const GCEProxy = require('./proxy')

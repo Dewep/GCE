@@ -3,7 +3,18 @@ const maxLength = {
   slug: 0
 }
 
-function logger (method, level, namespace, slug, ...args) {
+const levels = {
+  error: true,
+  warn: true,
+  info: true,
+  debug: true
+}
+
+function logger (level, prefix, namespace, slug, ...args) {
+  if (!levels[level]) {
+    return
+  }
+
   const date = new Date()
 
   let hours = date.getHours()
@@ -23,8 +34,8 @@ function logger (method, level, namespace, slug, ...args) {
   }
 
   // eslint-disable-next-line no-console
-  console[method](
-    `[${level} ${hours}:${minutes}:${seconds}:${milliseconds}] `,
+  console[level](
+    `[${prefix} ${hours}:${minutes}:${seconds}:${milliseconds}] `,
     namespace.padEnd(maxLength.namespace + 1),
     slug.padEnd(maxLength.slug + 1),
     ...args
@@ -32,11 +43,18 @@ function logger (method, level, namespace, slug, ...args) {
 }
 
 module.exports = {
+  setLevel (logLevel) {
+    let enabled = true
+    for (const level of Object.keys(levels)) {
+      levels[level] = enabled
+      if (level === logLevel) {
+        enabled = false
+      }
+    }
+  },
+
   debug (...args) {
     logger('debug', '\x1b[36mDEBUG\x1b[0m', ...args)
-  },
-  log (...args) {
-    logger('log', '\x1b[34mLOG  \x1b[0m', ...args)
   },
   info (...args) {
     logger('info', '\x1b[1m\x1b[34mINFO \x1b[0m', ...args)
