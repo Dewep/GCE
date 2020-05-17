@@ -29,7 +29,13 @@
         NEW: Possibility to choose repositories to sync-files (docs) or run watch (shared)
       </p>
       <p class="toast-info">
+        NEW: Update shared watch config
+      </p>
+      <p class="toast-info">
         ISO: Home project / Home directory
+      </p>
+      <p class="toast-info">
+        ISO: Running without SSL/LB
       </p>
       <p class="toast-info">
         NEW: Git clone stream on directory not found
@@ -47,7 +53,7 @@
         NEW: Login protection WS
       </p>
       <p class="toast-info">
-        NEW: Electron app to run the 2 commands (<a href="https://github.com/jorangreef/sudo-prompt">sudo-prompt</a>)
+        NEW: Electron app to run the 2 commands
       </p>
       <p class="toast-info">
         NEW: Offline mode HTML
