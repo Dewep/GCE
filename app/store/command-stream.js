@@ -40,10 +40,10 @@ class CommandStreamStore {
     this.stoppedDate = stoppedDate
     this.exitCode = exitCode
 
-    if (this.exitCode > 0) {
-      this.status = STATUS.ERROR
-    } else if (this.runningDate && !this.stoppedDate) {
+    if (this.runningDate && !this.stoppedDate) {
       this.status = STATUS.RUNNING
+    } else if (this.exitCode > 0) {
+      this.status = STATUS.ERROR
     } else {
       this.status = STATUS.STOPPED
     }
