@@ -4,10 +4,12 @@ class Notification {
   constructor () {
     this.permission = (window.Notification && window.Notification.requestPermission && window.Notification.permission) || 'denied'
     this.notificationTimers = {}
+    this._permissionAlreadyAsked = false
   }
 
   askPermission () {
-    if (this.permission !== 'granted' && this.permission !== 'denied') {
+    if (this.permission !== 'granted' && this.permission !== 'denied' && !this._permissionAlreadyAsked) {
+      this._permissionAlreadyAsked = true
       window.Notification.requestPermission(permission => {
         this.permission = permission
         console.info('Notification.requestPermission', permission)
