@@ -35,9 +35,6 @@
         BUG: Error status but process running
       </p>
       <p class="toast-info">
-        BUG: PandaLab config PdfTemplates missing
-      </p>
-      <p class="toast-info">
         NEW: Possibility to choose repositories to sync-files (docs) or run watch (shared)
       </p>
       <p class="toast-info">

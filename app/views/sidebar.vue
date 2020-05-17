@@ -57,7 +57,7 @@
             v-if="stream.status !== 'RUNNING'"
             :key="'Sidebar/s/' + stream.slug + '/start'"
             class="stream-action"
-            @click.prevent.stop="streamUpdate(stream.slug, 'start')"
+            @click="streamUpdate(stream.slug, 'start')"
           >
             <i class="fa fa-play" />
           </a>
@@ -65,7 +65,7 @@
             v-if="stream.status === 'RUNNING'"
             :key="'Sidebar/s/' + stream.slug + '/stop'"
             class="stream-action"
-            @click.prevent.stop="streamUpdate(stream.slug, 'stop')"
+            @click="streamUpdate(stream.slug, 'stop')"
           >
             <i class="fa fa-stop" />
           </a>
@@ -73,7 +73,7 @@
             v-if="stream.status === 'RUNNING'"
             :key="'Sidebar/s/' + stream.slug + '/restart'"
             class="stream-action"
-            @click.prevent.stop="streamUpdate(stream.slug, 'restart')"
+            @click="streamUpdate(stream.slug, 'restart')"
           >
             <i class="fa fa-redo" />
           </a>
@@ -121,7 +121,7 @@
               v-if="stream.status !== 'RUNNING'"
               :key="'Sidebar/s/' + stream.slug + '/start'"
               class="stream-action"
-              @click.prevent.stop="streamUpdate(stream.slug, 'start')"
+              @click="streamUpdate(stream.slug, 'start')"
             >
               <i class="fa fa-play" />
             </a>
@@ -129,7 +129,7 @@
               v-if="stream.status === 'RUNNING'"
               :key="'Sidebar/s/' + stream.slug + '/stop'"
               class="stream-action"
-              @click.prevent.stop="streamUpdate(stream.slug, 'stop')"
+              @click="streamUpdate(stream.slug, 'stop')"
             >
               <i class="fa fa-stop" />
             </a>
@@ -137,7 +137,7 @@
               v-if="stream.status === 'RUNNING'"
               :key="'Sidebar/s/' + stream.slug + '/restart'"
               class="stream-action"
-              @click.prevent.stop="streamUpdate(stream.slug, 'restart')"
+              @click="streamUpdate(stream.slug, 'restart')"
             >
               <i class="fa fa-redo" />
             </a>
@@ -165,7 +165,7 @@
               v-if="!directory.stream || directory.stream.status !== 'RUNNING'"
               :key="'Sidebar/p/' + project.slug + '/d/' + directory.slug + '/start'"
               class="stream-action"
-              @click.prevent.stop="startDirectoryCommand(directory)"
+              @click="startDirectoryCommand(directory)"
             >
               <i class="fa fa-play" />
             </a>
@@ -173,7 +173,7 @@
               v-if="directory.stream && directory.stream.status === 'RUNNING'"
               :key="'Sidebar/s/' + project.slug + '/d/' + directory.slug + '/stop'"
               class="stream-action"
-              @click.prevent.stop="streamUpdate(directory.stream.slug, 'stop')"
+              @click="streamUpdate(directory.stream.slug, 'stop')"
             >
               <i class="fa fa-stop" />
             </a>
@@ -181,7 +181,7 @@
               v-if="directory.stream && directory.stream.status === 'RUNNING'"
               :key="'Sidebar/s/' + project.slug + '/d/' + directory.slug + '/restart'"
               class="stream-action"
-              @click.prevent.stop="streamUpdate(directory.stream.slug, 'restart')"
+              @click="streamUpdate(directory.stream.slug, 'restart')"
             >
               <i class="fa fa-redo" />
             </a>
@@ -216,7 +216,7 @@
                 v-if="stream.status !== 'RUNNING'"
                 :key="'Sidebar/s/' + stream.slug + '/start'"
                 class="stream-action"
-                @click.prevent.stop="streamUpdate(stream.slug, 'start')"
+                @click="streamUpdate(stream.slug, 'start')"
               >
                 <i class="fa fa-play" />
               </a>
@@ -224,7 +224,7 @@
                 v-if="stream.status === 'RUNNING'"
                 :key="'Sidebar/s/' + stream.slug + '/stop'"
                 class="stream-action"
-                @click.prevent.stop="streamUpdate(stream.slug, 'stop')"
+                @click="streamUpdate(stream.slug, 'stop')"
               >
                 <i class="fa fa-stop" />
               </a>
@@ -232,7 +232,7 @@
                 v-if="stream.status === 'RUNNING'"
                 :key="'Sidebar/s/' + stream.slug + '/restart'"
                 class="stream-action"
-                @click.prevent.stop="streamUpdate(stream.slug, 'restart')"
+                @click="streamUpdate(stream.slug, 'restart')"
               >
                 <i class="fa fa-redo" />
               </a>
