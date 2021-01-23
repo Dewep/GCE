@@ -4,101 +4,67 @@ const tls = require('tls')
 const GCEProxy = require('./proxy')
 
 class GCELB {
-  constructor (gce) {
+  constructor (gce, loggerName, serverPort) {
     this.gce = gce
 
-    this.certificates = {}
-    this.serverOptions = null
+    this.loggerName = loggerName
+    this.serverPort = serverPort
     this.server = null
+    this.serverOptions = null
+    this.isSecure = false
     this.proxy = null
   }
 
   static async create (gce) {
     const instance = new this(gce)
 
-    await instance.loadCertificates()
     await instance.create()
 
     return instance
   }
 
   async create () {
-    this.serverOptions = {
-      SNICallback: this._SNICallback.bind(this)
-    }
-
-    this.server = https.createServer(this.serverOptions, this._onRequest.bind(this))
-    this.server.on('upgrade', this._onUpgrade.bind(this))
-
     this.proxy = await GCEProxy.create(this.gce, this)
   }
 
-  async loadCertificates () {
-    for (const serverName of Object.keys(this.gce.config.loadBalancers)) {
-      this.certificates[serverName] = await this._createSecureContext(this.gce.config.loadBalancers[serverName])
-    }
-  }
-
   async listen () {
-    this.server.listen(this.gce.config.gce.ports.loadBalancer, () => {
-      logger.info('GCE LB', 'Server', 'Started on port', this.gce.config.gce.ports.loadBalancer)
+    this.server.listen(this.serverPort, () => {
+      logger.info(this.loggerName, 'Server', 'Started on port', this.serverPort)
     })
   }
 
-  _onRequest (req, res) {
+  async _onRequest (req, res) {
     req.headers.host = req.headers.host.split(':')[0] // Remove port from host
 
-    if (this.proxy.proxyRequest(req, res)) {
-      return
+    try {
+      if (await this.proxy.proxyRequest(req, res)) {
+        return
+      }
+    } catch (err) {
+      logger.error(this.loggerName, req.headers.host, err.message)
     }
 
-    logger.warn('GCE LB', req.headers.host, 'No proxy found')
+    logger.warn(this.loggerName, req.headers.host, 'No proxy found')
 
     res.writeHead(404)
     res.write('404 Not Found')
     res.end()
   }
 
-  _onUpgrade (req, socket, head) {
+  async _onUpgrade (req, socket, head) {
     req.headers.host = req.headers.host.split(':')[0] // Remove port from host
 
-    if (this.proxy.proxyUpgrade(req, socket, head)) {
-      return
-    }
-
-    logger.warn('GCE LB', req.headers.host, 'No proxy found')
-  }
-
-  async _createSecureContext (options) {
-    const context = tls.createSecureContext({
-      cert: options.crt,
-      key: options.key
-    })
-
-    return context
-  }
-
-  _SNICallback (serverName, callback) {
-    let context = null
-
-    const host = '.' + serverName.split(':')[0]
-
-    for (const serverNameCertificate of Object.keys(this.certificates)) {
-      if (host.endsWith(serverNameCertificate)) {
-        context = this.certificates[serverNameCertificate]
-        break
+    try {
+      if (await this.proxy.proxyUpgrade(req, socket, head)) {
+        return
       }
+    } catch (err) {
+      logger.error(this.loggerName, req.headers.host, err.message)
     }
 
-    if (!context) {
-      logger.error('GCE LB', serverName, 'SSL certificate not found, host was', host)
-    }
+    logger.warn(this.loggerName, req.headers.host, 'No proxy found')
 
-    if (callback) {
-      callback(null, context)
-    } else {
-      return context
-    }
+    socket.destroy()
   }
 }
 

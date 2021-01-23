@@ -248,7 +248,7 @@ class GCECommandStream {
   }
 
   async _sendToWsConnections (type, data, wsInstance = null) {
-    await this.gce.http.sendToWsConnections(type, data, wsInstance)
+    await this.gce.lbHttps.proxy.sendToGceWsConnections(type, data, wsInstance)
   }
 }
 

@@ -1,14 +1,14 @@
 const GCEConfigure = require('./configure')
-const GCEHttp = require('./http')
-const GCELB = require('./lb')
+const GCELBHttps = require('./lb-https')
+const GCELBHttp = require('./lb-http')
 const GCECommandStream = require('./command-stream')
 
 class GCEServer {
   constructor () {
     this.config = null
 
-    this.http = null
-    this.lb = null
+    this.lbHttps = null
+    this.lbHttp = null
     this.commandStreams = []
   }
 
@@ -16,8 +16,7 @@ class GCEServer {
     const instance = new this()
 
     await instance.loadConfig(config)
-    await instance.createHttp()
-    await instance.createLB()
+    await instance.createLBs()
 
     await instance.run()
 
@@ -30,21 +29,18 @@ class GCEServer {
     await this.config.reconfigure()
   }
 
-  async createHttp () {
-    this.http = await GCEHttp.create(this)
-  }
-
-  async createLB () {
-    this.lb = await GCELB.create(this)
+  async createLBs () {
+    this.lbHttps = await GCELBHttps.create(this)
+    this.lbHttp = await GCELBHttp.create(this)
   }
 
   async run () {
-    this.http.listen()
-    this.lb.listen()
+    this.lbHttps.listen()
+    this.lbHttp.listen()
   }
 
   async onNewConnection (ws) {
-    await this.http.sendToWsConnections('config', this.config.getForClient(), ws)
+    await this.lbHttps.proxy.sendToGceWsConnections('config', this.config.getForClient(), ws)
 
     for (const commandStream of this.commandStreams) {
       await commandStream.sendUpdate(ws)
@@ -55,7 +51,7 @@ class GCEServer {
   async onConnectionMessage (type, data, ws) {
     if (type === 'reconfigure') {
       await this.config.reconfigure()
-      await this.http.sendToWsConnections('config', this.config.getForClient())
+      await this.lbHttps.proxy.sendToGceWsConnections('config', this.config.getForClient())
     } else if (type === 'newCommandStream') {
       await this.newCommandStream(data, ws)
     } else if (type === 'updateCommandStream') {

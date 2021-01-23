@@ -3,7 +3,7 @@ const logger = require('../shared/logger')
 const GCEServer = require('./server')
 const path = require('path')
 
-module.exports = async function ({ serverPort = 6730, loadBalancerPort = 6731, ssl = null, configDirectories = [] }) {
+module.exports = async function ({ httpPort = 6730, httpsPort = 6731, configDirectories = [] }) {
   try {
     if (!configDirectories.length) {
       throw new Error('No configuration directories set')
@@ -23,12 +23,11 @@ module.exports = async function ({ serverPort = 6730, loadBalancerPort = 6731, s
       ...configs,
       {
         gce: {
-          host: ssl || null,
+          host: 'gce.dewep.ovh',
           ports: {
-            server: serverPort,
-            loadBalancer: loadBalancerPort
-          },
-          secure: !!ssl
+            http: httpPort,
+            https: httpsPort
+          }
         }
       }
     )
