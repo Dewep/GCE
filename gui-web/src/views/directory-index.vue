@@ -174,7 +174,7 @@ export default {
 
 .dir-index-commands {
   position: absolute;
-  top: 1rem;
+  top: 5rem;
   right: 1.5rem;
   width: 20.5rem;
   text-align: center;

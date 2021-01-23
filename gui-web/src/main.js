@@ -4,9 +4,9 @@ import '../../shared/css/main.css'
 import '../../shared/css/fontawesome.css'
 import '../../shared/css/fontawesome-fonts.css'
 import router from './router'
-import pkg from '../package.json'
+import { version } from '../../package.json'
 
-window.gceVersion = pkg.version
+window.gceVersion = version
 
 const app = createApp(App)
 
