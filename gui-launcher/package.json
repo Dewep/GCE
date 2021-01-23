@@ -1,14 +1,13 @@
 {
-  "name": "gui-web",
+  "name": "gui-launcher",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --host gce.dewep.ovh --public gce.dewep.ovh --port 6733",
-    "build": "vue-cli-service build --dest ../server/public/",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "ansi_up": "^4.0.4",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0"
