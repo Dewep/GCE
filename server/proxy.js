@@ -39,6 +39,23 @@ class GCEProxy {
   }
 
   async loadAvailableServers () {
+    this.serversAvailable = [
+      {
+        internal: true,
+        slug: 'GCE:HTTP',
+        hosts: [this.gce.config.gce.host],
+        ports: [],
+        static: {
+          path: path.join(__dirname, 'public'),
+          index: 'index.html',
+          fallback: path.join(__dirname, 'public', 'index.html'),
+        },
+        path: null,
+        pathNot: null,
+        roundRobinPortIndex: 0
+      }
+    ]
+
     for (const projectSlug of Object.keys(this.gce.config.projects)) {
       const project = this.gce.config.projects[projectSlug]
 
@@ -61,19 +78,6 @@ class GCEProxy {
           })
         }
       }
-    }
-
-    if (this.gce.config.gce.host) {
-      this.serversAvailable.push({
-        internal: true,
-        slug: 'GCE:HTTP',
-        hosts: [this.gce.config.gce.host],
-        ports: [],
-        static: null, // TODO
-        path: null,
-        pathNot: null,
-        roundRobinPortIndex: 0
-      })
     }
   }
 
@@ -146,6 +150,7 @@ class GCEProxy {
 
     if (server.static) {
       await this._proxyRequestStatic(req, res, server.static)
+      logger.debug('Proxy HTTP', `${server.slug}:static`, req.url)
       return true
     }
 
