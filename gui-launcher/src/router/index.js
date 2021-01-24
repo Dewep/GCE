@@ -1,6 +1,6 @@
-import { createRouter } from 'vue-router'
-import Config from '../views/dashboard.vue'
-import GCE from '../views/project-index.vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import Config from '../views/config.vue'
+import GCE from '../views/gce.vue'
 
 const routes = [
   {
@@ -16,6 +16,7 @@ const routes = [
 ]
 
 const router = createRouter({
+  history: createWebHashHistory(),
   routes
 })
 

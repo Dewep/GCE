@@ -1,19 +1,81 @@
 <template>
   <div>
     <div class="dashboard">
-      <div class="cols">
+      <header class="cols">
         <div class="col">
-          <h1>GCE <small>{{ gceVersion }}</small></h1>
+          <img src="../../public/favicon.png">
         </div>
         <div class="col right">
           <a
             href="https://github.com/Dewep/GCE"
             target="_blank"
-            class="github"
           >
-            github.com/Dewep/GCE
+            Become a sponsor
+          </a>
+          <br>
+          <a
+            href="https://github.com/Dewep/GCE"
+            target="_blank"
+          >
+            GCE version {{ gceVersion }}
           </a>
         </div>
+      </header>
+      <div class="cols">
+        <div class="col">
+          <div
+            class="card-run"
+            :class="{ running: isRunning, stopped: !isRunning && directories.length, config: !isRunning && !directories.length }"
+          >
+            <div class="header header-start">
+              <a
+                class="action"
+                @click.prevent="run()"
+              >
+                <i class="fa fa-play" />
+              </a>
+              <div class="description">
+                <h2>GCE server</h2>
+                <p>Ready to start</p>
+              </div>
+            </div>
+            <div class="header header-stop">
+              <a
+                class="action"
+                @click.prevent="stop()"
+              >
+                <i class="fa fa-stop" />
+              </a>
+              <div class="description">
+                <h2>GCE server</h2>
+                <p>The server is running</p>
+              </div>
+            </div>
+            <div class="header header-config">
+              <a class="action">
+                <i class="fa fa-exclamation-circle" />
+              </a>
+              <div class="description">
+                <h2>GCE server</h2>
+                <p>Configuration required to run GCE</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        v-if="directories.length"
+        class="ft-help ft-help-top"
+      >
+        <i class="fas fa-share" />
+        Let's run GCE now
+      </div>
+      <div
+        v-else
+        class="ft-help ft-help-bot"
+      >
+        <i class="fas fa-reply" />
+        Let's add some configurations
       </div>
       <div class="cols">
         <div class="col">
@@ -41,7 +103,7 @@
           </div>
         </div>
         <div class="col">
-          <div class="card">
+          <div class="card opened">
             <h2>
               Use HTTPS port 443
               <button
@@ -56,7 +118,7 @@
               <p>GCE HTTPS server port: {{ httpsPort443 ? '443' : '6731' }}</p>
             </div>
           </div>
-          <div class="card">
+          <div class="card opened">
             <h2>
               Use HTTP port 80
               <button
@@ -71,33 +133,6 @@
               <p>GCE HTTP server port: {{ httpPort80 ? '80' : '6730' }}</p>
             </div>
           </div>
-          <div
-            :class="{ opened: autoStart }"
-            class="card"
-          >
-            <h2>
-              Servers auto-start
-              <button
-                :class="[autoStart ? 'on' : 'off']"
-                class="sm"
-                @click.prevent="autoStart = !autoStart"
-              >
-                {{ autoStart ? 'ON' : 'OFF' }}
-              </button>
-            </h2>
-            <div>
-              <p>GCE processes will start automatically when you start the application.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cols">
-        <div class="col">
-          <b>GCE server</b> STOPPED<br>
-          <b>Proxy 443</b> DISABLED
-        </div>
-        <div class="col right">
-          <button @click.prevent="run()">Start GCE processes</button>
         </div>
       </div>
     </div>
@@ -105,13 +140,15 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from 'Vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import configStore from '../store/config'
 
 export default {
   name: 'Config',
 
   setup () {
+    const isRunning = ref(false)
+
     function addNewDirectory (directories) {
       for (const directory of directories) {
         configStore.directories.value.push(directory)
@@ -135,7 +172,14 @@ export default {
 
     function run () {
       configStore.save()
-      window.runProxy(null, console.log, console.log, console.log)
+      isRunning.value = true
+      // window.runProxy(null, console.log, console.log, console.log)
+    }
+
+    function stop () {
+      configStore.save()
+      isRunning.value = false
+      // window.runProxy(null, console.log, console.log, console.log)
     }
 
     return {
@@ -143,10 +187,11 @@ export default {
       directories: configStore.directories,
       httpsPort443: configStore.httpsPort443,
       httpPort80: configStore.httpPort80,
-      autoStart: configStore.autoStart,
       addNewDirectoryTrigger,
       removeDirectory,
-      run
+      isRunning,
+      run,
+      stop
     }
   }
 }
@@ -155,16 +200,29 @@ export default {
 <style scoped>
 .dashboard {
   max-width: 80rem;
-  margin: 10rem auto;
+  margin: 0 auto;
+  padding: 5rem;
+  overflow: auto;
+  height: 100%;
 }
 
-a.github {
-  margin-top: 2rem;
-  display: inline-block;
+.dashboard > header {
+  margin-bottom: 4rem;
 }
+.dashboard > header img {
+  max-height: 10rem;
+}
+.dashboard > header .right {
+  margin-top: 2rem;
+  font-size: 110%;
+  line-height: 2rem;
+}
+.dashboard > header .right a {
+  text-decoration: none;
+}
+
 .cols {
   display: flex;
-  margin-bottom: 5rem;
 }
 .col {
   flex: 1 1 auto;
@@ -172,6 +230,65 @@ a.github {
 }
 .right {
   text-align: right;
+}
+
+.card-run {
+  background: #480101;
+  box-shadow: #480101 0 0 0.5rem;
+  padding: 1rem;
+  margin: 1rem;
+}
+.card-run.running {
+  background: #01480a;
+  box-shadow: #01480a 0 0 0.5rem;
+}
+.card-run.stopped {
+  background: #482f01;
+  box-shadow: #482f01 0 0 0.5rem;
+}
+.card-run.running .header-start, .card-run.running .header-config {
+  display: none;
+}
+.card-run.stopped .header-stop, .card-run.stopped .header-config {
+  display: none;
+}
+.card-run.config .header-start, .card-run.config .header-stop {
+  display: none;
+}
+.card-run .header {
+  display: flex;
+}
+.card-run .header a.action {
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+.card-run .header a.action i {
+  font-size: 4rem;
+}
+.card-run .header .description {
+  flex: 1 1 auto;
+  margin-left: 3rem;
+}
+.card-run .header .description h2 {
+  margin: 0 0 1rem;
+}
+
+.ft-help {
+  color: #737777;
+  padding: 2rem 4rem;
+  font-size: 1.5rem;
+  opacity: 0.4;
+  font-style: italic;
+}
+.ft-help .fas {
+  font-size: 3rem;
+  margin-right: 1rem;
+}
+.ft-help .fa-reply {
+  transform: rotateZ(-90deg) translate(-1.5rem, 0);
+}
+.ft-help .fa-share {
+  transform: rotateZ(-90deg) translate(0.5rem, 0);
 }
 
 .card {

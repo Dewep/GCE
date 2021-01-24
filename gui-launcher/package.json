@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "vue-cli-service serve --host gce-launcher.dewep.ovh --public gce-launcher.dewep.ovh --port 6734",
+    "build": "vue-cli-service build --dest ../launcher/public/",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
