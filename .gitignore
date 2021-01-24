@@ -60,5 +60,13 @@ typings/
 # IntelliJ
 .idea/
 
+# Electron-Forge
+out/
+
 # Dist files
 /server/public/
+/launcher/public/
+
+# Local test
+/old/
+/test.js

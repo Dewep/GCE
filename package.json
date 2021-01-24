@@ -3,7 +3,7 @@
   "productName": "gce",
   "version": "4.0.0",
   "description": "Global Commands Execution",
-  "main": "launcher/index.js",
+  "main": "launcher/main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^7.0.0",
     "http-proxy": "^1.18.1",
     "tree-kill": "^1.2.2",
     "ws": "^7.4.2"
